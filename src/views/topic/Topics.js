@@ -11,40 +11,45 @@ import {
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import usersData from "../users/UsersData";
+import api from "../../service/api";
 
-const getBadge = (status) => {
-  switch (status) {
-    case "Active":
-      return "success";
-    case "Inactive":
-      return "secondary";
-    case "Pending":
-      return "warning";
-    case "Banned":
-      return "danger";
-    default:
-      return "primary";
-  }
-};
-const fields = ["id", "name", "registered", "role", "status"];
+const fields = [
+  "id",
+  "name",
+  "thesis",
+  "semester",
+  "educationMethod",
+  "majors",
+  "description",
+];
 
 const Topics = () => {
   const history = useHistory();
   const queryPage = useLocation().search.match(/page=([0-9]+)/, "");
   const currentPage = Number(queryPage && queryPage[1] ? queryPage[1] : 1);
   const [page, setPage] = useState(currentPage);
+  const [topics, setTopics] = useState([]);
+
+  const fetchTopics = async (number) => {
+    var response = await api.getPaging(
+      { number: number - 1, size: 5 },
+      "/topic"
+    );
+    await setTopics(response.content);
+    return response.content;
+  };
 
   const pageChange = (newPage) => {
     currentPage !== newPage && history.push(`/topics?page=${newPage}`);
   };
 
-  const addTopic = () => {
-    history.push(`/topics/create`);
-  };
+  useEffect(() => {
+    fetchTopics(page);
+  }, []);
 
   useEffect(() => {
     currentPage !== page && setPage(currentPage);
+    fetchTopics(currentPage);
   }, [currentPage, page]);
 
   return (
@@ -57,7 +62,11 @@ const Topics = () => {
             </h4>
           </CCol>
           <CCol sm="7" className="d-none d-md-block">
-            <CButton color="primary" className="float-right" onClick={addTopic}>
+            <CButton
+              color="primary"
+              className="float-right"
+              onClick={() => history.push(`/topics/create`)}
+            >
               Thêm đề tài
             </CButton>
           </CCol>
@@ -65,7 +74,7 @@ const Topics = () => {
       </CCardHeader>
       <CCardBody>
         <CDataTable
-          items={usersData}
+          items={topics}
           fields={fields}
           hover
           striped
@@ -74,9 +83,30 @@ const Topics = () => {
           clickableRows
           onRowClick={(item) => history.push(`/topics/${item.id}`)}
           scopedSlots={{
-            status: (item) => (
+            name: (item) => (
               <td>
-                <CBadge color={getBadge(item.status)}>{item.status}</CBadge>
+                <tr>
+                  <CBadge>{item.name?.vi}</CBadge>
+                </tr>
+                <tr>
+                  <CBadge>{item.name?.en}</CBadge>
+                </tr>
+              </td>
+            ),
+            educationMethod: (item) => {
+              return (
+                <td>
+                  <CBadge>{item.educationMethod.value?.vi}</CBadge>
+                </td>
+              );
+            },
+            majors: (item) => (
+              <td>
+                {item.majors.map((major) => (
+                  <tr>
+                    <CBadge>{major.name?.vi}</CBadge>
+                  </tr>
+                ))}
               </td>
             ),
           }}

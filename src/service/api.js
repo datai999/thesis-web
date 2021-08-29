@@ -31,11 +31,11 @@ const CommonApi = (baseURL = "") => {
     getAll: () => {
       return AxiosClient.get(baseURL);
     },
-    getPaging: (pageParam) => {
-      return AxiosClient.get(baseURL + "/paging", { params: pageParam });
+    getPaging: (pageParam, url = "") => {
+      return AxiosClient.get(baseURL + url + "/paging", { params: pageParam });
     },
-    create: (data) => {
-      return AxiosClient.post(baseURL, data);
+    create: (data, url = baseURL) => {
+      return AxiosClient.post(url, data);
     },
     postExample: (example, url = "") => {
       return AxiosClient.post(baseURL + url + "/example", example);

@@ -57,7 +57,7 @@ const TopicCreate = () => {
   };
 
   const create = () => {
-    console.log(form);
+    api.create(form, "/topic");
   };
 
   useEffect(() => {
