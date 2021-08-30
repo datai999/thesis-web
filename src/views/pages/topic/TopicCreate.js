@@ -17,7 +17,7 @@ import {
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import api from "../../service/api";
+import api from "../../../service/api";
 
 const TopicCreate = () => {
   const [form, setForm] = useState({

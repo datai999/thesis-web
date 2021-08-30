@@ -60,8 +60,8 @@ const Widgets = React.lazy(() => import("./views/widgets/Widgets"));
 const Users = React.lazy(() => import("./views/users/Users"));
 const User = React.lazy(() => import("./views/users/User"));
 
-const Topics = React.lazy(() => import("./views/topic/Topics"));
-const TopicCreate = React.lazy(() => import("./views/topic/TopicCreate"));
+const Topics = React.lazy(() => import("./views/pages/topic/Topics"));
+const TopicCreate = React.lazy(() => import("./views/pages/topic/TopicCreate"));
 
 const routes = [
   { path: "/", exact: true, name: "Home" },

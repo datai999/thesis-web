@@ -11,7 +11,7 @@ import {
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import api from "../../service/api";
+import api from "../../../service/api";
 
 const fields = [
   "id",
