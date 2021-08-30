@@ -1,5 +1,4 @@
 import {
-  CBadge,
   CButton,
   CCard,
   CCardBody,
@@ -9,6 +8,7 @@ import {
   CPagination,
   CRow,
 } from "@coreui/react";
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import api from "../../../service/api";
@@ -31,13 +31,17 @@ const Component = () => {
   const [page, setPage] = useState(currentPage);
   const [data, setData] = useState([]);
 
-  const fetchData = async (number) => {
-    var response = await api.getPaging(
-      { number: number - 1, size: 5 },
-      "/teacher"
-    );
-    await setData(response.content);
-    return response.content;
+  const size = 5;
+
+  const fetchData = async () => {
+    var response = await api.getPaging({ page, size }, "/teacher");
+
+    let nextData = _.cloneDeep(data);
+    response.content.forEach((element, index) => {
+      nextData[(page - 1) * size + index] = element;
+    });
+
+    setData(nextData);
   };
 
   const pageChange = (newPage) => {
@@ -45,12 +49,12 @@ const Component = () => {
   };
 
   useEffect(() => {
-    fetchData(page);
+    fetchData();
   }, []);
 
   useEffect(() => {
     currentPage !== page && setPage(currentPage);
-    fetchData(currentPage);
+    fetchData();
   }, [currentPage, page]);
 
   return (
@@ -79,7 +83,7 @@ const Component = () => {
           fields={fields}
           hover
           striped
-          itemsPerPage={5}
+          itemsPerPage={size}
           activePage={page}
           clickableRows
           onRowClick={(item) => history.push(`/teachers/${item.id}`)}

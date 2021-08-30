@@ -1,5 +1,4 @@
 import {
-  CBadge,
   CButton,
   CCard,
   CCardBody,
@@ -9,6 +8,7 @@ import {
   CPagination,
   CRow,
 } from "@coreui/react";
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import api from "../../../service/api";
@@ -28,15 +28,19 @@ const Topics = () => {
   const queryPage = useLocation().search.match(/page=([0-9]+)/, "");
   const currentPage = Number(queryPage && queryPage[1] ? queryPage[1] : 1);
   const [page, setPage] = useState(currentPage);
-  const [topics, setTopics] = useState([]);
+  const [data, setData] = useState([]);
 
-  const fetchTopics = async (number) => {
-    var response = await api.getPaging(
-      { number: number - 1, size: 5 },
-      "/topic"
-    );
-    await setTopics(response.content);
-    return response.content;
+  const size = 5;
+
+  const fetchData = async () => {
+    var response = await api.getPaging({ page, size }, "/topic");
+
+    let nextData = _.cloneDeep(data);
+    response.content.forEach((element, index) => {
+      nextData[(page - 1) * size + index] = element;
+    });
+
+    setData(nextData);
   };
 
   const pageChange = (newPage) => {
@@ -44,12 +48,12 @@ const Topics = () => {
   };
 
   useEffect(() => {
-    fetchTopics(page);
+    fetchData();
   }, []);
 
   useEffect(() => {
     currentPage !== page && setPage(currentPage);
-    fetchTopics(currentPage);
+    fetchData();
   }, [currentPage, page]);
 
   return (
@@ -74,11 +78,11 @@ const Topics = () => {
       </CCardHeader>
       <CCardBody>
         <CDataTable
-          items={topics}
+          items={data}
           fields={fields}
           hover
           striped
-          itemsPerPage={5}
+          itemsPerPage={size}
           activePage={page}
           clickableRows
           onRowClick={(item) => history.push(`/topics/${item.id}`)}
