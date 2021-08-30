@@ -19,6 +19,12 @@ const _nav = [
     icon: "cil-library",
   },
   {
+    _tag: "CSidebarNavItem",
+    name: "Teacher",
+    to: "/teachers",
+    icon: "cil-library",
+  },
+  {
     _tag: "CSidebarNavTitle",
     _children: ["Theme"],
   },

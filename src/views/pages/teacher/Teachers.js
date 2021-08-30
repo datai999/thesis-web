@@ -15,41 +15,42 @@ import api from "../../../service/api";
 
 const fields = [
   "id",
-  "name",
-  "thesis",
-  "semester",
-  "educationMethod",
-  "majors",
-  "description",
+  "firstName",
+  "lastName",
+  "gender",
+  "subjectDepartment",
+  "degree",
+  "email",
+  "phone",
 ];
 
-const Topics = () => {
+const Component = () => {
   const history = useHistory();
   const queryPage = useLocation().search.match(/page=([0-9]+)/, "");
   const currentPage = Number(queryPage && queryPage[1] ? queryPage[1] : 1);
   const [page, setPage] = useState(currentPage);
-  const [topics, setTopics] = useState([]);
+  const [data, setData] = useState([]);
 
-  const fetchTopics = async (number) => {
+  const fetchData = async (number) => {
     var response = await api.getPaging(
       { number: number - 1, size: 5 },
-      "/topic"
+      "/teacher"
     );
-    await setTopics(response.content);
+    await setData(response.content);
     return response.content;
   };
 
   const pageChange = (newPage) => {
-    currentPage !== newPage && history.push(`/topics?page=${newPage}`);
+    currentPage !== newPage && history.push(`/teachers?page=${newPage}`);
   };
 
   useEffect(() => {
-    fetchTopics(page);
+    fetchData(page);
   }, []);
 
   useEffect(() => {
     currentPage !== page && setPage(currentPage);
-    fetchTopics(currentPage);
+    fetchData(currentPage);
   }, [currentPage, page]);
 
   return (
@@ -58,47 +59,36 @@ const Topics = () => {
         <CRow>
           <CCol sm="5">
             <h4 id="traffic" className="card-title mb-0">
-              Đề tài
+              Danh sách giáo viên
             </h4>
           </CCol>
           <CCol sm="7" className="d-none d-md-block">
             <CButton
               color="primary"
               className="float-right"
-              onClick={() => history.push(`/topics/create`)}
+              onClick={() => history.push(`/teachers/create`)}
             >
-              Thêm đề tài
+              Thêm giáo viên mới
             </CButton>
           </CCol>
         </CRow>
       </CCardHeader>
       <CCardBody>
         <CDataTable
-          items={topics}
+          items={data}
           fields={fields}
           hover
           striped
           itemsPerPage={5}
           activePage={page}
           clickableRows
-          onRowClick={(item) => history.push(`/topics/${item.id}`)}
+          onRowClick={(item) => history.push(`/teachers/${item.id}`)}
           scopedSlots={{
-            name: (item) => (
-              <td>
-                <tr>{item.name?.vi}</tr>
-                <tr>{item.name?.en}</tr>
-              </td>
+            gender: (item) => <td>{item.male ? "Nam" : "Nữ"}</td>,
+            subjectDepartment: (item) => (
+              <td>{item.subjectDepartment?.name?.vi}</td>
             ),
-            educationMethod: (item) => (
-              <td>{item.educationMethod.value?.vi}</td>
-            ),
-            majors: (item) => (
-              <td>
-                {item.majors.map((major) => (
-                  <tr>{major.name?.vi}</tr>
-                ))}
-              </td>
-            ),
+            degree: (item) => <td>{item.degree?.name?.vi}</td>,
           }}
         />
         <CPagination
@@ -111,4 +101,4 @@ const Topics = () => {
   );
 };
 
-export default Topics;
+export default Component;
