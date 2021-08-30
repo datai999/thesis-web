@@ -10,8 +10,11 @@ import {
   CFormGroup,
   CInput,
   CInputCheckbox,
+  CInputGroup,
+  CInputGroupPrepend,
   CInputRadio,
   CLabel,
+  CLink,
   CSelect,
   CTextarea,
 } from "@coreui/react";
@@ -79,22 +82,16 @@ const TopicCreate = () => {
       <CCardBody>
         <CForm>
           <CFormGroup row>
-            <CCol md="2">
+            <CCol>
               <CLabel htmlFor="name.vi">Tên đề tài tiếng việt</CLabel>
-            </CCol>
-            <CCol xs="12" md="10">
               <CInput
                 id="name.vi"
                 placeholder="Text"
                 {...setGetForm("name.vi")}
               />
             </CCol>
-          </CFormGroup>
-          <CFormGroup row>
-            <CCol md="2">
+            <CCol>
               <CLabel htmlFor="name.en">Tên đề tài tiếng anh</CLabel>
-            </CCol>
-            <CCol xs="12" md="10">
               <CInput
                 id="name.en"
                 placeholder="Text"
@@ -102,114 +99,100 @@ const TopicCreate = () => {
               />
             </CCol>
           </CFormGroup>
+
           <CFormGroup row>
-            <CCol md="2">
-              <CLabel htmlFor="semester">Học kỳ</CLabel>
-            </CCol>
-            <CCol xs="12" md="2">
-              <CSelect custom {...setGetForm("semester")}>
-                <option>Chọn học kỳ</option>
-                <option value="211">211</option>
-                <option value="212">212</option>
-                <option value="213">213</option>
-              </CSelect>
-            </CCol>
-          </CFormGroup>
-          <CFormGroup row>
-            <CCol md="2">
-              <CLabel>Loại đề tài</CLabel>
-            </CCol>
-            <CCol md="9">
-              <CFormGroup variant="custom-radio" inline>
-                <CInputRadio
-                  custom
-                  id="nonThesis"
-                  name="type"
-                  defaultChecked={!form.thesis}
-                  {...setGetForm("thesis")}
-                  value={false}
-                />
-                <CLabel variant="custom-checkbox" htmlFor="nonThesis">
-                  Đề cương
-                </CLabel>
-              </CFormGroup>
-              <CFormGroup variant="custom-radio" inline>
-                <CInputRadio
-                  custom
-                  id="thesis"
-                  name="type"
-                  defaultChecked={form.thesis}
-                  {...setGetForm("thesis")}
-                  value={true}
-                />
-                <CLabel variant="custom-checkbox" htmlFor="thesis">
-                  Luận văn
-                </CLabel>
-              </CFormGroup>
-            </CCol>
-          </CFormGroup>
-          <CFormGroup row>
-            <CCol md="2">
-              <CLabel>Phương thức đào tạo</CLabel>
-            </CCol>
-            <CCol md="9">
-              {educationMethods.map((educationMethod) => (
-                <CFormGroup variant="custom-radio" inline>
-                  <CInputRadio
-                    custom
-                    id={"educationMethod" + educationMethod.id}
-                    name="eduMethod"
-                    defaultChecked={educationMethod.no == 0}
-                    {...setGetForm("educationMethod")}
-                    value={educationMethod.id}
-                  />
-                  <CLabel
-                    variant="custom-checkbox"
-                    htmlFor={"educationMethod" + educationMethod.id}
-                  >
-                    {educationMethod.value?.vi}
-                  </CLabel>
-                </CFormGroup>
-              ))}
-            </CCol>
-          </CFormGroup>
-          <CFormGroup row>
-            <CCol md="2">
-              <CLabel>Ngành</CLabel>
-            </CCol>
-            <CCol md="9">
-              {majors.map((major) => (
-                <CFormGroup variant="custom-checkbox" inline>
-                  <CInputCheckbox
-                    custom
-                    id={"major" + major.id}
-                    name="major"
-                    value={major.id}
-                    onChange={onChangeMajors}
-                  />
-                  <CLabel
-                    variant="custom-checkbox"
-                    htmlFor={"major" + major.id}
-                  >
-                    {major.name?.vi}
-                  </CLabel>
-                </CFormGroup>
-              ))}
-            </CCol>
-          </CFormGroup>
-          <CFormGroup row>
-            <CCol md="2">
-              <CLabel htmlFor="select">Số lượng sinh viên</CLabel>
-            </CCol>
-            <CCol xs="12" md="10">
+            <CCol md="6">
               <CFormGroup row>
                 <CCol md="3">
+                  <CLabel htmlFor="semester">Học kỳ</CLabel>
+                  <CSelect custom {...setGetForm("semester")}>
+                    <option>Chọn</option>
+                    <option value="211">211</option>
+                    <option value="212">212</option>
+                    <option value="213">213</option>
+                  </CSelect>
+                </CCol>
+                <CCol md="3">
+                  <CLabel>Loại đề tài</CLabel>
+                  <CFormGroup variant="custom-radio">
+                    <CInputRadio
+                      custom
+                      id="nonThesis"
+                      name="type"
+                      defaultChecked={!form.thesis}
+                      {...setGetForm("thesis")}
+                      value={false}
+                    />
+                    <CLabel variant="custom-checkbox" htmlFor="nonThesis">
+                      Đề cương
+                    </CLabel>
+                  </CFormGroup>
+                  <CFormGroup variant="custom-radio" inline>
+                    <CInputRadio
+                      custom
+                      id="thesis"
+                      name="type"
+                      defaultChecked={form.thesis}
+                      {...setGetForm("thesis")}
+                      value={true}
+                    />
+                    <CLabel variant="custom-checkbox" htmlFor="thesis">
+                      Luận văn
+                    </CLabel>
+                  </CFormGroup>
+                </CCol>
+                <CCol md="5">
+                  <CLabel>Phương thức đào tạo</CLabel>
+                  {educationMethods.map((educationMethod) => (
+                    <CFormGroup variant="custom-radio">
+                      <CInputRadio
+                        custom
+                        id={"educationMethod" + educationMethod.id}
+                        name="eduMethod"
+                        defaultChecked={educationMethod.no == 0}
+                        {...setGetForm("educationMethod")}
+                        value={educationMethod.id}
+                      />
+                      <CLabel
+                        variant="custom-checkbox"
+                        htmlFor={"educationMethod" + educationMethod.id}
+                      >
+                        {educationMethod.value?.vi}
+                      </CLabel>
+                    </CFormGroup>
+                  ))}
+                </CCol>
+              </CFormGroup>
+              <CFormGroup row>
+                <CCol xs="12" md="4">
+                  <CLabel>Ngành</CLabel>
+                  {majors.map((major) => (
+                    <CFormGroup variant="custom-checkbox">
+                      <CInputCheckbox
+                        custom
+                        id={"major" + major.id}
+                        name="major"
+                        value={major.id}
+                        onChange={onChangeMajors}
+                      />
+                      <CLabel
+                        variant="custom-checkbox"
+                        htmlFor={"major" + major.id}
+                      >
+                        {major.name?.vi}
+                      </CLabel>
+                    </CFormGroup>
+                  ))}
+                </CCol>
+                <CCol xs="12" md="4">
+                  <CLabel htmlFor="select">Số lượng sinh viên</CLabel>
+
                   <CFormGroup row>
-                    <CCol md="5">
-                      <CLabel htmlFor="select">Tối thiểu</CLabel>
+                    <CCol md="6">
+                      <CLabel htmlFor="selectMin">Tối thiểu</CLabel>
                     </CCol>
-                    <CCol md="5">
-                      <CSelect custom name="select" size="sm" id="select">
+                    <CCol md="6">
+                      <CSelect custom id="selectMin" size="sm" id="select">
                         <option value="1" selected>
                           1
                         </option>
@@ -217,15 +200,11 @@ const TopicCreate = () => {
                         <option value="3">3</option>
                       </CSelect>
                     </CCol>
-                  </CFormGroup>
-                </CCol>
-                <CCol md="3">
-                  <CFormGroup row>
-                    <CCol md="5">
-                      <CLabel htmlFor="select">Tối đa</CLabel>
+                    <CCol md="6">
+                      <CLabel htmlFor="selectMax">Tối đa</CLabel>
                     </CCol>
-                    <CCol md="5">
-                      <CSelect custom name="select" size="sm" id="select">
+                    <CCol md="6">
+                      <CSelect custom id="selectMax" size="sm" id="select">
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3" selected>
@@ -237,51 +216,111 @@ const TopicCreate = () => {
                 </CCol>
               </CFormGroup>
             </CCol>
+
+            <CCol md="6">
+              <CFormGroup row>
+                <CCol md="4">
+                  <CLabel>Giáo viên hướng dẫn</CLabel>
+                </CCol>
+                <CCol>
+                  <CInputGroup>
+                    <CInput placeholder="Nhập code hoặc tên giáo viên" />
+                    <CInputGroupPrepend>
+                      <CButton size="sm" type="button" color="info">
+                        <CIcon name="cil-magnifying-glass" /> Tìm kiếm
+                      </CButton>
+                    </CInputGroupPrepend>
+                  </CInputGroup>
+                </CCol>
+              </CFormGroup>
+
+              <CFormGroup row>
+                <CCol md="4">
+                  <CCard>
+                    <CCardHeader>
+                      Nguyễn Đức Anh Tài
+                      <div className="card-header-actions">
+                        <CLink className="card-header-action">
+                          <CIcon name="cil-settings" />
+                        </CLink>
+                        <CLink className="card-header-action">
+                          <CIcon name="cil-x-circle" />
+                        </CLink>
+                      </div>
+                    </CCardHeader>
+                    <CCardBody>Email: Code:</CCardBody>
+                  </CCard>
+                </CCol>
+                <CCol md="4">
+                  <CCard>
+                    <CCardHeader>
+                      Nguyễn Đức Anh Tài
+                      <div className="card-header-actions">
+                        <CLink className="card-header-action">
+                          <CIcon name="cil-settings" />
+                        </CLink>
+                        <CLink className="card-header-action">
+                          <CIcon name="cil-x-circle" />
+                        </CLink>
+                      </div>
+                    </CCardHeader>
+                    <CCardBody>Email: Code:</CCardBody>
+                  </CCard>
+                </CCol>
+                <CCol md="4">
+                  <CCard>
+                    <CCardHeader>
+                      Nguyễn Đức Anh Tài
+                      <div className="card-header-actions">
+                        <CLink className="card-header-action">
+                          <CIcon name="cil-settings" />
+                        </CLink>
+                        <CLink className="card-header-action">
+                          <CIcon name="cil-x-circle" />
+                        </CLink>
+                      </div>
+                    </CCardHeader>
+                    <CCardBody>Email: Code:</CCardBody>
+                  </CCard>
+                </CCol>
+              </CFormGroup>
+            </CCol>
           </CFormGroup>
-          <CFormGroup row>
-            <CCol md="2">
-              <CLabel htmlFor="description">Mô tả</CLabel>
-            </CCol>
-            <CCol xs="12" md="10">
-              <CTextarea
-                id="description"
-                rows="9"
-                placeholder="Content..."
-                {...setGetForm("description")}
-              />
-            </CCol>
+
+          <CFormGroup>
+            <CLabel htmlFor="description">Mô tả</CLabel>
+            <CTextarea
+              id="description"
+              rows="9"
+              placeholder="Content..."
+              {...setGetForm("description")}
+            />
           </CFormGroup>
-          <CFormGroup row>
-            <CCol md="2">
-              <CLabel htmlFor="task">Nhiệm vụ</CLabel>
-            </CCol>
-            <CCol xs="12" md="10">
-              <CTextarea
-                id="task"
-                rows="9"
-                placeholder="Content..."
-                {...setGetForm("task")}
-              />
-            </CCol>
+
+          <CFormGroup>
+            <CLabel htmlFor="task">Nhiệm vụ</CLabel>
+            <CTextarea
+              id="task"
+              rows="9"
+              placeholder="Content..."
+              {...setGetForm("task")}
+            />
           </CFormGroup>
-          <CFormGroup row>
-            <CCol md="2">
-              <CLabel htmlFor="documentReference">Tài liệu tham khảo</CLabel>
-            </CCol>
-            <CCol xs="12" md="10">
-              <CTextarea
-                id="documentReference"
-                rows="9"
-                placeholder="Content..."
-                {...setGetForm("documentReference")}
-              />
-            </CCol>
+
+          <CFormGroup>
+            <CLabel htmlFor="documentReference">Tài liệu tham khảo</CLabel>
+            <CTextarea
+              id="documentReference"
+              rows="5"
+              placeholder="Content..."
+              {...setGetForm("documentReference")}
+            />
           </CFormGroup>
         </CForm>
       </CCardBody>
       <CCardFooter>
-        <CButton type="submit" size="sm" color="primary" onClick={create}>
-          <CIcon name="cil-scrubber" /> Submit
+        <CButton type="submit" color="info" onClick={create}>
+          <CIcon name="cil-scrubber" /> Lưu
         </CButton>
       </CCardFooter>
     </CCard>
