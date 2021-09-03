@@ -2,96 +2,68 @@ import {
   CButton,
   CCard,
   CCardBody,
-  CCardHeader,
   CCol,
-  CDataTable,
-  CPagination,
+  CNav,
+  CNavItem,
+  CNavLink,
   CRow,
+  CTabContent,
+  CTabPane,
+  CTabs,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import api from "../../../service/api";
+import TopicTable from "./TopicTable";
 
-const fields = [
-  { key: "id", label: "Mã", _style: { width: "5%" } },
-  { key: "names", label: "Tên đề tài" },
-  { key: "thesis", label: "Loại", _style: { width: "10%" } },
-  { key: "semester", label: "Học kỳ", _style: { width: "10%" } },
-  { key: "educationMethod", label: "Phương thức", _style: { width: "10%" } },
-  { key: "majorNames", label: "Ngành" },
-  { key: "guideTeacherNames", label: "Giáo viên hướng dẫn" },
-  { key: "description", label: "Mô tả" },
-];
-
-const Topics = () => {
+const MainComponent = () => {
   const history = useHistory();
-  const queryPage = useLocation().search.match(/page=([0-9]+)/, "");
-  const currentPage = Number(queryPage && queryPage[1] ? queryPage[1] : 1);
-  const [page, setPage] = useState(currentPage);
-  const [data, setData] = useState([]);
-  const size = 5;
-
-  const pageChange = (newPage) => {
-    currentPage !== newPage && history.push(`/topics?page=${newPage}`);
-  };
+  const location = useLocation();
+  const isThesisTab = location.pathname == "/topics/thesis";
+  const [activeThesisTab, setActiveThesisTab] = useState(isThesisTab);
 
   useEffect(() => {
-    currentPage !== page && setPage(currentPage);
-    api.get("/topic/flat").then(setData);
-  }, [currentPage, page]);
+    activeThesisTab !== activeThesisTab && setActiveThesisTab(activeThesisTab);
+    history.push(`/topics/${activeThesisTab ? "thesis" : "outline"}`);
+  }, [isThesisTab, activeThesisTab]);
+
+  console.log(isThesisTab);
 
   return (
     <CCard>
-      <CCardHeader>
-        <CRow>
-          <CCol sm="5">
-            <h4 id="traffic" className="card-title mb-0">
-              Đề tài
-            </h4>
-          </CCol>
-          <CCol sm="7" className="d-none d-md-block">
-            <CButton
-              color="primary"
-              className="float-right"
-              onClick={() => history.push(`/topics/create`)}
-            >
-              Thêm đề tài
-            </CButton>
-          </CCol>
-        </CRow>
-      </CCardHeader>
       <CCardBody>
-        <CDataTable
-          items={data}
-          fields={fields}
-          hover
-          striped
-          sorter
-          columnFilter
-          itemsPerPage={size}
-          activePage={page}
-          clickableRows
-          onRowClick={(item) => history.push(`/topics/${item.id}`)}
-          scopedSlots={{
-            name: (item) => (
-              <td>
-                <tr>{item.name?.vi}</tr>
-                <tr>{item.name?.en}</tr>
-              </td>
-            ),
-            educationMethod: (item) => (
-              <td>{item.educationMethod.value?.vi}</td>
-            ),
-          }}
-        />
-        <CPagination
-          activePage={page}
-          onActivePageChange={pageChange}
-          align="center"
-        />
+        <CTabs
+          activeTab={activeThesisTab ? 1 : 0}
+          onActiveTabChange={(index) => setActiveThesisTab(index == 1)}
+        >
+          <CRow>
+            <CCol>
+              <CNav variant="tabs">
+                <CNavItem>
+                  <CNavLink>Đề cương</CNavLink>
+                </CNavItem>
+                <CNavItem>
+                  <CNavLink>Luận văn</CNavLink>
+                </CNavItem>
+              </CNav>
+            </CCol>
+            <CCol md="2">
+              <CButton
+                color="primary"
+                className="float-right"
+                onClick={() => history.push(`/topics/create`)}
+              >
+                Thêm đề tài
+              </CButton>
+            </CCol>
+          </CRow>
+          <CTabContent>
+            <CTabPane>{!isThesisTab && <TopicTable thesis={false} />}</CTabPane>
+            <CTabPane>{isThesisTab && <TopicTable thesis={true} />}</CTabPane>
+          </CTabContent>
+        </CTabs>
       </CCardBody>
     </CCard>
   );
 };
 
-export default Topics;
+export default MainComponent;

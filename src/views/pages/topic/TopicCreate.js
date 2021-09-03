@@ -103,9 +103,14 @@ const TopicCreate = () => {
 
   const create = () => {
     form.guideTeachers = guideTeachers;
+    console.log(`/topics/${form.thesis ? "thesis" : "outline"}`);
     api
-      .create(form, "/topic")
-      .then((response) => response && history.push(`/topics`));
+      .create(form, "/topics")
+      .then(
+        (response) =>
+          response &&
+          history.push(`/topics/${form.thesis ? "thesis" : "outline"}`)
+      );
   };
 
   const removeGuideTeacher = (teacher) => {

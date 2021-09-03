@@ -13,16 +13,45 @@ const _nav = [
     },
   },
   {
-    _tag: "CSidebarNavItem",
-    name: "Topic",
+    _tag: "CSidebarNavDropdown",
+    name: "Đề tài",
     to: "/topics",
     icon: "cil-library",
+    _children: [
+      {
+        _tag: "CSidebarNavItem",
+        name: "Đề cương",
+        to: "/topics/outline",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Luận văn",
+        to: "/topics/thesis",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Tạo đề tài",
+        to: "/topics/create",
+      },
+    ],
   },
   {
-    _tag: "CSidebarNavItem",
-    name: "Teacher",
+    _tag: "CSidebarNavDropdown",
+    name: "Giáo viên",
     to: "/teachers",
     icon: "cil-library",
+    _children: [
+      {
+        _tag: "CSidebarNavItem",
+        name: "Giáo viên",
+        to: "/teachers",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Thêm giáo viên",
+        to: "/teachers/create",
+      },
+    ],
   },
   {
     _tag: "CSidebarNavTitle",
