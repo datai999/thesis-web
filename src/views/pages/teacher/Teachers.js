@@ -8,20 +8,19 @@ import {
   CPagination,
   CRow,
 } from "@coreui/react";
-import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import api from "../../../service/api";
 
 const fields = [
-  "code",
-  "firstName",
-  "lastName",
-  "gender",
-  "subjectDepartment",
-  "degree",
-  "email",
-  "phone",
+  { key: "code", label: "Mã số", _style: { width: "7%" } },
+  { key: "firstName", label: "Họ" },
+  { key: "lastName", label: "Tên", _style: { width: "10%" } },
+  { key: "gender", label: "Giới tính", _style: { width: "10%" } },
+  { key: "subjectDepartmentName", label: "Bộ môn" },
+  { key: "degreeName", label: "Học vị", _style: { width: "10%" } },
+  { key: "email", label: "Email:@hcmut.edu.vn" },
+  { key: "phone", label: "Số điện thoại", _style: { width: "11%" } },
 ];
 
 const Component = () => {
@@ -33,29 +32,16 @@ const Component = () => {
 
   const size = 5;
 
-  const fetchData = async () => {
-    var response = await api.getPaging({ page, size }, "/teacher");
-
-    let nextData = _.cloneDeep(data);
-    response.content.forEach((element, index) => {
-      nextData[(page - 1) * size + index] = element;
-    });
-
-    setData(nextData);
-  };
-
   const pageChange = (newPage) => {
     currentPage !== newPage && history.push(`/teachers?page=${newPage}`);
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
     currentPage !== page && setPage(currentPage);
-    fetchData();
+    api.get("/teacher/flat").then(setData);
   }, [currentPage, page]);
+
+  console.log(data);
 
   return (
     <CCard>
@@ -83,6 +69,8 @@ const Component = () => {
           fields={fields}
           hover
           striped
+          sorter
+          columnFilter
           itemsPerPage={size}
           activePage={page}
           clickableRows
