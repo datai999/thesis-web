@@ -10,8 +10,6 @@ import {
   CFormGroup,
   CInput,
   CInputCheckbox,
-  CInputGroup,
-  CInputGroupPrepend,
   CInputRadio,
   CLabel,
   CLink,
@@ -20,9 +18,50 @@ import {
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import api from "../../../service/api";
+import TeacherSearchModal from "../teacher/TeacherSearchModal";
+
+const defaultTeacher = {
+  id: 1,
+  firstName: "Nguyễn Đức Anh",
+  lastName: "Tài",
+  email: "defaultMail",
+  code: "teacherCode",
+};
+
+const TeacherCard = ({ teacher, remove }) => {
+  return (
+    <CCard>
+      <CCardHeader>
+        {teacher.code}
+        <div className="card-header-actions">
+          {remove && (
+            <CLink
+              className="card-header-action"
+              onClick={() => remove(teacher)}
+            >
+              <CIcon name="cil-x-circle" />
+            </CLink>
+          )}
+        </div>
+      </CCardHeader>
+      <CCardBody>
+        {teacher.firstName}
+        <br></br>
+        {teacher.lastName}
+        <br></br>
+        <br></br>
+        {teacher.email}
+        <br></br>
+        @hcmut.edu.vn
+      </CCardBody>
+    </CCard>
+  );
+};
 
 const TopicCreate = () => {
+  const history = useHistory();
   const [form, setForm] = useState({
     thesis: false,
     majors: [],
@@ -31,6 +70,8 @@ const TopicCreate = () => {
   });
   const [educationMethods, setEducationMethods] = useState([]);
   const [majors, setMajors] = useState([]);
+  const [guideTeachers, setGuideTeachers] = useState([defaultTeacher]);
+  const [searchTeachers, setSearchTeachers] = useState(false);
 
   const setGetForm = (getPath, setPath) => {
     return {
@@ -60,7 +101,14 @@ const TopicCreate = () => {
   };
 
   const create = () => {
-    api.create(form, "/topic");
+    form.guideTeachers = guideTeachers;
+    api
+      .create(form, "/topic")
+      .then((response) => response && history.push(`/topics`));
+  };
+
+  const removeGuideTeacher = (teacher) => {
+    setGuideTeachers(guideTeachers.filter((e) => e != teacher));
   };
 
   useEffect(() => {
@@ -78,6 +126,14 @@ const TopicCreate = () => {
 
   return (
     <CCard>
+      <TeacherSearchModal
+        view={searchTeachers}
+        setView={() => setSearchTeachers(false)}
+        selected={(teacher) => {
+          setSearchTeachers(false);
+          setGuideTeachers([...guideTeachers, teacher]);
+        }}
+      />
       <CCardHeader>Tạo đề tài</CCardHeader>
       <CCardBody>
         <CForm>
@@ -218,71 +274,27 @@ const TopicCreate = () => {
             </CCol>
 
             <CCol md="6">
+              <CLabel>Giáo viên hướng dẫn</CLabel>
               <CFormGroup row>
-                <CCol md="4">
-                  <CLabel>Giáo viên hướng dẫn</CLabel>
-                </CCol>
-                <CCol>
-                  <CInputGroup>
-                    <CInput placeholder="Nhập code hoặc tên giáo viên" />
-                    <CInputGroupPrepend>
-                      <CButton size="sm" type="button" color="info">
-                        <CIcon name="cil-magnifying-glass" /> Tìm kiếm
-                      </CButton>
-                    </CInputGroupPrepend>
-                  </CInputGroup>
-                </CCol>
-              </CFormGroup>
-
-              <CFormGroup row>
-                <CCol md="4">
-                  <CCard>
-                    <CCardHeader>
-                      Nguyễn Đức Anh Tài
-                      <div className="card-header-actions">
-                        <CLink className="card-header-action">
-                          <CIcon name="cil-settings" />
-                        </CLink>
-                        <CLink className="card-header-action">
-                          <CIcon name="cil-x-circle" />
-                        </CLink>
-                      </div>
-                    </CCardHeader>
-                    <CCardBody>Email: Code:</CCardBody>
-                  </CCard>
-                </CCol>
-                <CCol md="4">
-                  <CCard>
-                    <CCardHeader>
-                      Nguyễn Đức Anh Tài
-                      <div className="card-header-actions">
-                        <CLink className="card-header-action">
-                          <CIcon name="cil-settings" />
-                        </CLink>
-                        <CLink className="card-header-action">
-                          <CIcon name="cil-x-circle" />
-                        </CLink>
-                      </div>
-                    </CCardHeader>
-                    <CCardBody>Email: Code:</CCardBody>
-                  </CCard>
-                </CCol>
-                <CCol md="4">
-                  <CCard>
-                    <CCardHeader>
-                      Nguyễn Đức Anh Tài
-                      <div className="card-header-actions">
-                        <CLink className="card-header-action">
-                          <CIcon name="cil-settings" />
-                        </CLink>
-                        <CLink className="card-header-action">
-                          <CIcon name="cil-x-circle" />
-                        </CLink>
-                      </div>
-                    </CCardHeader>
-                    <CCardBody>Email: Code:</CCardBody>
-                  </CCard>
-                </CCol>
+                {guideTeachers.map((guideTeacher, index) => (
+                  <CCol md="4">
+                    <TeacherCard
+                      teacher={guideTeacher}
+                      remove={index > 0 && removeGuideTeacher}
+                    />
+                  </CCol>
+                ))}
+                {guideTeachers.length < 3 && (
+                  <CCol md="4">
+                    <CButton
+                      type="button"
+                      color="info"
+                      onClick={() => setSearchTeachers(true)}
+                    >
+                      Thêm giáo viên
+                    </CButton>
+                  </CCol>
+                )}
               </CFormGroup>
             </CCol>
           </CFormGroup>

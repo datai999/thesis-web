@@ -14,7 +14,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import api from "../../../service/api";
 
 const fields = [
-  "id",
+  "code",
   "firstName",
   "lastName",
   "gender",

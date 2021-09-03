@@ -20,6 +20,7 @@ const fields = [
   "semester",
   "educationMethod",
   "majors",
+  "guideTeachers",
   "description",
 ];
 
