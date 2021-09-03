@@ -26,8 +26,6 @@ const MainComponent = () => {
     history.push(`/topics/${activeThesisTab ? "thesis" : "outline"}`);
   }, [isThesisTab, activeThesisTab]);
 
-  console.log(isThesisTab);
-
   return (
     <CCard>
       <CCardBody>

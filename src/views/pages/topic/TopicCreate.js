@@ -65,6 +65,7 @@ const TopicCreate = () => {
   const [form, setForm] = useState({
     thesis: false,
     semester: 211,
+    educationMethods: [],
     majors: [],
     minStudentTake: 1,
     maxStudentTake: 3,
@@ -85,25 +86,24 @@ const TopicCreate = () => {
     };
   };
 
-  const onChangeMajors = (event) => {
-    const majorId = event.currentTarget.value;
+  const onChangeCheck = (event, path) => {
+    const id = event.currentTarget.value;
     const checked = event.currentTarget.checked;
     let nextForm = _.cloneDeep(form);
-    let currentMajors = _.get(nextForm, "majors");
-    let nextMajors = currentMajors;
-    if (!checked && currentMajors.includes(majorId)) {
-      nextMajors = currentMajors.filter((element) => element != majorId);
+    let current = _.get(nextForm, path);
+    let next = current;
+    if (!checked && current.includes(id)) {
+      next = current.filter((element) => element != id);
     }
-    if (checked && !currentMajors.includes(majorId)) {
-      nextMajors.push(majorId);
+    if (checked && !current.includes(id)) {
+      next.push(id);
     }
-    _.set(nextForm, "majors", nextMajors);
+    _.set(nextForm, path, next);
     setForm(nextForm);
   };
 
   const create = () => {
     form.guideTeachers = guideTeachers;
-    console.log(`/topics/${form.thesis ? "thesis" : "outline"}`);
     api
       .create(form, "/topics")
       .then(
@@ -119,15 +119,7 @@ const TopicCreate = () => {
 
   useEffect(() => {
     api.get("/major").then(setMajors);
-    api.postExample({ type: "educationMethod" }, "/const").then((response) => {
-      setEducationMethods(response);
-      const defaultEducationMethod = response.find(
-        (educationMethod) => educationMethod.no == 0
-      );
-      let nextForm = _.cloneDeep(form);
-      _.set(nextForm, "educationMethod", defaultEducationMethod.id);
-      setForm(nextForm);
-    });
+    api.get("/education-methods").then(setEducationMethods);
   }, []);
 
   return (
@@ -205,20 +197,21 @@ const TopicCreate = () => {
                 <CCol md="5">
                   <CLabel>Phương thức đào tạo</CLabel>
                   {educationMethods.map((educationMethod) => (
-                    <CFormGroup variant="custom-radio">
-                      <CInputRadio
+                    <CFormGroup variant="custom-checkbox">
+                      <CInputCheckbox
                         custom
                         id={"educationMethod" + educationMethod.id}
-                        name="eduMethod"
-                        defaultChecked={educationMethod.no == 0}
-                        {...setGetForm("educationMethod")}
+                        name="educationMethod"
                         value={educationMethod.id}
+                        onChange={(event) =>
+                          onChangeCheck(event, "educationMethods")
+                        }
                       />
                       <CLabel
                         variant="custom-checkbox"
                         htmlFor={"educationMethod" + educationMethod.id}
                       >
-                        {educationMethod.value?.vi}
+                        {educationMethod.name}
                       </CLabel>
                     </CFormGroup>
                   ))}
@@ -234,7 +227,7 @@ const TopicCreate = () => {
                         id={"major" + major.id}
                         name="major"
                         value={major.id}
-                        onChange={onChangeMajors}
+                        onChange={(event) => onChangeCheck(event, "majors")}
                       />
                       <CLabel
                         variant="custom-checkbox"

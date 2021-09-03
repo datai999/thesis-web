@@ -1,4 +1,4 @@
-import { CDataTable, CPagination } from "@coreui/react";
+import { CCardBody, CCollapse, CDataTable, CPagination } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import api from "../../../service/api";
@@ -8,7 +8,7 @@ const fields = [
   { key: "names", label: "Tên đề tài" },
   { key: "semester", label: "Học kỳ", _style: { width: "10%" } },
   {
-    key: "educationMethodName",
+    key: "educationMethodNames",
     label: "Phương thức",
     _style: { width: "12%" },
   },
@@ -22,11 +22,23 @@ const MainComponent = ({ thesis }) => {
   const currentPage = Number(queryPage && queryPage[1] ? queryPage[1] : 1);
   const [page, setPage] = useState(currentPage);
   const [data, setData] = useState([]);
+  const [details, setDetails] = useState([]);
   const size = 5;
 
   const pageChange = (newPage) => {
     currentPage !== newPage &&
       history.push(`/topics/${thesis ? "thesis" : "outline"}?page=${newPage}`);
+  };
+
+  const toggleDetails = (index) => {
+    const position = details.indexOf(index);
+    let newDetails = details.slice();
+    if (position !== -1) {
+      newDetails.splice(position, 1);
+    } else {
+      newDetails = [...details, index];
+    }
+    setDetails(newDetails);
   };
 
   useEffect(() => {
@@ -46,11 +58,21 @@ const MainComponent = ({ thesis }) => {
         itemsPerPage={size}
         activePage={page}
         clickableRows
-        // onRowClick={(item) => history.push(`/topics/${item.id}`)}
+        onRowClick={(item, index) => toggleDetails(index)}
         scopedSlots={{
           names: (item) => multiLine(item.names),
+          educationMethodNames: (item) => multiLine(item.educationMethodNames),
           majorNames: (item) => multiLine(item.majorNames),
           guideTeacherNames: (item) => multiLine(item.guideTeacherNames),
+          details: (item, index) => {
+            return (
+              <CCollapse show={details.includes(index)}>
+                <CCardBody>
+                  <h4>{item.id}</h4>
+                </CCardBody>
+              </CCollapse>
+            );
+          },
         }}
       />
       <CPagination
