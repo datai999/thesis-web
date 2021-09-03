@@ -64,6 +64,7 @@ const TopicCreate = () => {
   const history = useHistory();
   const [form, setForm] = useState({
     thesis: false,
+    semester: 211,
     majors: [],
     minStudentTake: 1,
     maxStudentTake: 3,
@@ -162,7 +163,6 @@ const TopicCreate = () => {
                 <CCol md="3">
                   <CLabel htmlFor="semester">Học kỳ</CLabel>
                   <CSelect custom {...setGetForm("semester")}>
-                    <option>Chọn</option>
                     <option value="211">211</option>
                     <option value="212">212</option>
                     <option value="213">213</option>

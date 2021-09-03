@@ -8,20 +8,19 @@ import {
   CPagination,
   CRow,
 } from "@coreui/react";
-import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import api from "../../../service/api";
 
 const fields = [
-  "id",
-  "name",
-  "thesis",
-  "semester",
-  "educationMethod",
-  "majors",
-  "guideTeachers",
-  "description",
+  { key: "id", label: "Mã", _style: { width: "5%" } },
+  { key: "names", label: "Tên đề tài" },
+  { key: "thesis", label: "Loại", _style: { width: "10%" } },
+  { key: "semester", label: "Học kỳ", _style: { width: "10%" } },
+  { key: "educationMethod", label: "Phương thức", _style: { width: "10%" } },
+  { key: "majorNames", label: "Ngành" },
+  { key: "guideTeacherNames", label: "Giáo viên hướng dẫn" },
+  { key: "description", label: "Mô tả" },
 ];
 
 const Topics = () => {
@@ -30,31 +29,15 @@ const Topics = () => {
   const currentPage = Number(queryPage && queryPage[1] ? queryPage[1] : 1);
   const [page, setPage] = useState(currentPage);
   const [data, setData] = useState([]);
-
   const size = 5;
-
-  const fetchData = async () => {
-    var response = await api.getPaging({ page, size }, "/topic");
-
-    let nextData = _.cloneDeep(data);
-    response.content.forEach((element, index) => {
-      nextData[(page - 1) * size + index] = element;
-    });
-
-    setData(nextData);
-  };
 
   const pageChange = (newPage) => {
     currentPage !== newPage && history.push(`/topics?page=${newPage}`);
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
     currentPage !== page && setPage(currentPage);
-    fetchData();
+    api.get("/topic/flat").then(setData);
   }, [currentPage, page]);
 
   return (
@@ -83,6 +66,8 @@ const Topics = () => {
           fields={fields}
           hover
           striped
+          sorter
+          columnFilter
           itemsPerPage={size}
           activePage={page}
           clickableRows
@@ -96,13 +81,6 @@ const Topics = () => {
             ),
             educationMethod: (item) => (
               <td>{item.educationMethod.value?.vi}</td>
-            ),
-            majors: (item) => (
-              <td>
-                {item.majors.map((major) => (
-                  <tr>{major.name?.vi}</tr>
-                ))}
-              </td>
             ),
           }}
         />
