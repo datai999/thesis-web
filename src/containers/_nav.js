@@ -36,6 +36,12 @@ const _nav = [
     ],
   },
   {
+    _tag: "CSidebarNavItem",
+    name: "Đề tài của tôi",
+    to: "/my/topics",
+    icon: "cil-puzzle",
+  },
+  {
     _tag: "CSidebarNavDropdown",
     name: "Giáo viên",
     to: "/teachers",
