@@ -69,6 +69,7 @@ const MainComponent = ({ thesis }) => {
       <RegisterTopicModal
         view={registerTopicModal}
         disableView={() => setRegisterTopicModal(false)}
+        confirm={() => history.go(0)}
         topic={topicRegister}
       />
       <CDataTable
@@ -128,7 +129,15 @@ const MainComponent = ({ thesis }) => {
                       {[...Array(item.maxStudentTake).keys()].map((index) => (
                         <div>
                           {item.students[index] ? (
-                            item.students[index].name
+                            <div>
+                              <CRow>
+                                <CCol>{item.students[index].firstName}</CCol>
+                              </CRow>
+                              <CRow>
+                                <CCol>{item.students[index].lastName}</CCol>
+                                <CCol>{item.students[index].code}</CCol>
+                              </CRow>
+                            </div>
                           ) : (
                             <CButton
                               type="button"

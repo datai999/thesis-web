@@ -11,9 +11,12 @@ import {
 import React from "react";
 import api from "../../../service/api";
 
-const MainComponent = ({ view, disableView, topic }) => {
+const MainComponent = ({ view, disableView, confirm, topic }) => {
   const registerTopic = () => {
-    api.post(`/topics/${topic.id}/student-register`).then(disableView);
+    api.post(`/topics/${topic.id}/student-register`).then((response) => {
+      disableView();
+      confirm(response.data);
+    });
   };
 
   if (!topic) return null;
