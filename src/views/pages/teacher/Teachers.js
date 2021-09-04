@@ -41,8 +41,6 @@ const Component = () => {
     api.get("/teacher/flat").then(setData);
   }, [currentPage, page]);
 
-  console.log(data);
-
   return (
     <CCard>
       <CCardHeader>

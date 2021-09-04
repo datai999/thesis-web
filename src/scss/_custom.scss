@@ -1,1 +1,30 @@
 // Here you can add other styles
+
+.c-datatable-filter label {
+  visibility: hidden;
+  position: relative;
+}
+
+.c-datatable-filter label:after {
+  visibility: visible;
+  position: relative;
+  content: "Tìm kiếm";
+}
+
+.c-datatable-filter input::placeholder {
+  content: "Tìm kiếm";
+}
+
+.c-datatable-items-per-page label {
+  visibility: hidden;
+  position: relative;
+  margin: auto;
+  margin-bottom: 0.5rem !important;
+}
+
+.c-datatable-items-per-page label:after {
+  visibility: visible;
+  position: relative;
+  content: "Số mục trên mỗi trang";
+  margin: auto;
+}

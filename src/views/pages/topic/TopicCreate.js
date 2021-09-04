@@ -93,7 +93,7 @@ const TopicCreate = () => {
     let current = _.get(nextForm, path);
     let next = current;
     if (!checked && current.includes(id)) {
-      next = current.filter((element) => element != id);
+      next = current.filter((element) => element !== id);
     }
     if (checked && !current.includes(id)) {
       next.push(id);
@@ -114,7 +114,7 @@ const TopicCreate = () => {
   };
 
   const removeGuideTeacher = (teacher) => {
-    setGuideTeachers(guideTeachers.filter((e) => e != teacher));
+    setGuideTeachers(guideTeachers.filter((e) => e !== teacher));
   };
 
   useEffect(() => {
@@ -255,6 +255,7 @@ const TopicCreate = () => {
                       </CSelect>
                     </CCol>
                     <CCol md="6">
+                      {/* TODO: bug submit */}
                       <CLabel htmlFor="selectMax">Tối đa</CLabel>
                     </CCol>
                     <CCol md="6">

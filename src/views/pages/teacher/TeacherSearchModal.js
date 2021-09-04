@@ -26,7 +26,7 @@ const Component = ({ view, disableView, selected }) => {
   const size = 5;
 
   const pageChange = (newPage) => {
-    if (page != newPage) {
+    if (page !== newPage) {
       setPage(newPage);
     }
   };

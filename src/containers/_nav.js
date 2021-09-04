@@ -16,7 +16,7 @@ const _nav = [
     _tag: "CSidebarNavDropdown",
     name: "Đề tài",
     to: "/topics",
-    icon: "cil-library",
+    icon: "cil-puzzle",
     _children: [
       {
         _tag: "CSidebarNavItem",
@@ -39,7 +39,7 @@ const _nav = [
     _tag: "CSidebarNavDropdown",
     name: "Giáo viên",
     to: "/teachers",
-    icon: "cil-library",
+    icon: "cil-user",
     _children: [
       {
         _tag: "CSidebarNavItem",
@@ -57,7 +57,7 @@ const _nav = [
     _tag: "CSidebarNavItem",
     name: "Sinh viên",
     to: "/students",
-    icon: "cil-drop",
+    icon: "cil-user",
   },
 
   {

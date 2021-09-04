@@ -1,19 +1,35 @@
-import { CCardBody, CCollapse, CDataTable, CPagination } from "@coreui/react";
+import {
+  CButton,
+  CCardBody,
+  CCol,
+  CCollapse,
+  CDataTable,
+  CPagination,
+  CRow,
+} from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import api from "../../../service/api";
+import RegisterTopicModal from "./RegisterTopicModal";
 
 const fields = [
-  { key: "id", label: "Mã", _style: { width: "3%" } },
+  { key: "id", label: "Mã", _style: { width: "1%" } },
   { key: "names", label: "Tên đề tài" },
-  { key: "semester", label: "Học kỳ", _style: { width: "10%" } },
+  { key: "semester", label: "Học kỳ", _style: { width: "1%" } },
   {
     key: "educationMethodNames",
     label: "Phương thức",
     _style: { width: "12%" },
   },
   { key: "majorNames", label: "Ngành" },
-  { key: "guideTeacherNames", label: "Giáo viên hướng dẫn" },
+  { key: "guideTeacherCodeNames", label: "Giáo viên hướng dẫn" },
+  {
+    key: "actions",
+    label: "",
+    _style: { width: "1%" },
+    sorter: false,
+    filter: false,
+  },
 ];
 
 const MainComponent = ({ thesis }) => {
@@ -23,6 +39,8 @@ const MainComponent = ({ thesis }) => {
   const [page, setPage] = useState(currentPage);
   const [data, setData] = useState([]);
   const [details, setDetails] = useState([]);
+  const [registerTopicModal, setRegisterTopicModal] = useState(false);
+  const [topicRegister, setTopicRegister] = useState();
   const size = 5;
 
   const pageChange = (newPage) => {
@@ -48,27 +66,87 @@ const MainComponent = ({ thesis }) => {
 
   return (
     <div>
+      <RegisterTopicModal
+        view={registerTopicModal}
+        disableView={() => setRegisterTopicModal(false)}
+        topic={topicRegister}
+      />
       <CDataTable
         items={data}
         fields={fields}
         hover
-        striped
         sorter
         columnFilter
+        tableFilter
+        itemsPerPageSelect
         itemsPerPage={size}
         activePage={page}
         clickableRows
-        onRowClick={(item, index) => toggleDetails(index)}
         scopedSlots={{
           names: (item) => multiLine(item.names),
           educationMethodNames: (item) => multiLine(item.educationMethodNames),
           majorNames: (item) => multiLine(item.majorNames),
-          guideTeacherNames: (item) => multiLine(item.guideTeacherNames),
+          guideTeacherCodeNames: (item) =>
+            multiLine(item.guideTeacherCodeNames),
+          actions: (item, index) => (
+            <td className="py-2">
+              <CButton
+                color="primary"
+                variant="outline"
+                shape="square"
+                size="sm"
+                onClick={() => {
+                  toggleDetails(index);
+                }}
+              >
+                {details.includes(index) ? "Ẩn bớt" : "Chi tiết"}
+              </CButton>
+            </td>
+          ),
           details: (item, index) => {
             return (
               <CCollapse show={details.includes(index)}>
                 <CCardBody>
-                  <h4>{item.id}</h4>
+                  <CRow>
+                    <CCol md="5">
+                      Mô tả
+                      <br></br>
+                      {item.description}
+                    </CCol>
+                    <CCol md="5">
+                      Nhiệm vụ
+                      <br></br>
+                      {item.task}
+                      <br></br>
+                      Tài liệu
+                      <br></br>
+                      {item.documentReference}
+                    </CCol>
+                    <CCol>
+                      Sinh viên:
+                      <br></br>
+                      {[...Array(item.maxStudentTake).keys()].map((index) => (
+                        <div>
+                          {item.students[index] ? (
+                            item.students[index].name
+                          ) : (
+                            <CButton
+                              type="button"
+                              color="info"
+                              size="sm"
+                              onClick={() => {
+                                setTopicRegister(item);
+                                setRegisterTopicModal(true);
+                              }}
+                            >
+                              Đăng ký
+                            </CButton>
+                          )}
+                          <br></br>
+                        </div>
+                      ))}
+                    </CCol>
+                  </CRow>
                 </CCardBody>
               </CCollapse>
             );

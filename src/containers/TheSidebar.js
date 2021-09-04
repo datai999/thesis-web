@@ -1,19 +1,15 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
 import {
   CCreateElement,
   CSidebar,
-  CSidebarBrand,
+  CSidebarMinimizer,
   CSidebarNav,
   CSidebarNavDivider,
-  CSidebarNavTitle,
-  CSidebarMinimizer,
   CSidebarNavDropdown,
   CSidebarNavItem,
+  CSidebarNavTitle,
 } from "@coreui/react";
-
-import CIcon from "@coreui/icons-react";
-
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 // sidebar nav config
 import navigation from "./_nav";
 
