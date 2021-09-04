@@ -68,6 +68,8 @@ const TeacherCreate = React.lazy(() =>
   import("./views/pages/teacher/TeacherCreate")
 );
 
+const Students = React.lazy(() => import("./views/pages/student/Students"));
+
 const routes = [
   { path: "/", exact: true, name: "Trang chủ" },
   { path: "/dashboard", name: "Dashboard", component: Dashboard },
@@ -76,7 +78,12 @@ const routes = [
   { path: "/topics/thesis", exact: true, name: "Luận văn", component: Topics },
   { path: "/topics/create", name: "Tạo đề tài", component: TopicCreate },
   { path: "/teachers", exact: true, name: "Giáo viên", component: Teachers },
-  { path: "/teachers/create", name: "Thêm giáo viên", component: TeacherCreate },
+  {
+    path: "/teachers/create",
+    name: "Thêm giáo viên",
+    component: TeacherCreate,
+  },
+  { path: "/students", exact: true, name: "Sinh viên", component: Students },
 
   { path: "/theme", name: "Theme", component: Colors, exact: true },
   { path: "/theme/colors", name: "Colors", component: Colors },

@@ -54,6 +54,13 @@ const _nav = [
     ],
   },
   {
+    _tag: "CSidebarNavItem",
+    name: "Sinh viên",
+    to: "/students",
+    icon: "cil-drop",
+  },
+
+  {
     _tag: "CSidebarNavTitle",
     _children: ["Theme"],
   },
