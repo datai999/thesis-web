@@ -14,7 +14,7 @@ import {
   CInputGroupText,
   CInputRadio,
   CLabel,
-  CSelect,
+  CSelect
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
@@ -39,7 +39,7 @@ const TopicCreate = () => {
   };
 
   const create = () => {
-    api.create(form, "/teacher");
+    api.create(form, "/teachers");
   };
 
   useEffect(() => {

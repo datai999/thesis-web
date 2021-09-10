@@ -6,7 +6,7 @@ import {
   CModalFooter,
   CModalHeader,
   CModalTitle,
-  CPagination,
+  CPagination
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import api from "../../../service/api";
@@ -32,7 +32,7 @@ const Component = ({ view, disableView, selected }) => {
   };
 
   useEffect(() => {
-    api.get("/teacher/flat").then(setData);
+    api.get("/teachers", { params: { direction: "DESC" } }).then(setData);
   }, [page]);
 
   return (
