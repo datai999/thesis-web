@@ -1,16 +1,21 @@
-import CIcon from "@coreui/icons-react";
 import { CButton, CCard, CCol, CContainer, CForm, CRow } from "@coreui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
+import api from "../../../service/api";
 import { getIdToken, signInWithGoogle } from "../../../service/firebase";
 
 const Login = () => {
   const history = useHistory();
 
   const login = async () => {
-    await signInWithGoogle();
-    console.log(await getIdToken());
-    // history.push(`/`);
+    const result = await signInWithGoogle();
+    // TODO check extend email domain
+    console.log(result.user.email);
+    const token = await getIdToken();
+    console.log(token);
+    window.localStorage.setItem("token", token);
+    await api.post("/persons/login");
+    history.push(`/`);
   };
 
   return (
@@ -22,15 +27,10 @@ const Login = () => {
               <CForm>
                 <h2>Hệ thống đánh giá luận văn</h2>
                 <CRow className="pt-4">
-                  <CCol md="8">
-                    <CIcon name="cib-google" />
+                  <CCol md="7">Sử dụng mail@hcmut.edu.vn</CCol>
+                  <CCol>
                     <CButton color="primary" className="px-4" onClick={login}>
                       Đăng nhập
-                    </CButton>
-                  </CCol>
-                  <CCol>
-                    <CButton color="link" className="px-0">
-                      Đăng ký
                     </CButton>
                   </CCol>
                 </CRow>

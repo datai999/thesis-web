@@ -4,7 +4,7 @@ const config = {
   baseURL: "http://localhost:8080/api",
   headers: {
     "content-type": "application/json",
-    Lang: "vi",
+    "Access-Control-Allow-Origin": "*",
   },
 };
 
@@ -19,6 +19,14 @@ AxiosClient.interceptors.response.use(
     throw error;
   }
 );
+
+AxiosClient.interceptors.request.use(async (config) => {
+  const getToken = async () => {
+    return await window.localStorage.getItem("token");
+  };
+  config.headers.common["X-auth"] = await getToken();
+  return config;
+});
 
 const CommonApi = (baseURL = "") => {
   return {
