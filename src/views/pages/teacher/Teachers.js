@@ -6,7 +6,7 @@ import {
   CCol,
   CDataTable,
   CPagination,
-  CRow,
+  CRow
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
@@ -38,7 +38,7 @@ const Component = () => {
 
   useEffect(() => {
     currentPage !== page && setPage(currentPage);
-    api.get("/teacher/flat").then(setData);
+    api.get("/teachers", { params: { direction: "DESC" } }).then(setData);
   }, [currentPage, page]);
 
   return (
