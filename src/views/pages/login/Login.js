@@ -14,7 +14,7 @@ const Login = () => {
     const token = await getIdToken();
     console.log(token);
     window.localStorage.setItem("token", token);
-    await api.post("/persons/login");
+    await api.post("/users/login");
     history.push(`/`);
   };
 

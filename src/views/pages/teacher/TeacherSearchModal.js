@@ -32,7 +32,7 @@ const Component = ({ view, disableView, selected }) => {
   };
 
   useEffect(() => {
-    api.get("/teachers", { params: { direction: "DESC" } }).then(setData);
+    api.get("/users/teachers", { params: { direction: "DESC" } }).then(setData);
   }, [page]);
 
   return (

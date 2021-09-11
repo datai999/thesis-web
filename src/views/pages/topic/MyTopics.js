@@ -1,7 +1,12 @@
 import { CCard, CCardBody, CCardHeader } from "@coreui/react";
-import React from "react";
+import React, { useEffect } from "react";
+import api from "../../../service/api";
 
 const MainComponent = () => {
+  useEffect(() => {
+    api.get("/persons/topics");
+  });
+
   return (
     <CCard>
       <CCardHeader></CCardHeader>

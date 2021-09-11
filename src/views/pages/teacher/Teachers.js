@@ -38,7 +38,7 @@ const Component = () => {
 
   useEffect(() => {
     currentPage !== page && setPage(currentPage);
-    api.get("/teachers", { params: { direction: "DESC" } }).then(setData);
+    api.get("/users/teachers", { params: { direction: "DESC" } }).then(setData);
   }, [currentPage, page]);
 
   return (

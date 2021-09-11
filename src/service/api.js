@@ -12,6 +12,7 @@ const AxiosClient = axios.create(config);
 
 AxiosClient.interceptors.response.use(
   (response) => {
+    console.log(response.data);
     if (response && response.data) return response.data.data;
     return response;
   },
