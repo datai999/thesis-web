@@ -14,7 +14,7 @@ import {
   CLabel,
   CLink,
   CSelect,
-  CTextarea,
+  CTextarea
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
@@ -22,15 +22,8 @@ import { useHistory } from "react-router-dom";
 import api from "../../../service/api";
 import TeacherSearchModal from "../teacher/TeacherSearchModal";
 
-const defaultTeacher = {
-  id: 1,
-  firstName: "Nguyễn Đức Anh",
-  lastName: "Tài",
-  email: "defaultMail",
-  code: "teacherCode",
-};
-
 const TeacherCard = ({ teacher, remove }) => {
+  if (!teacher) return;
   return (
     <CCard>
       <CCardHeader>
@@ -51,10 +44,7 @@ const TeacherCard = ({ teacher, remove }) => {
         <br></br>
         {teacher.lastName}
         <br></br>
-        <br></br>
         {teacher.email}
-        <br></br>
-        @hcmut.edu.vn
       </CCardBody>
     </CCard>
   );
@@ -72,7 +62,7 @@ const TopicCreate = () => {
   });
   const [educationMethods, setEducationMethods] = useState([]);
   const [majors, setMajors] = useState([]);
-  const [guideTeachers, setGuideTeachers] = useState([defaultTeacher]);
+  const [guideTeachers, setGuideTeachers] = useState([]);
   const [searchTeachers, setSearchTeachers] = useState(false);
 
   const setGetForm = (getPath, setPath) => {
@@ -118,7 +108,8 @@ const TopicCreate = () => {
   };
 
   useEffect(() => {
-    api.get("/major").then(setMajors);
+    api.get("/users/token").then((user) => setGuideTeachers([user]));
+    api.get("/majors").then(setMajors);
     api.get("/education-methods").then(setEducationMethods);
   }, []);
 
@@ -233,7 +224,7 @@ const TopicCreate = () => {
                         variant="custom-checkbox"
                         htmlFor={"major" + major.id}
                       >
-                        {major.name?.vi}
+                        {major.name}
                       </CLabel>
                     </CFormGroup>
                   ))}
