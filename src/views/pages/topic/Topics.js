@@ -9,7 +9,7 @@ import {
   CRow,
   CTabContent,
   CTabPane,
-  CTabs,
+  CTabs
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
@@ -18,7 +18,7 @@ import TopicTable from "./TopicTable";
 const MainComponent = () => {
   const history = useHistory();
   const location = useLocation();
-  const isThesisTab = location.pathname == "/topics/thesis";
+  const isThesisTab = location.pathname === "/topics/thesis";
   const [activeThesisTab, setActiveThesisTab] = useState(isThesisTab);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const MainComponent = () => {
       <CCardBody>
         <CTabs
           activeTab={activeThesisTab ? 1 : 0}
-          onActiveTabChange={(index) => setActiveThesisTab(index == 1)}
+          onActiveTabChange={(index) => setActiveThesisTab(index === 1)}
         >
           <CRow>
             <CCol>

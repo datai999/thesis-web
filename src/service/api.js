@@ -16,6 +16,13 @@ AxiosClient.interceptors.response.use(
     return response;
   },
   (error) => {
+    if (error && error.response && error.response.data) {
+      console.log(error.response.data);
+      if (error.response.data.errorCode === "EXPIRED_ID_TOKEN") {
+        alert(error.response.data.error);
+        window.location.replace(window.location.origin + "/#/login");
+      }
+    }
     throw error;
   }
 );
@@ -58,7 +65,7 @@ export const StudentApi = {
   ...CommonApi("/student"),
 
   search: (value) => {
-    const url = "/student" + "/search?value=" + value;
+    const url = "/student/search?value=" + value;
     return AxiosClient.get(url);
   },
 };
