@@ -6,14 +6,14 @@ import {
   CModalFooter,
   CModalHeader,
   CModalTitle,
-  CRow,
+  CRow
 } from "@coreui/react";
 import React from "react";
 import api from "../../../service/api";
 
 const MainComponent = ({ view, disableView, confirm, topic }) => {
   const registerTopic = () => {
-    api.post(`/topics/${topic.id}/student-register`).then((response) => {
+    api.post(`/topics/${topic.id}/students`).then((response) => {
       disableView();
       confirm(response.data);
     });
@@ -43,7 +43,14 @@ const MainComponent = ({ view, disableView, confirm, topic }) => {
 
         <CRow>
           <CCol md="4">Giáo viên hướng dẫn:</CCol>
-          <CCol>{multiLine(topic.guideTeacherCodeNames)}</CCol>
+          <CCol>
+            {topic.guideTeachers?.map((guideTeacher) => (
+              <tr>
+                {guideTeacher.code} {guideTeacher.firstName}{" "}
+                {guideTeacher.lastName}
+              </tr>
+            ))}
+          </CCol>
         </CRow>
       </CModalBody>
       <CModalFooter>

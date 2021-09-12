@@ -61,17 +61,4 @@ const CommonApi = (baseURL = "") => {
   };
 };
 
-export const StudentApi = {
-  ...CommonApi("/student"),
-
-  search: (value) => {
-    const url = "/student/search?value=" + value;
-    return AxiosClient.get(url);
-  },
-};
-
-export const ConstApi = {
-  ...CommonApi("/const"),
-};
-
 export default CommonApi();

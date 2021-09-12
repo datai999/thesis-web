@@ -5,7 +5,7 @@ import {
   CCollapse,
   CDataTable,
   CPagination,
-  CRow,
+  CRow
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
@@ -22,7 +22,7 @@ const fields = [
     _style: { width: "12%" },
   },
   { key: "majorNames", label: "Ngành" },
-  { key: "guideTeacherCodeNames", label: "Giáo viên hướng dẫn" },
+  { key: "guideTeachers", label: "Giáo viên hướng dẫn" },
   {
     key: "actions",
     label: "",
@@ -61,7 +61,11 @@ const MainComponent = ({ thesis }) => {
 
   useEffect(() => {
     currentPage !== page && setPage(currentPage);
-    api.get(`/topics/${thesis ? "thesis" : "outline"}-flat`).then(setData);
+    api
+      .get(`/topics/${thesis ? "thesis" : "outline"}`, {
+        params: { direction: "DESC" },
+      })
+      .then(setData);
   }, [currentPage, page]);
 
   return (
@@ -87,8 +91,16 @@ const MainComponent = ({ thesis }) => {
           names: (item) => multiLine(item.names),
           educationMethodNames: (item) => multiLine(item.educationMethodNames),
           majorNames: (item) => multiLine(item.majorNames),
-          guideTeacherCodeNames: (item) =>
-            multiLine(item.guideTeacherCodeNames),
+          guideTeachers: (item) => (
+            <td>
+              {item.guideTeachers?.map((guideTeacher) => (
+                <tr>
+                  {guideTeacher.code} {guideTeacher.firstName}{" "}
+                  {guideTeacher.lastName}
+                </tr>
+              ))}
+            </td>
+          ),
           actions: (item, index) => (
             <td className="py-2">
               <CButton
@@ -128,7 +140,7 @@ const MainComponent = ({ thesis }) => {
                       <br></br>
                       {[...Array(item.maxStudentTake).keys()].map((index) => (
                         <div>
-                          {item.students[index] ? (
+                          {item.students && item.students[index] ? (
                             <div>
                               <CRow>
                                 <CCol>{item.students[index].firstName}</CCol>

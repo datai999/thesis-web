@@ -237,7 +237,7 @@ const TopicCreate = () => {
                       <CLabel htmlFor="selectMin">Tối thiểu</CLabel>
                     </CCol>
                     <CCol md="6">
-                      <CSelect custom id="selectMin" size="sm" id="select">
+                      <CSelect custom id="selectMin" size="sm">
                         <option value="1" selected>
                           1
                         </option>
@@ -250,7 +250,7 @@ const TopicCreate = () => {
                       <CLabel htmlFor="selectMax">Tối đa</CLabel>
                     </CCol>
                     <CCol md="6">
-                      <CSelect custom id="selectMax" size="sm" id="select">
+                      <CSelect custom id="selectMax" size="sm">
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3" selected>
