@@ -36,10 +36,27 @@ const _nav = [
     ],
   },
   {
-    _tag: "CSidebarNavItem",
+    _tag: "CSidebarNavDropdown",
     name: "Đề tài của tôi",
     to: "/my/topics",
     icon: "cil-puzzle",
+    _children: [
+      {
+        _tag: "CSidebarNavItem",
+        name: "Thực thi",
+        to: "/my/topics/execute",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Hướng dẫn",
+        to: "/my/topics/guide",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Phản biện",
+        to: "/my/topics/review",
+      },
+    ],
   },
   {
     _tag: "CSidebarNavDropdown",

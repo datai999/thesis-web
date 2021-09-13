@@ -9,8 +9,7 @@ import {
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import api from "../../../service/api";
-import RegisterTopicModal from "./RegisterTopicModal";
+import api from "../../../../service/api";
 
 const fields = [
   { key: "id", label: "Mã", _style: { width: "1%" } },
@@ -70,12 +69,6 @@ const MainComponent = ({ thesis }) => {
 
   return (
     <div>
-      <RegisterTopicModal
-        view={registerTopicModal}
-        disableView={() => setRegisterTopicModal(false)}
-        confirm={() => history.push("/my/topics/execute")}
-        topic={topicRegister}
-      />
       <CDataTable
         items={data}
         fields={fields}
@@ -157,7 +150,6 @@ const MainComponent = ({ thesis }) => {
                               size="sm"
                               onClick={() => {
                                 setTopicRegister(item);
-                                setRegisterTopicModal(true);
                               }}
                             >
                               Đăng ký
