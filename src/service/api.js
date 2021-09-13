@@ -20,7 +20,7 @@ AxiosClient.interceptors.response.use(
       console.log(error.response.data);
       if (error.response.data.errorCode === "EXPIRED_ID_TOKEN") {
         alert(error.response.data.error);
-        window.location.replace(window.location.origin + "/#/login");
+        window.location.replace(window.location.origin + "/login");
       }
     }
     throw error;
