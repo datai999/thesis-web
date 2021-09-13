@@ -10,11 +10,16 @@ import {
   CRow
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import api from "../../../../service/api";
+import CancelTopicModal from "./CancelTopicModal";
 
 const TopicExecutes = () => {
+  const history = useHistory();
   const [data, setData] = useState([]);
   const [details, setDetails] = useState([0, 1]);
+  const [cancelTopicModal, setCancelTopicModal] = useState(false);
+  const [topicCancel, setTopicCancel] = useState();
 
   const toggleDetails = (index) => {
     const position = details.indexOf(index);
@@ -45,6 +50,12 @@ const TopicExecutes = () => {
 
   return (
     <div className="pt-3">
+      <CancelTopicModal
+        view={cancelTopicModal}
+        disableView={() => setCancelTopicModal(false)}
+        confirm={() => history.go("/my/topics/execute")}
+        topic={topicCancel}
+      />
       {data.map((topic, index) => (
         <CCard key={index} className="mb-2">
           <CCardHeader className="m-0 p-0">
@@ -95,7 +106,7 @@ const TopicExecutes = () => {
                     </CCol>
                   </CRow>
                 </CCol>
-                <CCol>
+                <CCol md="4">
                   Giáo viên hướng dẫn
                   <CListGroup>
                     {topic.guideTeachers?.map((guideTeacher) => (
@@ -111,7 +122,7 @@ const TopicExecutes = () => {
                     ))}
                   </CListGroup>
                 </CCol>
-                <CCol>
+                <CCol md="4">
                   Sinh viên thực hiện
                   <CListGroup>
                     {topic.students?.map((student) => (
@@ -124,6 +135,19 @@ const TopicExecutes = () => {
                       </CListGroupItem>
                     ))}
                   </CListGroup>
+                </CCol>
+                <CCol>
+                  <CButton
+                    block
+                    color="danger"
+                    className="m-0 p-0"
+                    onClick={() => {
+                      setTopicCancel(topic);
+                      setCancelTopicModal(true);
+                    }}
+                  >
+                    Hủy chọn đề tài
+                  </CButton>
                 </CCol>
               </CRow>
               <br />

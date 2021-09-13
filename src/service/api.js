@@ -43,6 +43,9 @@ const CommonApi = (baseURL = "") => {
     post: (url, data, config) => {
       return AxiosClient.post(baseURL + url, data, config);
     },
+    delete: (url, config) => {
+      return AxiosClient.delete(url, config);
+    },
     getAll: () => {
       return AxiosClient.get(baseURL);
     },

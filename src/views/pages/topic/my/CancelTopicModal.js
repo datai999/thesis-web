@@ -9,11 +9,11 @@ import {
   CRow
 } from "@coreui/react";
 import React from "react";
-import api from "../../../service/api";
+import api from "../../../../service/api";
 
 const MainComponent = ({ view, disableView, confirm, topic }) => {
   const registerTopic = () => {
-    api.post(`/topics/${topic.id}/students`).then((response) => {
+    api.delete(`/topics/${topic.id}/students/cancel`).then((response) => {
       disableView();
       confirm(response.data);
     });
@@ -23,7 +23,7 @@ const MainComponent = ({ view, disableView, confirm, topic }) => {
   return (
     <CModal color="warning" show={view} onClose={disableView}>
       <CModalHeader closeButton>
-        <CModalTitle>Đăng ký đề tài</CModalTitle>
+        <CModalTitle>Xác nhận hủy đăng ký đề tài</CModalTitle>
       </CModalHeader>
       <CModalBody>
         <center>
