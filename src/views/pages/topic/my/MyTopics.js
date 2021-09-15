@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import MyTopicExecute from "./TopicExecutes";
 import MyTopicGuides from "./TopicGuides";
+import MyTopicReviews from "./TopicReviews";
 
 const tabs = ["execute", "guide", "review"];
 
@@ -43,6 +44,7 @@ const MainComponent = () => {
           <CTabContent>
             <CTabPane>{tabIndex === 0 && <MyTopicExecute />}</CTabPane>
             <CTabPane>{tabIndex === 1 && <MyTopicGuides />}</CTabPane>
+            <CTabPane>{tabIndex === 2 && <MyTopicReviews />}</CTabPane>
           </CTabContent>
         </CTabs>
       </CCardBody>
