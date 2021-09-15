@@ -11,6 +11,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import MyTopicExecute from "./TopicExecutes";
+import MyTopicGuides from "./TopicGuides";
 
 const tabs = ["execute", "guide", "review"];
 
@@ -41,6 +42,7 @@ const MainComponent = () => {
           </CNav>
           <CTabContent>
             <CTabPane>{tabIndex === 0 && <MyTopicExecute />}</CTabPane>
+            <CTabPane>{tabIndex === 1 && <MyTopicGuides />}</CTabPane>
           </CTabContent>
         </CTabs>
       </CCardBody>
