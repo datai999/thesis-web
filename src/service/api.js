@@ -20,18 +20,21 @@ AxiosClient.interceptors.response.use(
       console.log(error.response.data);
       if (error.response.data.errorCode === "EXPIRED_ID_TOKEN") {
         alert(error.response.data.error);
-        window.location.replace(window.location.origin + "/login");
+        // TODO: redirect to login page
+        window.location.replace(window.location.origin);
       }
     }
     throw error;
   }
 );
 
+export const setLocalUser = (user) => {
+  window.localStorage.setItem("token", user.email);
+  window.localStorage.setItem("userId", user.id);
+};
+
 AxiosClient.interceptors.request.use(async (config) => {
-  const getToken = async () => {
-    return await window.localStorage.getItem("token");
-  };
-  config.headers.common["X-auth"] = await getToken();
+  config.headers.common["X-auth"] = await window.localStorage.getItem("token");
   return config;
 });
 
