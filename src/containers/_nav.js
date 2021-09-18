@@ -82,6 +82,12 @@ const _nav = [
     to: "/students",
     icon: "cil-user",
   },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Học kỳ",
+    to: "/semesters",
+    icon: "cil-chart-pie",
+  },
 
   {
     _tag: "CSidebarNavTitle",
