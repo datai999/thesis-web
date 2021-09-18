@@ -95,7 +95,7 @@ const TopicCreate = () => {
   const create = () => {
     form.guideTeachers = guideTeachers;
     api
-      .create(form, "/topics")
+      .post("/topics", form)
       .then((response) => response && history.push(`/my/topics/guide`));
   };
 

@@ -38,33 +38,4 @@ AxiosClient.interceptors.request.use(async (config) => {
   return config;
 });
 
-const CommonApi = (baseURL = "") => {
-  return {
-    get: (url, config) => {
-      return AxiosClient.get(baseURL + url, config);
-    },
-    post: (url, data, config) => {
-      return AxiosClient.post(baseURL + url, data, config);
-    },
-    delete: (url, config) => {
-      return AxiosClient.delete(url, config);
-    },
-    getAll: () => {
-      return AxiosClient.get(baseURL);
-    },
-    getPaging: (pageParam, url = "") => {
-      return AxiosClient.get(baseURL + url + "/paging", { params: pageParam });
-    },
-    create: (data, url = baseURL) => {
-      return AxiosClient.post(url, data);
-    },
-    postExample: (example, url = "") => {
-      return AxiosClient.post(baseURL + url + "/example", example);
-    },
-    pagingSearch: (searchRequest) => {
-      return AxiosClient.post(baseURL + "/paging/search", searchRequest);
-    },
-  };
-};
-
-export default CommonApi();
+export default AxiosClient;

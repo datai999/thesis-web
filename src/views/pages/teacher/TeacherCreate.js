@@ -39,7 +39,7 @@ const TopicCreate = () => {
   };
 
   const create = () => {
-    api.create(form, "/teachers");
+    api.post("/teachers", form);
   };
 
   useEffect(() => {
