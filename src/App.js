@@ -2,6 +2,7 @@ import { CToaster } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./scss/style.scss";
+import { initContext } from "./service/contextService";
 import { toastHolder } from "./service/toastService";
 
 const loading = (
@@ -21,6 +22,10 @@ const Page500 = React.lazy(() => import("./views/pages/page500/Page500"));
 
 const App = () => {
   const [toasts, addToasts] = useState([]);
+
+  useEffect(() => {
+    initContext();
+  }, []);
 
   useEffect(() => {
     toastHolder.toast = (toast) => addToasts([...toasts, toast]);

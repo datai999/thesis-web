@@ -19,6 +19,7 @@ import {
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import contextHolder from "src/service/contextService";
 import api from "../../../service/api";
 import TeacherSearchModal from "../teacher/TeacherSearchModal";
 
@@ -54,17 +55,14 @@ const TopicCreate = () => {
   const history = useHistory();
   const [form, setForm] = useState({
     thesis: false,
-    semester: null,
+    semester: contextHolder.semester,
     educationMethods: [],
     majors: [],
     minStudentTake: 1,
     maxStudentTake: 3,
   });
-  const [educationMethods, setEducationMethods] = useState([]);
-  const [majors, setMajors] = useState([]);
   const [guideTeachers, setGuideTeachers] = useState([]);
   const [searchTeachers, setSearchTeachers] = useState(false);
-  const [currentSemester, setCurrentSemester] = useState();
 
   const setValueForm = (path, value) => {
     let nextForm = _.cloneDeep(form);
@@ -101,7 +99,6 @@ const TopicCreate = () => {
 
   const create = () => {
     form.guideTeachers = guideTeachers;
-    form.semester = currentSemester;
     api
       .post("/topics", form)
       .then((response) => response && history.push(`/my/topics/guide`));
@@ -112,10 +109,7 @@ const TopicCreate = () => {
   };
 
   useEffect(() => {
-    api.get("/semesters/current").then(setCurrentSemester);
     api.get("/users/token").then((user) => setGuideTeachers([user]));
-    api.get("/majors").then(setMajors);
-    api.get("/education-methods").then(setEducationMethods);
   }, []);
 
   return (
@@ -184,7 +178,7 @@ const TopicCreate = () => {
                 </CCol>
                 <CCol md="5">
                   <CLabel>Phương thức đào tạo</CLabel>
-                  {educationMethods.map((educationMethod) => (
+                  {contextHolder.educationMethods.map((educationMethod) => (
                     <CFormGroup
                       key={educationMethod.id}
                       variant="custom-checkbox"
@@ -211,7 +205,7 @@ const TopicCreate = () => {
               <CFormGroup row>
                 <CCol xs="12" md="4">
                   <CLabel>Ngành</CLabel>
-                  {majors.map((major) => (
+                  {contextHolder.majors.map((major) => (
                     <CFormGroup key={major.id} variant="custom-checkbox">
                       <CInputCheckbox
                         custom
