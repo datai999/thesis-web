@@ -54,7 +54,7 @@ const TopicCreate = () => {
   const history = useHistory();
   const [form, setForm] = useState({
     thesis: false,
-    semester: 211,
+    semester: null,
     educationMethods: [],
     majors: [],
     minStudentTake: 1,
@@ -65,22 +65,23 @@ const TopicCreate = () => {
   const [guideTeachers, setGuideTeachers] = useState([]);
   const [searchTeachers, setSearchTeachers] = useState(false);
 
+  const setValueForm = (path, value) => {
+    let nextForm = _.cloneDeep(form);
+    _.set(nextForm, path, value);
+    setForm(nextForm);
+  };
+
   const setGetForm = (getPath, setPath) => {
     return {
       value: _.get(form, getPath),
-      onChange: (e) => {
-        let nextForm = _.cloneDeep(form);
-        _.set(nextForm, getPath ?? setPath, e.target.value);
-        setForm(nextForm);
-      },
+      onChange: (e) => setValueForm(getPath ?? setPath, e.target.value),
     };
   };
 
   const onChangeCheck = (event, path) => {
     const id = event.currentTarget.value;
     const checked = event.currentTarget.checked;
-    let nextForm = _.cloneDeep(form);
-    let current = _.get(nextForm, path);
+    let current = _.get(form, path);
     let next = current;
     if (!checked && current.includes(id)) {
       next = current.filter((element) => element !== id);
@@ -88,8 +89,13 @@ const TopicCreate = () => {
     if (checked && !current.includes(id)) {
       next.push(id);
     }
-    _.set(nextForm, path, next);
-    setForm(nextForm);
+    setValueForm(path, next);
+  };
+
+  const selectProps = (path) => {
+    return {
+      onChange: (e) => setValueForm(path, e.currentTarget.value),
+    };
   };
 
   const create = () => {
@@ -104,6 +110,9 @@ const TopicCreate = () => {
   };
 
   useEffect(() => {
+    api
+      .get("/semesters/current")
+      .then((response) => setValueForm("semester", response));
     api.get("/users/token").then((user) => setGuideTeachers([user]));
     api.get("/majors").then(setMajors);
     api.get("/education-methods").then(setEducationMethods);
@@ -145,14 +154,6 @@ const TopicCreate = () => {
             <CCol md="6">
               <CFormGroup row>
                 <CCol md="3">
-                  <CLabel htmlFor="semester">Học kỳ</CLabel>
-                  <CSelect custom {...setGetForm("semester")}>
-                    <option value="211">211</option>
-                    <option value="212">212</option>
-                    <option value="213">213</option>
-                  </CSelect>
-                </CCol>
-                <CCol md="3">
                   <CLabel>Loại đề tài</CLabel>
                   <CFormGroup variant="custom-radio">
                     <CInputRadio
@@ -184,7 +185,10 @@ const TopicCreate = () => {
                 <CCol md="5">
                   <CLabel>Phương thức đào tạo</CLabel>
                   {educationMethods.map((educationMethod) => (
-                    <CFormGroup variant="custom-checkbox">
+                    <CFormGroup
+                      key={educationMethod.id}
+                      variant="custom-checkbox"
+                    >
                       <CInputCheckbox
                         custom
                         id={"educationMethod" + educationMethod.id}
@@ -208,7 +212,7 @@ const TopicCreate = () => {
                 <CCol xs="12" md="4">
                   <CLabel>Ngành</CLabel>
                   {majors.map((major) => (
-                    <CFormGroup variant="custom-checkbox">
+                    <CFormGroup key={major.id} variant="custom-checkbox">
                       <CInputCheckbox
                         custom
                         id={"major" + major.id}
@@ -233,25 +237,32 @@ const TopicCreate = () => {
                       <CLabel htmlFor="selectMin">Tối thiểu</CLabel>
                     </CCol>
                     <CCol md="6">
-                      <CSelect custom id="selectMin" size="sm">
-                        <option value="1" selected>
-                          1
-                        </option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
+                      <CSelect
+                        custom
+                        id="selectMin"
+                        size="sm"
+                        defaultValue={form.minStudentTake}
+                        {...selectProps("minStudentTake")}
+                      >
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
                       </CSelect>
                     </CCol>
                     <CCol md="6">
-                      {/* TODO: bug submit */}
                       <CLabel htmlFor="selectMax">Tối đa</CLabel>
                     </CCol>
                     <CCol md="6">
-                      <CSelect custom id="selectMax" size="sm">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3" selected>
-                          3
-                        </option>
+                      <CSelect
+                        custom
+                        id="selectMax"
+                        size="sm"
+                        defaultValue={form.maxStudentTake}
+                        {...selectProps("maxStudentTake")}
+                      >
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
                       </CSelect>
                     </CCol>
                   </CFormGroup>
@@ -263,7 +274,7 @@ const TopicCreate = () => {
               <CLabel>Giáo viên hướng dẫn</CLabel>
               <CFormGroup row>
                 {guideTeachers.map((guideTeacher, index) => (
-                  <CCol md="4">
+                  <CCol key={index} md="4">
                     <TeacherCard
                       teacher={guideTeacher}
                       remove={index > 0 && removeGuideTeacher}
