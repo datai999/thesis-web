@@ -17,20 +17,17 @@ const MainComponent = ({ view, disableView }) => {
   const [userId, setUserId] = React.useState();
   const [user, setUser] = React.useState({});
 
-  const search = () => {
-    api
-      .get(`/users/detail/${userId}`)
-      .then(setUser)
-      .catch((error) => setUser({}));
-  };
-
   const confirm = () => {
     setLocalUser(user);
     disableView();
   };
 
   React.useEffect(() => {
-    if (userId) search();
+    if (userId)
+      api
+        .get(`/users/detail/${userId}`)
+        .then(setUser)
+        .catch(() => setUser({}));
   }, [userId]);
 
   return (

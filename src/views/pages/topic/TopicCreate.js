@@ -64,6 +64,7 @@ const TopicCreate = () => {
   const [majors, setMajors] = useState([]);
   const [guideTeachers, setGuideTeachers] = useState([]);
   const [searchTeachers, setSearchTeachers] = useState(false);
+  const [currentSemester, setCurrentSemester] = useState();
 
   const setValueForm = (path, value) => {
     let nextForm = _.cloneDeep(form);
@@ -100,6 +101,7 @@ const TopicCreate = () => {
 
   const create = () => {
     form.guideTeachers = guideTeachers;
+    form.semester = currentSemester;
     api
       .post("/topics", form)
       .then((response) => response && history.push(`/my/topics/guide`));
@@ -110,9 +112,7 @@ const TopicCreate = () => {
   };
 
   useEffect(() => {
-    api
-      .get("/semesters/current")
-      .then((response) => setValueForm("semester", response));
+    api.get("/semesters/current").then(setCurrentSemester);
     api.get("/users/token").then((user) => setGuideTeachers([user]));
     api.get("/majors").then(setMajors);
     api.get("/education-methods").then(setEducationMethods);

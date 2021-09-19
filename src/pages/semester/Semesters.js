@@ -98,18 +98,16 @@ const MainComponent = () => {
   };
 
   const deleteSemester = (semester) =>
-    api.delete(`/semesters/${semester.id}`).then((response) => history.go(0));
+    api.delete(`/semesters/${semester.id}`).then(() => history.go(0));
 
   const setCurrentSemester = (semester) =>
-    api
-      .put(`/semesters/current?id=${semester.id}`)
-      .then((response) => history.go(0));
+    api.put(`/semesters/current?id=${semester.id}`).then(() => history.go(0));
 
   useEffect(() => {
     api
       .get(`/semesters`, { params: { direction: "DESC" } })
       .then((response) => {
-        response.map((e) => {
+        response.forEach((e) => {
           e.registerTopicStartTime = e.registerTopicStart?.replace("T", " ");
           e.registerTopicEndTime = e.registerTopicEnd?.replace("T", " ");
         });

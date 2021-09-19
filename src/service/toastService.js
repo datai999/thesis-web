@@ -1,15 +1,19 @@
 import { CToast, CToastBody, CToastHeader } from "@coreui/react";
 
-export const toastHolder = {
-  toast: () => {},
+const toastHolder = {
+  toast: null,
 };
 
-export default (toast) => toastHolder.toast(toast);
+const toast = (toast) => toastHolder.toast(toast);
 
-export const toastError = (code, message) =>
+const toastError = (code, message) =>
   toastHolder.toast(
     <CToast show fade color="danger" autohide={4000}>
       <CToastHeader>Lỗi {code}</CToastHeader>
       <CToastBody>{message}</CToastBody>
     </CToast>
   );
+
+export { toastHolder, toastError };
+
+export default toast;
