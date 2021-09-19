@@ -8,7 +8,7 @@ const toast = (toast) => toastHolder.toast(toast);
 
 const toastError = (code, message) =>
   toastHolder.toast(
-    <CToast show fade color="danger" autohide={4000}>
+    <CToast show fade color="danger" autohide={8000}>
       <CToastHeader>Lỗi {code}</CToastHeader>
       <CToastBody>{message}</CToastBody>
     </CToast>

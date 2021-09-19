@@ -14,9 +14,9 @@ import api from "../../../../service/api";
 const MainComponent = ({ view, disableView, confirm, topic }) => {
   const registerTopic = () => {
     api.delete(`/topics/${topic.id}/students/cancel`).then((response) => {
-      disableView();
       confirm(response.data);
     });
+    disableView();
   };
 
   if (!topic) return null;

@@ -14,9 +14,9 @@ import api from "../../../service/api";
 const MainComponent = ({ view, disableView, confirm, topic }) => {
   const registerTopic = () => {
     api.post(`/topics/${topic.id}/students`).then((response) => {
-      disableView();
       confirm(response.data);
     });
+    disableView();
   };
 
   if (!topic) return null;
