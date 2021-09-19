@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toastError } from "./toastService";
 
 const config = {
   baseURL: "http://localhost:8080/api",
@@ -17,11 +18,14 @@ AxiosClient.interceptors.response.use(
   },
   (error) => {
     if (error && error.response && error.response.data) {
-      console.log(error.response.data);
-      if (error.response.data.errorCode === "EXPIRED_ID_TOKEN") {
+      const responseError = error.response.data;
+      if (responseError.errorCode === "EXPIRED_ID_TOKEN") {
         alert(error.response.data.error);
         // TODO: redirect to login page
         window.location.replace(window.location.origin);
+      }
+      if (error.response.status === 409) {
+        toastError(responseError.errorCode, responseError.errorMessage);
       }
     }
     throw error;

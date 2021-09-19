@@ -1,14 +1,14 @@
 import {
   CButton,
   CCol,
+  CForm,
+  CInput,
   CModal,
   CModalBody,
   CModalFooter,
   CModalHeader,
   CModalTitle,
-  CRow,
-  CInput,
-  CForm,
+  CRow
 } from "@coreui/react";
 import React from "react";
 import api, { setLocalUser } from "../service/api";
@@ -30,7 +30,7 @@ const MainComponent = ({ view, disableView }) => {
   };
 
   React.useEffect(() => {
-    search();
+    if (userId) search();
   }, [userId]);
 
   return (

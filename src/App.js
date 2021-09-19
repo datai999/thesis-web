@@ -1,6 +1,8 @@
-import React, { Component } from "react";
+import { CToaster } from "@coreui/react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./scss/style.scss";
+import { toastHolder } from "./service/toastService";
 
 const loading = (
   <div className="pt-3 text-center">
@@ -17,9 +19,20 @@ const Register = React.lazy(() => import("./views/pages/register/Register"));
 const Page404 = React.lazy(() => import("./views/pages/page404/Page404"));
 const Page500 = React.lazy(() => import("./views/pages/page500/Page500"));
 
-class App extends Component {
-  render() {
-    return (
+const App = () => {
+  const [toasts, addToasts] = useState([]);
+
+  useEffect(() => {
+    toastHolder.toast = (toast) => addToasts([...toasts, toast]);
+  }, [toasts]);
+
+  return (
+    <>
+      <CToaster position="top-center">
+        {toasts.map((toast, index) => (
+          <div key={index}>{toast}</div>
+        ))}
+      </CToaster>
       <BrowserRouter>
         <React.Suspense fallback={loading}>
           <Switch>
@@ -55,8 +68,8 @@ class App extends Component {
           </Switch>
         </React.Suspense>
       </BrowserRouter>
-    );
-  }
-}
+    </>
+  );
+};
 
 export default App;
