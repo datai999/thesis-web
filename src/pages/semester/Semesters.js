@@ -50,7 +50,12 @@ const getBadge = (status) => {
   }
 };
 
-const getAction = (semester, editSemester, deleteSemester) => {
+const getAction = (
+  semester,
+  editSemester,
+  deleteSemester,
+  setCurrentSemester
+) => {
   switch (semester.status) {
     case "USING":
       return (
@@ -67,7 +72,7 @@ const getAction = (semester, editSemester, deleteSemester) => {
             Hành động
           </CDropdownToggle>
           <CDropdownMenu>
-            <CDropdownItem onClick={() => alert("set this semester")}>
+            <CDropdownItem onClick={setCurrentSemester}>
               Đặt làm học kỳ hiện tại
             </CDropdownItem>
             <CDropdownItem onClick={editSemester}>Chỉnh sửa</CDropdownItem>
@@ -94,6 +99,11 @@ const MainComponent = () => {
 
   const deleteSemester = (semester) =>
     api.delete(`/semesters/${semester.id}`).then((response) => history.go(0));
+
+  const setCurrentSemester = (semester) =>
+    api
+      .put(`/semesters/current?id=${semester.id}`)
+      .then((response) => history.go(0));
 
   useEffect(() => {
     api
@@ -161,7 +171,8 @@ const MainComponent = () => {
                     setEditSemester(item);
                     setCreateModal(true);
                   },
-                  () => deleteSemester(item)
+                  () => deleteSemester(item),
+                  () => setCurrentSemester(item)
                 )}
               </td>
             ),
