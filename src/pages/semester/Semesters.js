@@ -15,6 +15,7 @@ import {
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
+import contextHolder from "src/service/contextService";
 import api from "../../service/api";
 import CreateSemesterModal from "./CreateSemesterModal";
 
@@ -23,17 +24,21 @@ const fields = [
   { key: "name", label: "Học kỳ" },
   { key: "status", label: "Trạng thái" },
   {
-    key: "registerTopicStartTime",
-    label: "Thời gian bắt đầu đăng ký đề tài",
+    key: "registerTopicTime",
+    label: "Thời gian đăng ký đề tài",
   },
   {
-    key: "registerTopicEndTime",
-    label: "Thời gian kết thúc đăng ký đề tài",
+    key: "topicTime",
+    label: "Thời gian làm DCLV",
+  },
+  {
+    key: "thesisTime",
+    label: "Thời gian làm luận văn",
   },
   {
     key: "actions",
     label: "",
-    _style: { width: "1%" },
+    _style: { width: "10%" },
     sorter: false,
     filter: false,
   },
@@ -91,6 +96,9 @@ const MainComponent = () => {
   const [data, setData] = useState([]);
   const [createModal, setCreateModal] = useState(false);
   const [editSemester, setEditSemester] = useState({});
+  const [toggle, refreshToggle] = useState(false);
+
+  const refresh = () => refreshToggle(!toggle);
 
   const pageChange = (newPage) => {
     currentPage !== newPage && history.push(`/semesters?page=${newPage}`);
@@ -98,29 +106,28 @@ const MainComponent = () => {
   };
 
   const deleteSemester = (semester) =>
-    api.delete(`/semesters/${semester.id}`).then(() => history.go(0));
+    api.delete(`/semesters/${semester.id}`).then(refresh);
 
   const setCurrentSemester = (semester) =>
-    api.put(`/semesters/current?id=${semester.id}`).then(() => history.go(0));
+    api.put(`/semesters/current?id=${semester.id}`).then(() => {
+      refresh();
+      contextHolder.refreshSemester();
+    });
 
   useEffect(() => {
     api
       .get(`/semesters`, { params: { direction: "DESC" } })
       .then((response) => {
-        response.forEach((e) => {
-          e.registerTopicStartTime = e.registerTopicStart?.replace("T", " ");
-          e.registerTopicEndTime = e.registerTopicEnd?.replace("T", " ");
-        });
         setData(response);
       });
-  }, [page]);
+  }, [page, toggle]);
 
   return (
     <CCard>
       <CreateSemesterModal
         view={createModal}
         disableView={() => setCreateModal(false)}
-        success={() => history.go(0)}
+        success={refresh}
         defaultForm={editSemester}
       />
       <CCardHeader></CCardHeader>
@@ -161,6 +168,11 @@ const MainComponent = () => {
                 </CBadge>
               </td>
             ),
+            registerTopicTime: (item) =>
+              multiLineTime(item.registerTopicStart, item.registerTopicEnd),
+            topicTime: (item) => multiLineTime(item.topicStart, item.topicEnd),
+            thesisTime: (item) =>
+              multiLineTime(item.thesisStart, item.thesisEnd),
             actions: (item) => (
               <td>
                 {getAction(
@@ -185,5 +197,20 @@ const MainComponent = () => {
     </CCard>
   );
 };
+
+const multiLineTime = (from, to) => (
+  <td>
+    <CRow>
+      <CCol md="0" className="ml-3">
+        <div>Từ</div>
+        <div>Đến</div>
+      </CCol>
+      <CCol>
+        <div>{from?.replace("T", " ")}</div>
+        <div>{to?.replace("T", " ")}</div>
+      </CCol>
+    </CRow>
+  </td>
+);
 
 export default MainComponent;

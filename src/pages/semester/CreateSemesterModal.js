@@ -1,17 +1,17 @@
 import {
-    CButton,
-    CCol,
-    CForm,
-    CFormGroup,
-    CInput,
-    CInvalidFeedback,
-    CLabel,
-    CModal,
-    CModalBody,
-    CModalFooter,
-    CModalHeader,
-    CModalTitle,
-    CRow
+  CButton,
+  CCol,
+  CForm,
+  CFormGroup,
+  CInput,
+  CInvalidFeedback,
+  CLabel,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CRow
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
@@ -49,7 +49,7 @@ const MainComponent = ({ view, disableView, success, defaultForm = {} }) => {
       <CModalHeader closeButton>
         <CModalTitle>{update ? "Chỉnh sửa" : "Thêm mới"} học kỳ</CModalTitle>
       </CModalHeader>
-      <CModalBody className="px-5">
+      <CModalBody className="px-3">
         {update && (
           <CRow>
             <CCol md="4">
@@ -80,31 +80,46 @@ const MainComponent = ({ view, disableView, success, defaultForm = {} }) => {
           </CFormGroup>
 
           <CFormGroup>
-            <CLabel htmlFor="startTime">Thời gian đăng kí đề tài</CLabel>
+            <CLabel htmlFor="startTime">Sinh viên đăng kí đề tài</CLabel>
             <CRow>
-              <CCol md="4">
-                <CLabel htmlFor="date-input">Bắt đầu</CLabel>
-              </CCol>
               <CCol>
                 <CInput
                   type="datetime-local"
-                  id="startTime"
-                  placeholder="date"
                   {...setGetForm("registerTopicStart")}
                 />
               </CCol>
-            </CRow>
-            <CRow>
-              <CCol md="4">
-                <CLabel htmlFor="endTime">Kết thúc</CLabel>
-              </CCol>
+              <CCol md="0 mt-2">{"-->"}</CCol>
               <CCol>
                 <CInput
                   type="datetime-local"
-                  id="endTime"
-                  placeholder="date"
                   {...setGetForm("registerTopicEnd")}
                 />
+              </CCol>
+            </CRow>
+          </CFormGroup>
+
+          <CFormGroup>
+            <CLabel htmlFor="startTime">Làm đề cương luận văn</CLabel>
+            <CRow>
+              <CCol>
+                <CInput type="datetime-local" {...setGetForm("topicStart")} />
+              </CCol>
+              <CCol md="0 mt-2">{"-->"}</CCol>
+              <CCol>
+                <CInput type="datetime-local" {...setGetForm("topicEnd")} />
+              </CCol>
+            </CRow>
+          </CFormGroup>
+
+          <CFormGroup>
+            <CLabel htmlFor="startTime">Làm luận văn</CLabel>
+            <CRow>
+              <CCol>
+                <CInput type="datetime-local" {...setGetForm("thesisStart")} />
+              </CCol>
+              <CCol md="0 mt-2">{"-->"}</CCol>
+              <CCol>
+                <CInput type="datetime-local" {...setGetForm("thesisEnd")} />
               </CCol>
             </CRow>
           </CFormGroup>

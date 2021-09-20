@@ -4,10 +4,13 @@ const contextHolder = {
   semester: null,
   majors: [],
   educationMethods: [],
+
+  refreshSemester: () =>
+    api.get("/semesters/current").then((res) => (contextHolder.semester = res)),
 };
 
 const initContext = () => {
-  api.get("/semesters/current").then((res) => (contextHolder.semester = res));
+  contextHolder.refreshSemester();
   api.get("/majors").then((res) => (contextHolder.majors = res));
   api
     .get("/education-methods")
