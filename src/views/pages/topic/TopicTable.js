@@ -1,4 +1,5 @@
 import {
+  CBadge,
   CButton,
   CCardBody,
   CCol,
@@ -23,6 +24,7 @@ const fields = [
   },
   { key: "majorNames", label: "Ngành" },
   { key: "guideTeachers", label: "Giáo viên hướng dẫn" },
+  { key: "studentCount", label: "Số SV đăng ký", _style: { width: "1%" } },
   {
     key: "actions",
     label: "",
@@ -65,7 +67,14 @@ const MainComponent = ({ thesis }) => {
       .get(`/topics/${thesis ? "thesis" : "outline"}`, {
         params: { direction: "DESC" },
       })
-      .then(setData);
+      .then((response) => {
+        response.forEach((e) => {
+          e.studentCount = `${
+            e.students.length === e.maxStudentTake ? "Đủ" : "Đã đăng ký"
+          }  ${e.students.length}/${e.maxStudentTake}`;
+        });
+        setData(response);
+      });
   }, [currentPage, page]);
 
   return (
@@ -99,6 +108,13 @@ const MainComponent = ({ thesis }) => {
                   {guideTeacher.lastName}
                 </tr>
               ))}
+            </td>
+          ),
+          studentCount: (item) => (
+            <td className="py-2">
+              <CBadge color={item.status === "FULL" ? "success" : "secondary"}>
+                {item.studentCount}
+              </CBadge>
             </td>
           ),
           actions: (item, index) => (
