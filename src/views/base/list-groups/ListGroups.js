@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import {
   CBadge,
   CCard,
@@ -11,6 +10,7 @@ import {
   CTabContent,
   CTabPane
 } from '@coreui/react'
+import React, { useState } from 'react'
 import { DocsLink } from 'src/reusable'
 
 
@@ -47,7 +47,7 @@ const ListGroups = () => {
             </CCardHeader>
             <CCardBody>
               <CListGroup>
-                <CListGroupItem href="#" active>Cras justo odio</CListGroupItem>
+                <CListGroupItem href="#" >Cras justo <a href="#">odio</a></CListGroupItem>
                 <CListGroupItem href="#">Dapibus ac facilisis in</CListGroupItem>
                 <CListGroupItem href="#">Morbi leo risus</CListGroupItem>
                 <CListGroupItem href="#">Porta ac consectetur ac</CListGroupItem>
