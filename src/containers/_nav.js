@@ -28,11 +28,6 @@ const _nav = [
         name: "Luận văn",
         to: "/topics/thesis",
       },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Tạo đề tài",
-        to: "/topics/create",
-      },
     ],
   },
   {
@@ -55,6 +50,11 @@ const _nav = [
         _tag: "CSidebarNavItem",
         name: "Phản biện",
         to: "/my/topics/review",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Tạo đề tài",
+        to: "my/topics/create",
       },
     ],
   },

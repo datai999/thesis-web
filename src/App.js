@@ -23,8 +23,8 @@ const Page500 = React.lazy(() => import("./views/pages/page500/Page500"));
 const App = () => {
   const [toasts, addToasts] = useState([]);
 
-  useEffect(() => {
-    initContext();
+  useEffect(async () => {
+    await initContext();
   }, []);
 
   useEffect(() => {

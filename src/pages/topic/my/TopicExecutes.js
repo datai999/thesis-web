@@ -11,7 +11,7 @@ import {
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import api from "../../../../service/api";
+import api from "src/service/api";
 import CancelTopicModal from "./CancelTopicModal";
 
 const TopicExecutes = () => {
@@ -140,6 +140,7 @@ const TopicExecutes = () => {
                   <CButton
                     block
                     color="danger"
+                    size="sm"
                     className="m-0 p-0"
                     onClick={() => {
                       setTopicCancel(topic);

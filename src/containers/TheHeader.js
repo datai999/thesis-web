@@ -8,17 +8,20 @@ import {
 } from "@coreui/react";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 // routes config
 import routes from "../routes";
 import ActionUserModal from "./ActionUserModal";
 import {
-  Notification, TheHeaderDropdown,
+  Notification,
+  TheHeaderDropdown,
   TheHeaderDropdownMssg,
   TheHeaderDropdownNotif,
   TheHeaderDropdownTasks
 } from "./index";
 
-const TheHeader = () => {
+const TheHeader = ({ refreshPage }) => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const sidebarShow = useSelector((state) => state.sidebarShow);
   const [actionUserModal, setActionUserModal] = React.useState(false);
@@ -58,7 +61,9 @@ const TheHeader = () => {
       <CHeaderNav className="px-3">
         <ActionUserModal
           view={actionUserModal}
-          disableView={() => setActionUserModal(false)}
+          disableView={() => {
+            history.go(0);
+          }}
         />
         <CLink onClick={() => setActionUserModal(true)}>
           <CIcon name="cil-user" className="mfe-2" />

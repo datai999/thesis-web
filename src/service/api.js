@@ -1,4 +1,5 @@
 import axios from "axios";
+import contextService from "./contextService";
 import { toastError } from "./toastService";
 
 const config = {
@@ -33,6 +34,7 @@ AxiosClient.interceptors.response.use(
 );
 
 export const setLocalUser = (user) => {
+  contextService.user = user;
   window.localStorage.setItem("token", user.email);
   window.localStorage.setItem("userId", user.id);
 };
