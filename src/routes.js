@@ -61,8 +61,8 @@ const Users = React.lazy(() => import("./views/users/Users"));
 const User = React.lazy(() => import("./views/users/User"));
 
 const Topics = React.lazy(() => import("./views/pages/topic/Topics"));
-const TopicCreate = React.lazy(() => import("./views/pages/topic/TopicCreate"));
 const MyTopics = React.lazy(() => import("./pages/topic/my/MyTopics"));
+const CreateTopic = React.lazy(() => import("./pages/topic/my/CreateTopic"));
 
 const Teachers = React.lazy(() => import("./views/pages/teacher/Teachers"));
 const TeacherCreate = React.lazy(() =>
@@ -103,7 +103,8 @@ const routes = [
     name: "Phản biện",
     component: MyTopics,
   },
-  { path: "/my/topics/create", name: "Tạo đề tài", component: TopicCreate },
+  { path: "/my/topics/create", name: "Tạo đề tài", component: CreateTopic },
+  { path: "/my/topics/edit", name: "Chỉnh sửa đề tài", component: CreateTopic },
   { path: "/teachers", exact: true, name: "Giáo viên", component: Teachers },
   {
     path: "/teachers/create",

@@ -128,7 +128,7 @@ const MainComponent = ({ thesis }) => {
                 shape="square"
                 size="sm"
                 onClick={() => {
-                  alert("edit");
+                  history.push("/my/topics/edit", item);
                 }}
               >
                 Chỉnh sửa

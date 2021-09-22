@@ -68,17 +68,21 @@ const MainComponent = () => {
                 ))}
               </CNav>
             </CCol>
-            <CCol md="2">
-              <CButton
-                color="primary"
-                size="sm"
-                className="float-right"
-                onClick={() => history.push(`/topics/create`)}
-                className="float-right r-0"
-              >
-                Thêm đề tài
-              </CButton>
-            </CCol>
+            {["ADMIN", "TEACHER"].some((role) =>
+              contextService.user.roles.includes(role)
+            ) && (
+              <CCol md="2">
+                <CButton
+                  color="primary"
+                  size="sm"
+                  className="float-right"
+                  onClick={() => history.push(`/my/topics/create`)}
+                  className="float-right r-0"
+                >
+                  Thêm đề tài
+                </CButton>
+              </CCol>
+            )}
           </CRow>
           <CTabContent>
             {roleTabs.map((e) => (
