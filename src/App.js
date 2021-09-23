@@ -1,5 +1,6 @@
 import { CToaster } from "@coreui/react";
 import React, { useEffect, useState } from "react";
+import LoadingOverlay from "react-loading-overlay";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./scss/style.scss";
 import { initContext } from "./service/contextService";
@@ -22,9 +23,14 @@ const Page500 = React.lazy(() => import("./views/pages/page500/Page500"));
 
 const App = () => {
   const [toasts, addToasts] = useState([]);
+  const [sleep, setSleep] = React.useState(true);
 
-  useEffect(async () => {
-    await initContext();
+  useEffect(() => {
+    const init = async () => {
+      const init = await initContext();
+      setSleep(!init);
+    };
+    init();
   }, []);
 
   useEffect(() => {
@@ -73,6 +79,19 @@ const App = () => {
           </Switch>
         </React.Suspense>
       </BrowserRouter>
+      {sleep && (
+        <LoadingOverlay
+          active={true}
+          spinner
+          styles={{
+            overlay: (base) => ({
+              ...base,
+              position: "fixed",
+              zIndex: "10000",
+            }),
+          }}
+        />
+      )}
     </>
   );
 };

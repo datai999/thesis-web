@@ -122,6 +122,7 @@ const TopicCreate = ({ location }) => {
       setThesis(exitTopic.thesis);
       setGuideTeachers(location.state.guideTeachers);
     } else api.get("/users/token").then((user) => setGuideTeachers([user]));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

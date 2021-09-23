@@ -88,6 +88,12 @@ const _nav = [
     to: "/semesters",
     icon: "cil-chart-pie",
   },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Phân công phản biện",
+    to: "/assign/review",
+    icon: "cil-chart-pie",
+  },
 
   {
     _tag: "CSidebarNavTitle",

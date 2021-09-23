@@ -6,6 +6,7 @@ import {
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
+  CLink,
   CRow,
   CSwitch
 } from "@coreui/react";
@@ -13,7 +14,7 @@ import React, { useEffect, useState } from "react";
 import api from "src/service/api";
 
 const limitMessage = 20;
-const scheduleMilliseconds = 5000;
+const scheduleMilliseconds = 10 * 5000;
 
 const MainComponent = () => {
   const [allMessages, setAllMessages] = useState([]);
@@ -41,6 +42,7 @@ const MainComponent = () => {
 
   useEffect(() => {
     getMessage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toggle]);
 
   return (
@@ -84,9 +86,9 @@ const MainComponent = () => {
                   {message.createdAt.replace("T", " ").substring(0, 16)}
                 </small>
                 {!message.seen && (
-                  <a href="#" onClick={() => seen(message)}>
+                  <CLink href="#" onClick={() => seen(message)}>
                     <small className="float-right">Đánh dấu đã xem</small>
-                  </a>
+                  </CLink>
                 )}
               </div>
               <div

@@ -22,8 +22,8 @@ const MainComponent = () => {
   const [activeThesisTab, setActiveThesisTab] = useState(isThesisTab);
 
   useEffect(() => {
-    activeThesisTab !== activeThesisTab && setActiveThesisTab(activeThesisTab);
     history.push(`/topics/${activeThesisTab ? "thesis" : "outline"}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isThesisTab, activeThesisTab]);
 
   return (

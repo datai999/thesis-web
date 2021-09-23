@@ -43,7 +43,7 @@ const TopicCreate = () => {
   };
 
   useEffect(() => {
-    api.get("/subject-department").then(setSubjectDepartments);
+    api.get("/subject-departments").then(setSubjectDepartments);
     api.get("/degree").then(setDegrees);
   }, []);
 

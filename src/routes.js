@@ -1,4 +1,5 @@
 import React from "react";
+import contextService from "./service/contextService";
 
 const Toaster = React.lazy(() =>
   import("./views/notifications/toaster/Toaster")
@@ -72,8 +73,11 @@ const TeacherCreate = React.lazy(() =>
 const Students = React.lazy(() => import("./views/pages/student/Students"));
 
 const Semesters = React.lazy(() => import("./pages/semester/Semesters"));
+const AssignReview = React.lazy(() =>
+  import("./pages/assign/review/AssignReview")
+);
 
-const routes = [
+let routes = [
   { path: "/", exact: true, name: "Trang chủ" },
   { path: "/dashboard", name: "Dashboard", component: Dashboard },
   { path: "/topics", exact: true, name: "Đề tài", component: Topics },
@@ -113,6 +117,12 @@ const routes = [
   },
   { path: "/students", exact: true, name: "Sinh viên", component: Students },
   { path: "/semesters", exact: true, name: "Học kỳ", component: Semesters },
+  {
+    path: "/assign/review",
+    exact: true,
+    name: "Phân công phản biện",
+    component: AssignReview,
+  },
 
   { path: "/theme", name: "Theme", component: Colors, exact: true },
   { path: "/theme/colors", name: "Colors", component: Colors },
@@ -171,4 +181,13 @@ const routes = [
   { path: "/users/:id", exact: true, name: "User Details", component: User },
 ];
 
-export default routes;
+const subAssignReviews = contextService.subjectDepartments.map((e) => {
+  return {
+    path: `/assign/review/${e.id}`,
+    exact: false,
+    name: e.name,
+    component: AssignReview,
+  };
+});
+
+export default routes.concat(subAssignReviews);

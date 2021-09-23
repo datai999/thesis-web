@@ -52,6 +52,7 @@ const MainComponent = () => {
 
   useEffect(() => {
     history.push(`/my/topics/${roleTabs[tabIndex].url}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabIndex]);
 
   return (
@@ -77,7 +78,6 @@ const MainComponent = () => {
                   size="sm"
                   className="float-right"
                   onClick={() => history.push(`/my/topics/create`)}
-                  className="float-right r-0"
                 >
                   Thêm đề tài
                 </CButton>

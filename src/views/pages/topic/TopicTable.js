@@ -75,6 +75,7 @@ const MainComponent = ({ thesis }) => {
         });
         setData(response);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, page]);
 
   return (

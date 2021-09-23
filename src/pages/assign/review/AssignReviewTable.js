@@ -41,7 +41,7 @@ const fields = [
   },
 ];
 
-const MainComponent = () => {
+const MainComponent = ({ subjectDepartmentId }) => {
   const history = useHistory();
   const queryPage = useLocation().search.match(/page=([0-9]+)/, "");
   const currentPage = Number(queryPage && queryPage[1] ? queryPage[1] : 1);
@@ -51,7 +51,8 @@ const MainComponent = () => {
   const size = 5;
 
   const pageChange = (newPage) => {
-    currentPage !== newPage && history.push(`/my/topics/guide?page=${newPage}`);
+    currentPage !== newPage &&
+      history.push(`/assign/review/${subjectDepartmentId}?page=${newPage}`);
     setPage(newPage);
   };
 
@@ -67,12 +68,10 @@ const MainComponent = () => {
   };
 
   const getData = async () => {
-    const userId = await window.localStorage.getItem("userId");
     api
-      .get(`/topics/user`, {
+      .get(`/topics/subject-department`, {
         params: {
-          userId: userId,
-          topicRole: "GUIDE_TEACHER",
+          id: subjectDepartmentId,
           direction: "DESC",
         },
       })
@@ -85,6 +84,7 @@ const MainComponent = () => {
           element.studentsEmails = element.students.map(
             (student) => student.email
           );
+          element._classes = { key: element.id };
         });
         setData(response);
       });
@@ -92,10 +92,11 @@ const MainComponent = () => {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   return (
-    <div>
+    <>
       <CDataTable
         items={data}
         fields={fields}
@@ -196,7 +197,7 @@ const MainComponent = () => {
         onActivePageChange={pageChange}
         align="center"
       />
-    </div>
+    </>
   );
 };
 
