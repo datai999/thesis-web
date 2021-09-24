@@ -75,7 +75,6 @@ const MainComponent = () => {
               <CCol md="2">
                 <CButton
                   color="primary"
-                  size="sm"
                   className="float-right"
                   onClick={() => history.push(`/my/topics/create`)}
                 >

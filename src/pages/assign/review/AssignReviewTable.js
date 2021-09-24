@@ -1,15 +1,20 @@
+import CIcon from "@coreui/icons-react";
 import {
   CButton,
+  CButtonGroup,
   CCardBody,
   CCol,
   CCollapse,
   CDataTable,
   CListGroupItem,
   CPagination,
-  CRow
+  CRow,
+  CTooltip
 } from "@coreui/react";
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
+import TeacherSearchModal from "src/pages/teacher/TeacherSearchModal";
 import api from "src/service/api";
 
 const fields = [
@@ -23,14 +28,14 @@ const fields = [
   },
   { key: "majorNames", label: "Ngành", _style: { width: "10%" } },
   {
-    key: "studentCodeNames",
-    label: "Sinh viên thực hiện",
-    _style: { width: "25%" },
+    key: "guideTeacherRenders",
+    label: "Giáo viên hướng dẫn",
+    _style: { width: "20%" },
   },
   {
-    key: "studentsEmails",
-    label: "Email sinh viên",
-    _style: { width: "10%" },
+    key: "reviewTeacherRenders",
+    label: "Giáo viên phản biện",
+    _style: { width: "20%" },
   },
   {
     key: "actions",
@@ -48,9 +53,12 @@ const MainComponent = ({ subjectDepartmentId }) => {
   const [page, setPage] = useState(currentPage);
   const [data, setData] = useState([]);
   const [details, setDetails] = useState([]);
+  const [searchTeachers, setSearchTeachers] = useState(false);
+  const [currentTopicIndex, setCurrentTopicIndex] = useState(-1);
   const size = 5;
 
   const pageChange = (newPage) => {
+    console.log(newPage);
     currentPage !== newPage &&
       history.push(`/assign/review/${subjectDepartmentId}?page=${newPage}`);
     setPage(newPage);
@@ -76,18 +84,41 @@ const MainComponent = ({ subjectDepartmentId }) => {
         },
       })
       .then((response) => {
-        response.forEach((element) => {
-          element.studentCodeNames = element.students.map(
-            (student) =>
-              student.code + " " + student.firstName + " " + student.lastName
+        response.forEach((e) => {
+          e.guideTeacherRenders = e.guideTeachers.map((user) =>
+            `${user.code} ${user.firstName} ${user.lastName} ${user.email}`.toString()
           );
-          element.studentsEmails = element.students.map(
-            (student) => student.email
+          e.reviewTeacherRenders = e.reviewTeachers.map((user) =>
+            `${user.code} ${user.firstName} ${user.lastName} ${user.email}`.toString()
           );
-          element._classes = { key: element.id };
         });
         setData(response);
       });
+  };
+
+  const addReviewTeacher = (teacher) => {
+    const nextData = _.cloneDeep(data);
+    nextData[currentTopicIndex].reviewTeachers = [
+      ...data[currentTopicIndex].reviewTeachers,
+      teacher,
+    ];
+    setData(nextData);
+  };
+
+  const removeReviewTeacher = (teacher) => {
+    const nextReviewTeachers = data[currentTopicIndex].reviewTeachers.filter(
+      (e) => e.id !== teacher.id
+    );
+    const nextData = _.cloneDeep(data);
+    nextData[currentTopicIndex].reviewTeachers = nextReviewTeachers;
+    setData(nextData);
+  };
+
+  const updateTopic = (topic) => {
+    api.put(`/topics/${topic.id}/assign-reviews`, topic).then(() => {
+      getData();
+      setCurrentTopicIndex(-1);
+    });
   };
 
   useEffect(() => {
@@ -97,6 +128,14 @@ const MainComponent = ({ subjectDepartmentId }) => {
 
   return (
     <>
+      <TeacherSearchModal
+        view={searchTeachers}
+        disableView={() => setSearchTeachers(false)}
+        selected={(teacher) => {
+          setSearchTeachers(false);
+          addReviewTeacher(teacher);
+        }}
+      />
       <CDataTable
         items={data}
         fields={fields}
@@ -112,44 +151,111 @@ const MainComponent = ({ subjectDepartmentId }) => {
           names: (item) => multiLine(item.names),
           educationMethodNames: (item) => multiLine(item.educationMethodNames),
           majorNames: (item) => multiLine(item.majorNames),
-          studentCodeNames: (item) =>
+          guideTeacherRenders: (item) =>
             multiLine(
-              item.students.map((student) => (
+              item.guideTeachers.map((user) => (
                 <div>
-                  {student.code} {student.firstName} {student.lastName}
+                  {user.code} {user.firstName} {user.lastName}{" "}
+                  <CTooltip content={user.email}>
+                    <CIcon name="cil-envelope-closed" className="mb-2" />
+                  </CTooltip>
                 </div>
               ))
             ),
-          studentsEmails: (item) => multiLine(item.studentsEmails),
-          actions: (item, index) => (
-            <td className="py-2">
-              <CButton
-                color="primary"
-                variant="outline"
-                shape="square"
-                size="sm"
-                onClick={() => {
-                  history.push("/my/topics/edit", item);
-                }}
-              >
-                Chỉnh sửa
-              </CButton>
-              <br />
-              <CButton
-                color="primary"
-                variant="outline"
-                shape="square"
-                size="sm"
-                onClick={() => {
-                  toggleDetails(index);
-                }}
-              >
-                {details.includes(index) ? "Ẩn bớt" : "Chi tiết"}
-              </CButton>
+          reviewTeacherRenders: (item, index) => (
+            <td>
+              {item.reviewTeachers.map((user) => (
+                <div>
+                  {user.code} {user.firstName} {user.lastName}{" "}
+                  <CTooltip content={user.email}>
+                    <CIcon name="cil-envelope-closed" className="mb-2" />
+                  </CTooltip>
+                  {currentTopicIndex === index && (
+                    <CTooltip content={"Xóa giáo viên"}>
+                      <CButton
+                        color="primary"
+                        variant="ghost"
+                        size="sm"
+                        className="mb-2"
+                        onClick={() => {
+                          removeReviewTeacher(user);
+                        }}
+                      >
+                        <CIcon
+                          name="cil-user-unfollow"
+                          className="text-danger"
+                        />
+                      </CButton>
+                    </CTooltip>
+                  )}
+                </div>
+              ))}
             </td>
           ),
-          details: (item, index) => (
-            <CCollapse show={details.includes(index)}>
+          actions: (item, index) => (
+            <td className="py-2">
+              {currentTopicIndex === index ? (
+                <CButtonGroup vertical size="sm">
+                  <CTooltip content={"Thêm giáo viên phản biện"}>
+                    <CButton
+                      color="primary"
+                      variant="outline"
+                      onClick={() => {
+                        setSearchTeachers(true);
+                      }}
+                    >
+                      <CIcon name="cil-user-follow" className="text-success" />
+                    </CButton>
+                  </CTooltip>
+                  <CTooltip content={"Lưu"}>
+                    <CButton
+                      color="primary"
+                      variant="outline"
+                      onClick={() => {
+                        updateTopic(item);
+                      }}
+                    >
+                      <CIcon name="cil-save" />
+                    </CButton>
+                  </CTooltip>
+                </CButtonGroup>
+              ) : (
+                <CButtonGroup vertical size="sm">
+                  <CTooltip content={"Chỉnh sửa"}>
+                    <CButton
+                      color="primary"
+                      variant="outline"
+                      onClick={() => {
+                        if (!details.includes(item.id)) toggleDetails(item.id);
+                        setCurrentTopicIndex(index);
+                      }}
+                    >
+                      <CIcon name="cil-pencil" />
+                    </CButton>
+                  </CTooltip>
+                  <CTooltip
+                    content={details.includes(item.id) ? "Ẩn bớt" : "Chi tiết"}
+                  >
+                    <CButton
+                      color="primary"
+                      variant="outline"
+                      onClick={() => {
+                        toggleDetails(item.id);
+                      }}
+                    >
+                      <CIcon
+                        name={`cil-chevron-${
+                          details.includes(item.id) ? "top" : "bottom"
+                        }`}
+                      />
+                    </CButton>
+                  </CTooltip>
+                </CButtonGroup>
+              )}
+            </td>
+          ),
+          details: (item) => (
+            <CCollapse show={details.includes(item.id)}>
               <CCardBody>
                 <CRow>
                   <CCol md="4">
@@ -167,21 +273,20 @@ const MainComponent = ({ subjectDepartmentId }) => {
                     {item.documentReference}
                   </CCol>
                   <CCol>
-                    Giảng viên hướng dẫn:
+                    Sinh viên thực hiện
                     <br />
-                    {item.guideTeachers.map((guideTeacher) => (
-                      <CListGroupItem key={guideTeacher}>
+                    {item.students.map((user) => (
+                      <CListGroupItem key={user}>
                         <CRow>
-                          <CCol>{guideTeacher.degree}</CCol>
-                          <CCol>{guideTeacher.code}</CCol>
+                          <CCol>{user.code}</CCol>
                         </CRow>
                         <CRow>
                           <CCol>
-                            {guideTeacher.firstName} {guideTeacher.lastName}
+                            {user.firstName} {user.lastName}
                           </CCol>
                         </CRow>
                         <CRow>
-                          <CCol>{guideTeacher.email}</CCol>
+                          <CCol>{user.email}</CCol>
                         </CRow>
                       </CListGroupItem>
                     ))}

@@ -166,7 +166,7 @@ const MainComponent = () => {
                     {item.documentReference}
                   </CCol>
                   <CCol>
-                    Giảng viên hướng dẫn:
+                    Giáo viên hướng dẫn:
                     <br />
                     {item.guideTeachers.map((guideTeacher) => (
                       <CListGroupItem key={guideTeacher}>

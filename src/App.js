@@ -28,7 +28,9 @@ const App = () => {
   useEffect(() => {
     const init = async () => {
       const init = await initContext();
-      setSleep(!init);
+      setTimeout(() => {
+        setSleep(!init);
+      }, 100);
     };
     init();
   }, []);

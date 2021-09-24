@@ -1,5 +1,4 @@
 import React from "react";
-import contextService from "./service/contextService";
 
 const Toaster = React.lazy(() =>
   import("./views/notifications/toaster/Toaster")
@@ -123,6 +122,60 @@ let routes = [
     name: "Phân công phản biện",
     component: AssignReview,
   },
+  {
+    path: "/assign/review/1",
+    exact: true,
+    name: "Phân công phản biện",
+    component: AssignReview,
+  },
+  {
+    path: "/assign/review/2",
+    exact: true,
+    name: "Phân công phản biện",
+    component: AssignReview,
+  },
+  {
+    path: "/assign/review/3",
+    exact: true,
+    name: "Phân công phản biện",
+    component: AssignReview,
+  },
+  {
+    path: "/assign/review/4",
+    exact: true,
+    name: "Phân công phản biện",
+    component: AssignReview,
+  },
+  {
+    path: "/assign/review/5",
+    exact: true,
+    name: "Phân công phản biện",
+    component: AssignReview,
+  },
+  {
+    path: "/assign/review/6",
+    exact: true,
+    name: "Phân công phản biện",
+    component: AssignReview,
+  },
+  {
+    path: "/assign/review/7",
+    exact: true,
+    name: "Phân công phản biện",
+    component: AssignReview,
+  },
+  {
+    path: "/assign/review/8",
+    exact: true,
+    name: "Phân công phản biện",
+    component: AssignReview,
+  },
+  {
+    path: "/assign/review/9",
+    exact: true,
+    name: "Phân công phản biện",
+    component: AssignReview,
+  },
 
   { path: "/theme", name: "Theme", component: Colors, exact: true },
   { path: "/theme/colors", name: "Colors", component: Colors },
@@ -181,13 +234,4 @@ let routes = [
   { path: "/users/:id", exact: true, name: "User Details", component: User },
 ];
 
-const subAssignReviews = contextService.subjectDepartments.map((e) => {
-  return {
-    path: `/assign/review/${e.id}`,
-    exact: false,
-    name: e.name,
-    component: AssignReview,
-  };
-});
-
-export default routes.concat(subAssignReviews);
+export default routes;
