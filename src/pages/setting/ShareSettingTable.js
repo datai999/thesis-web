@@ -11,18 +11,12 @@ import {
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import api from "src/service/api";
-import CouncilRoleModal from "./CouncilRoleModal";
+import { initContext } from "src/service/contextService";
+import ShareSettingModal from "./ShareSettingModal";
 
 const fields = [
-  { key: "id", label: "Mã", _style: { width: "1%" } },
-  {
-    key: "displayOrder",
-    label: "Thứ tự hiển thị",
-    _style: { maxWidth: "50px" },
-  },
-  { key: "name", label: "Vai trò" },
-  { key: "min", label: "Tối thiểu" },
-  { key: "max", label: "Tối đa" },
+  { key: "id", label: "Mã" },
+  { key: "name", label: "Tên" },
   { key: "deleted", label: "Sử dụng" },
   {
     key: "actions",
@@ -33,19 +27,13 @@ const fields = [
   },
 ];
 
-const MainComponent = () => {
+const MainComponent = ({ props }) => {
   const [data, setData] = useState([]);
   const [modalView, setModalView] = useState(false);
   const [defaultForm, setDefaultForm] = useState({});
 
   const getData = async () => {
-    api
-      .get(`/council-roles/all`, {
-        params: {
-          sort: "displayOrder",
-        },
-      })
-      .then(setData);
+    api.get(`${props.baseURL}/all`).then(setData);
   };
 
   useEffect(() => {
@@ -55,30 +43,34 @@ const MainComponent = () => {
 
   return (
     <CCard>
-      <CouncilRoleModal
+      <ShareSettingModal
         view={modalView}
         disableView={() => setModalView(false)}
         defaultForm={defaultForm}
         success={() => {
+          initContext();
           setDefaultForm({});
           getData();
         }}
+        {...props}
       />
       <CCardHeader>
         <CRow>
           <CCol>
-            <h4 className="card-title mb-0">Cài đặt thành viên hội đồng</h4>
+            <h4 className="card-title mb-0">{props.headerTitle}</h4>
           </CCol>
-          <CCol md="2">
+          <CCol md="4">
             <CButton
               color="primary"
               className="float-right"
-              onClick={() => {
-                setDefaultForm({});
+              onClick={async () => {
+                await setDefaultForm({});
+                await console.log("table");
+                await console.log(defaultForm);
                 setModalView(true);
               }}
             >
-              Thêm vai trò mới
+              Thêm mới
             </CButton>
           </CCol>
         </CRow>

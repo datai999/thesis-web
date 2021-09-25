@@ -79,6 +79,7 @@ const AssignReview = React.lazy(() =>
 const CouncilSetting = React.lazy(() =>
   import("./pages/setting/council/CouncilSetting")
 );
+const ShareSetting = React.lazy(() => import("./pages/setting/ShareSetting"));
 
 let routes = [
   { path: "/", exact: true, name: "Trang chủ" },
@@ -110,7 +111,12 @@ let routes = [
     name: "Phản biện",
     component: MyTopics,
   },
-  { path: "/my/topics/create", name: "Tạo đề tài", component: CreateTopic },
+  {
+    path: "/my/topics/create",
+    exact: true,
+    name: "Tạo đề tài",
+    component: CreateTopic,
+  },
   { path: "/my/topics/edit", name: "Chỉnh sửa đề tài", component: CreateTopic },
   { path: "/teachers", exact: true, name: "Giáo viên", component: Teachers },
   {
@@ -184,7 +190,12 @@ let routes = [
     path: "/settings",
     exact: true,
     name: "Cài đặt",
-    component: CouncilSetting,
+  },
+  {
+    path: "/settings/common",
+    exact: true,
+    name: "Chung",
+    component: ShareSetting,
   },
   {
     path: "/settings/council",

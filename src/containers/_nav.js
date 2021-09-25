@@ -108,12 +108,18 @@ const _nav = [
     _children: [
       {
         _tag: "CSidebarNavItem",
+        name: "Cài đặt chung",
+        to: "/settings/common",
+      },
+      {
+        _tag: "CSidebarNavItem",
         name: "Thành viên hội đồng",
         to: "/settings/council",
       },
     ],
   },
 
+  // -----------------------------------------------------------------------------------------------------------------------------------------
   {
     _tag: "CSidebarNavTitle",
     _children: ["Theme"],

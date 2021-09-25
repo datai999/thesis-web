@@ -43,10 +43,16 @@ const MainComponent = ({ view, disableView, success, defaultForm = {} }) => {
   };
 
   const submit = () => {
-    api.post(`/council-roles`, form).then((response) => {
-      disableView();
-      success(response);
-    });
+    if (update)
+      api.patch(`/council-roles`, form).then((response) => {
+        disableView();
+        success(response);
+      });
+    else
+      api.post(`/council-roles`, form).then((response) => {
+        disableView();
+        success(response);
+      });
   };
 
   useEffect(() => {
