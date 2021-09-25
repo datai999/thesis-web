@@ -76,6 +76,10 @@ const AssignReview = React.lazy(() =>
   import("./pages/assign/review/AssignReview")
 );
 
+const CouncilSetting = React.lazy(() =>
+  import("./pages/setting/council/CouncilSetting")
+);
+
 let routes = [
   { path: "/", exact: true, name: "Trang chủ" },
   { path: "/dashboard", name: "Dashboard", component: Dashboard },
@@ -175,6 +179,18 @@ let routes = [
     exact: true,
     name: "Phân công phản biện",
     component: AssignReview,
+  },
+  {
+    path: "/settings",
+    exact: true,
+    name: "Cài đặt",
+    component: CouncilSetting,
+  },
+  {
+    path: "/settings/council",
+    exact: true,
+    name: "Thành viên hội đồng",
+    component: CouncilSetting,
   },
 
   { path: "/theme", name: "Theme", component: Colors, exact: true },

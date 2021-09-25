@@ -1,23 +1,16 @@
-import React from 'react'
+import CIcon from '@coreui/icons-react'
 import {
-  CCardGroup,
-  CCardFooter,
-  CCol,
-  CLink,
-  CRow,
-  CWidgetProgress,
-  CWidgetIcon,
-  CWidgetProgressIcon,
-  CWidgetSimple,
-  CProgress,
+  CCardFooter, CCardGroup, CCol,
+  CLink, CProgress, CRow, CWidgetIcon, CWidgetProgress, CWidgetProgressIcon,
+  CWidgetSimple
 } from '@coreui/react'
+import React from 'react'
+import ChartBarSimple from '../charts/ChartBarSimple'
+import ChartLineSimple from '../charts/ChartLineSimple'
 import WidgetsBrand from './WidgetsBrand'
 import WidgetsDropdown from './WidgetsDropdown'
 
-import ChartLineSimple from '../charts/ChartLineSimple'
-import ChartBarSimple from '../charts/ChartBarSimple'
 
-import CIcon from '@coreui/icons-react'
 
 const Widgets = () => {
   return (
