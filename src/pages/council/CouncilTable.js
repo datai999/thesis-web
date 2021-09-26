@@ -240,8 +240,10 @@ const CouncilTable = ({ subjectDepartmentId }) => {
                       color="primary"
                       variant="outline"
                       onClick={() => {
-                        if (!details.includes(item.id)) toggleDetails(item.id);
-                        setCurrentTopicIndex(index);
+                        history.push(
+                          `/councils/${subjectDepartmentId}/edit`,
+                          item
+                        );
                       }}
                     >
                       <CIcon name="cil-pencil" />

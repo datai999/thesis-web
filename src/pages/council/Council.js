@@ -35,6 +35,15 @@ const MainComponent = ({ location }) => {
   const [searchTeachers, setSearchTeachers] = useState(false);
   const [currentRole, setCurrentRole] = useState(-1);
 
+  const remove = (roleIndex, teacherId) => {
+    const nextRoles = _.cloneDeep(councilRoles);
+    const nextTeachers = councilRoles[roleIndex].teachers.filter(
+      (e) => e.id !== teacherId
+    );
+    nextRoles[roleIndex].teachers = nextTeachers;
+    setCouncilRoles(nextRoles);
+  };
+
   const setValueForm = (path, value) => {
     let nextForm = _.cloneDeep(form);
     _.set(nextForm, path, value);
@@ -51,7 +60,7 @@ const MainComponent = ({ location }) => {
   const submit = () => {
     form.semester = contextHolder.semester;
     form.subjectDepartment = contextHolder.subjectDepartments.find(
-      (e) => (e.id = subjectDepartmentId)
+      (e) => e.id.toString() === subjectDepartmentId
     );
     form.members = councilRoles
       .map((role) =>
@@ -75,6 +84,9 @@ const MainComponent = ({ location }) => {
   };
 
   useEffect(() => {
+    if (location?.state) {
+      setForm(location.state);
+    }
     api
       .get("/council-roles", {
         params: {
@@ -84,15 +96,15 @@ const MainComponent = ({ location }) => {
       .then((response) => {
         response.forEach((e) => {
           e.teachers = [];
+          if (location?.state) {
+            location.state.members?.forEach((councilMember) => {
+              if (councilMember.role.id === e.id)
+                e.teachers = [...e.teachers, councilMember.member];
+            });
+          }
         });
         setCouncilRoles(response);
       });
-    if (location?.state) {
-      const exitTopic = location.state;
-      exitTopic.educationMethods = exitTopic.educationMethods.map((e) => e.id);
-      exitTopic.majors = exitTopic.majors.map((e) => e.id);
-      setForm(exitTopic);
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -102,7 +114,6 @@ const MainComponent = ({ location }) => {
         view={searchTeachers}
         setView={() => setSearchTeachers(false)}
         selected={(teacher) => {
-          console.log(teacher);
           setSearchTeachers(false);
           const nextRoles = _.cloneDeep(councilRoles);
           const nextTeachers = [...councilRoles[currentRole].teachers, teacher];
@@ -165,7 +176,10 @@ const MainComponent = ({ location }) => {
                       <CRow>
                         {role.teachers.map((e) => (
                           <CCol key={e} md={role.max > 1 ? 6 : 12}>
-                            <UserCard user={e} />
+                            <UserCard
+                              user={e}
+                              remove={() => remove(index, e.id)}
+                            />
                           </CCol>
                         ))}
                         {_.range(role.teachers.length, role.max).map((e) => (
