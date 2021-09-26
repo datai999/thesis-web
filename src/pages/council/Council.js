@@ -64,11 +64,13 @@ const MainComponent = ({ location }) => {
       )
       .flat();
     if (form.id) {
-      api.patch("/councils", form);
-      // .then(() => history.push(`/councils/${subjectDepartmentId}`));
+      api
+        .patch("/councils", form)
+        .then(() => history.push(`/councils/${subjectDepartmentId}`));
     } else {
-      api.post("/councils", form);
-      // .then(() => history.push(`/councils/${subjectDepartmentId}`));
+      api
+        .post("/councils", form)
+        .then(() => history.push(`/councils/${subjectDepartmentId}`));
     }
   };
 

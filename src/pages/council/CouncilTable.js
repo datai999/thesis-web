@@ -8,7 +8,6 @@ import {
   CCol,
   CCollapse,
   CDataTable,
-  CListGroupItem,
   CPagination,
   CRow,
   CTooltip
@@ -21,32 +20,26 @@ import TeacherSearchModal from "src/pages/teacher/TeacherSearchModal";
 import api from "src/service/api";
 
 const fields = [
-  { key: "id", label: "Mã", _style: { width: "1%" } },
-  { key: "names", label: "Tên đề tài", _style: { width: "30%" } },
-  { key: "semester", label: "Học kỳ", _style: { width: "1%" } },
-  {
-    key: "educationMethodNames",
-    label: "Phương thức",
-    _style: { width: "12%" },
-  },
-  { key: "majorNames", label: "Ngành", _style: { width: "10%" } },
-  {
-    key: "guideTeacherRenders",
-    label: "Giáo viên hướng dẫn",
-    _style: { width: "20%" },
-  },
-  {
-    key: "reviewTeacherRenders",
-    label: "Giáo viên phản biện",
-    _style: { width: "20%" },
-  },
+  { key: "id", label: "Mã", _style: { width: 1 } },
+  { key: "semesterName", label: "Học kỳ", _style: { width: 90 } },
+  { key: "time", label: "Thời gian", _style: { width: 140 } },
+  { key: "location", label: "Địa điểm", _style: { width: "15%" } },
+  { key: "members", label: "Thành viên", sorter: false },
+  { key: "note", label: "Ghi chú" },
   {
     key: "actions",
     label: "",
-    _style: { width: "1%" },
+    _style: { width: 1 },
     sorter: false,
     filter: false,
   },
+];
+
+const councilRoleFields = [
+  { key: "role", label: "Vai trò" },
+  { key: "code", label: "Mã số" },
+  { key: "degree", label: "Học vị" },
+  { key: "name", label: "Họ tên và email" },
 ];
 
 const CouncilTable = ({ subjectDepartmentId }) => {
@@ -61,9 +54,8 @@ const CouncilTable = ({ subjectDepartmentId }) => {
   const size = 5;
 
   const pageChange = (newPage) => {
-    console.log(newPage);
     currentPage !== newPage &&
-      history.push(`/assign/review/${subjectDepartmentId}?page=${newPage}`);
+      history.push(`/councils/${subjectDepartmentId}?page=${newPage}`);
     setPage(newPage);
   };
 
@@ -78,25 +70,18 @@ const CouncilTable = ({ subjectDepartmentId }) => {
     setDetails(newDetails);
   };
 
-  const getData = async () => {
+  const getData = () => {
     api
-      .get(`/topics/subject-department`, {
-        params: {
-          id: subjectDepartmentId,
-          direction: "DESC",
-        },
-      })
-      .then((response) => {
-        response.forEach((e) => {
-          e.guideTeacherRenders = e.guideTeachers.map((user) =>
-            `${user.code} ${user.firstName} ${user.lastName} ${user.email}`.toString()
-          );
-          e.reviewTeacherRenders = e.reviewTeachers.map((user) =>
-            `${user.code} ${user.firstName} ${user.lastName} ${user.email}`.toString()
-          );
-        });
-        setData(response);
-      });
+      .post(
+        `/councils/example`,
+        { subjectDepartment: subjectDepartmentId },
+        {
+          params: {
+            direction: "DESC",
+          },
+        }
+      )
+      .then(setData);
   };
 
   const addReviewTeacher = (teacher) => {
@@ -105,15 +90,6 @@ const CouncilTable = ({ subjectDepartmentId }) => {
       ...data[currentTopicIndex].reviewTeachers,
       teacher,
     ];
-    setData(nextData);
-  };
-
-  const removeReviewTeacher = (teacher) => {
-    const nextReviewTeachers = data[currentTopicIndex].reviewTeachers.filter(
-      (e) => e.id !== teacher.id
-    );
-    const nextData = _.cloneDeep(data);
-    nextData[currentTopicIndex].reviewTeachers = nextReviewTeachers;
     setData(nextData);
   };
 
@@ -127,7 +103,7 @@ const CouncilTable = ({ subjectDepartmentId }) => {
   useEffect(() => {
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, []);
 
   return (
     <CCard>
@@ -169,48 +145,65 @@ const CouncilTable = ({ subjectDepartmentId }) => {
         activePage={page}
         clickableRows
         scopedSlots={{
-          names: (item) => multiLine(item.names),
-          educationMethodNames: (item) => multiLine(item.educationMethodNames),
-          majorNames: (item) => multiLine(item.majorNames),
-          guideTeacherRenders: (item) =>
-            multiLine(
-              item.guideTeachers.map((user) => (
-                <div>
-                  {user.code} {user.firstName} {user.lastName}{" "}
-                  <CTooltip content={user.email}>
-                    <CIcon name="cil-envelope-closed" className="mb-2" />
-                  </CTooltip>
-                </div>
-              ))
-            ),
-          reviewTeacherRenders: (item, index) => (
+          time: (item) => (
             <td>
-              {item.reviewTeachers.map((user) => (
-                <div>
-                  {user.code} {user.firstName} {user.lastName}{" "}
-                  <CTooltip content={user.email}>
-                    <CIcon name="cil-envelope-closed" className="mb-2" />
-                  </CTooltip>
-                  {currentTopicIndex === index && (
-                    <CTooltip content={"Xóa giáo viên"}>
-                      <CButton
-                        color="primary"
-                        variant="ghost"
-                        size="sm"
-                        className="mb-2"
-                        onClick={() => {
-                          removeReviewTeacher(user);
-                        }}
-                      >
-                        <CIcon
-                          name="cil-user-unfollow"
-                          className="text-danger"
-                        />
-                      </CButton>
-                    </CTooltip>
+              <div>
+                {"Ngày"}
+                <div className="float-right">{item.reserveDate}</div>
+              </div>
+              <div>
+                {"Bắt đầu"}
+                <div className="float-right">{item.startTime}</div>
+              </div>
+              <div>
+                {"Kết thúc"}
+                <div className="float-right">{item.endTime}</div>
+              </div>
+            </td>
+          ),
+          members: (item) => (
+            <td className="p-0">
+              {
+                <CDataTable
+                  items={Object.entries(
+                    _.groupBy(item.members, (e) => e.role.name)
+                  ).sort(
+                    (a, b) =>
+                      a[1][0].role.displayOrder - b[1][0].role.displayOrder
                   )}
-                </div>
-              ))}
+                  fields={councilRoleFields}
+                  size="sm"
+                  scopedSlots={{
+                    role: (row) => <>{row[0]}</>,
+                    code: (row) =>
+                      multiLine(
+                        row[1].map((councilMember) => councilMember.member.code)
+                      ),
+                    degree: (row) =>
+                      multiLine(
+                        row[1].map(
+                          (councilMember) => councilMember.member.degreeName
+                        )
+                      ),
+                    name: (row) =>
+                      multiLine(
+                        row[1]
+                          .map((councilMember) => councilMember.member)
+                          .map((user) => (
+                            <div>
+                              {user.firstName} {user.lastName}{" "}
+                              <CTooltip content={user.email}>
+                                <CIcon
+                                  name="cil-envelope-closed"
+                                  className="mb-2"
+                                />
+                              </CTooltip>
+                            </div>
+                          ))
+                      ),
+                  }}
+                />
+              }
             </td>
           ),
           actions: (item, index) => (
@@ -292,25 +285,6 @@ const CouncilTable = ({ subjectDepartmentId }) => {
                     Tài liệu
                     <br />
                     {item.documentReference}
-                  </CCol>
-                  <CCol>
-                    Sinh viên thực hiện
-                    <br />
-                    {item.students.map((user) => (
-                      <CListGroupItem key={user}>
-                        <CRow>
-                          <CCol>{user.code}</CCol>
-                        </CRow>
-                        <CRow>
-                          <CCol>
-                            {user.firstName} {user.lastName}
-                          </CCol>
-                        </CRow>
-                        <CRow>
-                          <CCol>{user.email}</CCol>
-                        </CRow>
-                      </CListGroupItem>
-                    ))}
                   </CCol>
                 </CRow>
               </CCardBody>
