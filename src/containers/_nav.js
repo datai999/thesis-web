@@ -51,37 +51,37 @@ const _nav = [
         name: "Phản biện",
         to: "/my/topics/review",
       },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Tạo đề tài",
-        to: "my/topics/create",
-      },
+      // {
+      //   _tag: "CSidebarNavItem",
+      //   name: "Tạo đề tài",
+      //   to: "my/topics/create",
+      // },
     ],
   },
-  {
-    _tag: "CSidebarNavDropdown",
-    name: "Giáo viên",
-    to: "/teachers",
-    icon: "cil-user",
-    _children: [
-      {
-        _tag: "CSidebarNavItem",
-        name: "Giáo viên",
-        to: "/teachers",
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Thêm giáo viên",
-        to: "/teachers/create",
-      },
-    ],
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Sinh viên",
-    to: "/students",
-    icon: "cil-user",
-  },
+  // {
+  //   _tag: "CSidebarNavDropdown",
+  //   name: "Giáo viên",
+  //   to: "/teachers",
+  //   icon: "cil-user",
+  //   _children: [
+  //     {
+  //       _tag: "CSidebarNavItem",
+  //       name: "Giáo viên",
+  //       to: "/teachers",
+  //     },
+  //     {
+  //       _tag: "CSidebarNavItem",
+  //       name: "Thêm giáo viên",
+  //       to: "/teachers/create",
+  //     },
+  //   ],
+  // },
+  // {
+  //   _tag: "CSidebarNavItem",
+  //   name: "Sinh viên",
+  //   to: "/students",
+  //   icon: "cil-user",
+  // },
   {
     _tag: "CSidebarNavItem",
     name: "Học kỳ",
@@ -97,7 +97,7 @@ const _nav = [
   {
     _tag: "CSidebarNavItem",
     name: "Hội đồng",
-    to: "/council",
+    to: "/councils",
     icon: "cil-people",
   },
   {

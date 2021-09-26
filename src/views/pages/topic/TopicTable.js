@@ -23,6 +23,7 @@ const fields = [
     _style: { width: "12%" },
   },
   { key: "majorNames", label: "Ngành" },
+  { key: "subjectDepartmentName", label: "Bộ môn" },
   { key: "guideTeachers", label: "Giáo viên hướng dẫn" },
   { key: "studentCount", label: "Số SV đăng ký", _style: { width: "1%" } },
   {
@@ -64,8 +65,8 @@ const MainComponent = ({ thesis }) => {
   useEffect(() => {
     currentPage !== page && setPage(currentPage);
     api
-      .get(`/topics/${thesis ? "thesis" : "outline"}`, {
-        params: { direction: "DESC" },
+      .get(`/topics/type`, {
+        params: { type: thesis ? "thesis" : "outline", direction: "DESC" },
       })
       .then((response) => {
         response.forEach((e) => {

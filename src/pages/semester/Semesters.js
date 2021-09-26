@@ -130,8 +130,7 @@ const MainComponent = () => {
         success={refresh}
         defaultForm={editSemester}
       />
-      <CCardHeader></CCardHeader>
-      <CCardBody>
+      <CCardHeader>
         <CRow>
           <CCol sm="5">
             <h4 id="traffic" className="card-title mb-0">
@@ -151,6 +150,8 @@ const MainComponent = () => {
             </CButton>
           </CCol>
         </CRow>
+      </CCardHeader>
+      <CCardBody>
         <CDataTable
           items={data}
           fields={fields}

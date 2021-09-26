@@ -75,6 +75,8 @@ const Semesters = React.lazy(() => import("./pages/semester/Semesters"));
 const AssignReview = React.lazy(() =>
   import("./pages/assign/review/AssignReview")
 );
+const CouncilTable = React.lazy(() => import("./pages/council/CouncilTable"));
+const Council = React.lazy(() => import("./pages/council/Council"));
 
 const CouncilSetting = React.lazy(() =>
   import("./pages/setting/council/CouncilSetting")
@@ -132,59 +134,18 @@ let routes = [
     name: "Phân công phản biện",
     component: AssignReview,
   },
+  { path: "/assign/review/:id", component: AssignReview },
+  { path: "/councils", exact: true, name: "Hội đồng", component: CouncilTable },
   {
-    path: "/assign/review/1",
+    path: "/councils/:id",
     exact: true,
-    name: "Phân công phản biện",
-    component: AssignReview,
+    component: CouncilTable,
   },
+  { path: "/councils/:id/create", name: "Tạo hội đồng", component: Council },
   {
-    path: "/assign/review/2",
-    exact: true,
-    name: "Phân công phản biện",
-    component: AssignReview,
-  },
-  {
-    path: "/assign/review/3",
-    exact: true,
-    name: "Phân công phản biện",
-    component: AssignReview,
-  },
-  {
-    path: "/assign/review/4",
-    exact: true,
-    name: "Phân công phản biện",
-    component: AssignReview,
-  },
-  {
-    path: "/assign/review/5",
-    exact: true,
-    name: "Phân công phản biện",
-    component: AssignReview,
-  },
-  {
-    path: "/assign/review/6",
-    exact: true,
-    name: "Phân công phản biện",
-    component: AssignReview,
-  },
-  {
-    path: "/assign/review/7",
-    exact: true,
-    name: "Phân công phản biện",
-    component: AssignReview,
-  },
-  {
-    path: "/assign/review/8",
-    exact: true,
-    name: "Phân công phản biện",
-    component: AssignReview,
-  },
-  {
-    path: "/assign/review/9",
-    exact: true,
-    name: "Phân công phản biện",
-    component: AssignReview,
+    path: "/councils/:id/edit",
+    name: "Chỉnh sửa hội đồng",
+    component: Council,
   },
   {
     path: "/settings",
