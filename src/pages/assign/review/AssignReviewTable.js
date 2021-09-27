@@ -58,7 +58,6 @@ const MainComponent = ({ subjectDepartmentId }) => {
   const size = 5;
 
   const pageChange = (newPage) => {
-    console.log(newPage);
     currentPage !== newPage &&
       history.push(`/assign/review/${subjectDepartmentId}?page=${newPage}`);
     setPage(newPage);
@@ -77,12 +76,17 @@ const MainComponent = ({ subjectDepartmentId }) => {
 
   const getData = async () => {
     api
-      .get(`/topics/subject-department`, {
-        params: {
-          id: subjectDepartmentId,
-          direction: "DESC",
+      .post(
+        `/topics/example`,
+        {
+          subjectDepartment: subjectDepartmentId,
         },
-      })
+        {
+          params: {
+            direction: "DESC",
+          },
+        }
+      )
       .then((response) => {
         response.forEach((e) => {
           e.guideTeacherRenders = e.guideTeachers.map((user) =>
@@ -146,7 +150,6 @@ const MainComponent = ({ subjectDepartmentId }) => {
         itemsPerPageSelect
         itemsPerPage={size}
         activePage={page}
-        clickableRows
         scopedSlots={{
           names: (item) => multiLine(item.names),
           educationMethodNames: (item) => multiLine(item.educationMethodNames),

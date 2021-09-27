@@ -129,40 +129,7 @@ const MainComponent = ({ location }) => {
       <CCardBody>
         <CForm>
           <CRow>
-            <CCol>
-              <CFormGroup>
-                <CLabel>Địa điểm</CLabel>
-                <CInput
-                  placeholder="Cơ sở, tòa nhà, phòng hoặc link meet..."
-                  {...setGetForm("location")}
-                />
-              </CFormGroup>
-
-              <CFormGroup row>
-                <CCol>
-                  <CLabel>Ngày</CLabel>
-                  <CInput type="date" {...setGetForm("reserveDate")} />
-                </CCol>
-                <CCol>
-                  <CLabel>Thời gian bắt đầu</CLabel>
-                  <CInput type="time" {...setGetForm("startTime")} />
-                </CCol>
-                <CCol>
-                  <CLabel>Thời gian kết thúc</CLabel>
-                  <CInput type="time" {...setGetForm("endTime")} />
-                </CCol>
-              </CFormGroup>
-
-              <CFormGroup>
-                <CLabel>Ghi chú</CLabel>
-                <CTextarea
-                  rows="7"
-                  placeholder="Ghi chú..."
-                  {...setGetForm("note")}
-                />
-              </CFormGroup>
-            </CCol>
-            <CCol>
+            <CCol className="mb-4">
               <CRow>
                 {councilRoles.map((role, index) => (
                   <CCol
@@ -203,6 +170,39 @@ const MainComponent = ({ location }) => {
                   </CCol>
                 ))}
               </CRow>
+            </CCol>
+            <CCol>
+              <CFormGroup>
+                <CLabel>Địa điểm</CLabel>
+                <CInput
+                  placeholder="Cơ sở, tòa nhà, phòng hoặc link meet..."
+                  {...setGetForm("location")}
+                />
+              </CFormGroup>
+
+              <CFormGroup row>
+                <CCol>
+                  <CLabel>Ngày</CLabel>
+                  <CInput type="date" {...setGetForm("reserveDate")} />
+                </CCol>
+                <CCol>
+                  <CLabel>Thời gian bắt đầu</CLabel>
+                  <CInput type="time" {...setGetForm("startTime")} />
+                </CCol>
+                <CCol>
+                  <CLabel>Thời gian kết thúc</CLabel>
+                  <CInput type="time" {...setGetForm("endTime")} />
+                </CCol>
+              </CFormGroup>
+
+              <CFormGroup>
+                <CLabel>Ghi chú</CLabel>
+                <CTextarea
+                  rows="7"
+                  placeholder="Ghi chú..."
+                  {...setGetForm("note")}
+                />
+              </CFormGroup>
             </CCol>
           </CRow>
         </CForm>

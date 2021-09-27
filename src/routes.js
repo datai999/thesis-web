@@ -77,6 +77,7 @@ const AssignReview = React.lazy(() =>
 );
 const CouncilTable = React.lazy(() => import("./pages/council/CouncilTable"));
 const Council = React.lazy(() => import("./pages/council/Council"));
+const AssignCouncil = React.lazy(() => import("./pages/council/AssignCouncil"));
 
 const CouncilSetting = React.lazy(() =>
   import("./pages/setting/council/CouncilSetting")
@@ -145,7 +146,7 @@ let routes = [
   {
     path: "/councils/:id/edit",
     name: "Chỉnh sửa hội đồng",
-    component: Council,
+    component: AssignCouncil,
   },
   {
     path: "/settings",

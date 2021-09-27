@@ -16,7 +16,6 @@ import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import SubjectDepartmentTab from "src/components/SubjectDepartmentTab";
-import TeacherSearchModal from "src/pages/teacher/TeacherSearchModal";
 import api from "src/service/api";
 
 const fields = [
@@ -49,8 +48,6 @@ const CouncilTable = ({ subjectDepartmentId }) => {
   const [page, setPage] = useState(currentPage);
   const [data, setData] = useState([]);
   const [details, setDetails] = useState([]);
-  const [searchTeachers, setSearchTeachers] = useState(false);
-  const [currentTopicIndex, setCurrentTopicIndex] = useState(-1);
   const size = 5;
 
   const pageChange = (newPage) => {
@@ -84,22 +81,6 @@ const CouncilTable = ({ subjectDepartmentId }) => {
       .then(setData);
   };
 
-  const addReviewTeacher = (teacher) => {
-    const nextData = _.cloneDeep(data);
-    nextData[currentTopicIndex].reviewTeachers = [
-      ...data[currentTopicIndex].reviewTeachers,
-      teacher,
-    ];
-    setData(nextData);
-  };
-
-  const updateTopic = (topic) => {
-    api.put(`/topics/${topic.id}/assign-reviews`, topic).then(() => {
-      getData();
-      setCurrentTopicIndex(-1);
-    });
-  };
-
   useEffect(() => {
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,14 +88,6 @@ const CouncilTable = ({ subjectDepartmentId }) => {
 
   return (
     <CCard>
-      <TeacherSearchModal
-        view={searchTeachers}
-        disableView={() => setSearchTeachers(false)}
-        selected={(teacher) => {
-          setSearchTeachers(false);
-          addReviewTeacher(teacher);
-        }}
-      />
       <CCardHeader>
         <CRow>
           <CCol sm="5">
@@ -143,7 +116,6 @@ const CouncilTable = ({ subjectDepartmentId }) => {
         itemsPerPageSelect
         itemsPerPage={size}
         activePage={page}
-        clickableRows
         scopedSlots={{
           time: (item) => (
             <td>
@@ -206,68 +178,41 @@ const CouncilTable = ({ subjectDepartmentId }) => {
               }
             </td>
           ),
-          actions: (item, index) => (
+          actions: (item) => (
             <td className="py-2">
-              {currentTopicIndex === index ? (
-                <CButtonGroup vertical size="sm">
-                  <CTooltip content={"Thêm giáo viên phản biện"}>
-                    <CButton
-                      color="primary"
-                      variant="outline"
-                      onClick={() => {
-                        setSearchTeachers(true);
-                      }}
-                    >
-                      <CIcon name="cil-user-follow" className="text-success" />
-                    </CButton>
-                  </CTooltip>
-                  <CTooltip content={"Lưu"}>
-                    <CButton
-                      color="primary"
-                      variant="outline"
-                      onClick={() => {
-                        updateTopic(item);
-                      }}
-                    >
-                      <CIcon name="cil-save" />
-                    </CButton>
-                  </CTooltip>
-                </CButtonGroup>
-              ) : (
-                <CButtonGroup vertical size="sm">
-                  <CTooltip content={"Chỉnh sửa"}>
-                    <CButton
-                      color="primary"
-                      variant="outline"
-                      onClick={() => {
-                        history.push(
-                          `/councils/${subjectDepartmentId}/edit`,
-                          item
-                        );
-                      }}
-                    >
-                      <CIcon name="cil-pencil" />
-                    </CButton>
-                  </CTooltip>
-                  <CTooltip
-                    content={details.includes(item.id) ? "Ẩn bớt" : "Chi tiết"}
+              <CButtonGroup vertical size="sm">
+                <CTooltip content={"Chỉnh sửa"}>
+                  <CButton
+                    color="primary"
+                    variant="outline"
+                    onClick={() => {
+                      history.push(
+                        `/councils/${subjectDepartmentId}/edit/${item.id}`,
+                        item
+                      );
+                    }}
                   >
-                    <CButton
-                      color="primary"
-                      variant="outline"
-                      onClick={() => {
-                        toggleDetails(item.id);
-                      }}
-                    >
-                      <CIcon
-                        name={`cil-chevron-${
-                          details.includes(item.id) ? "top" : "bottom"
-                        }`}
-                      />
-                    </CButton>
-                  </CTooltip>
-                </CButtonGroup>
-              )}
+                    <CIcon name="cil-pencil" />
+                  </CButton>
+                </CTooltip>
+                {/* <CTooltip
+                  content={details.includes(item.id) ? "Ẩn bớt" : "Chi tiết"}
+                >
+                  <CButton
+                    color="primary"
+                    variant="outline"
+                    onClick={() => {
+                      toggleDetails(item.id);
+                    }}
+                  >
+                    <CIcon
+                      name={`cil-chevron-${
+                        details.includes(item.id) ? "top" : "bottom"
+                      }`}
+                    />
+                  </CButton>
+                </CTooltip> */}
+              </CButtonGroup>
             </td>
           ),
           details: (item) => (
