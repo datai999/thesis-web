@@ -22,6 +22,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import TeacherSearchModal from "src/pages/teacher/TeacherSearchModal";
 import api from "src/service/api";
 import contextHolder from "src/service/contextService";
+import toastHolder from "src/service/toastService";
 
 const MainComponent = ({ location }) => {
   const subjectDepartmentId = useLocation().pathname.match(
@@ -73,13 +74,15 @@ const MainComponent = ({ location }) => {
       )
       .flat();
     if (form.id) {
-      api
-        .patch("/councils", form)
-        .then(() => history.push(`/councils/${subjectDepartmentId}`));
+      api.patch("/councils", form).then(() => {
+        toastHolder.success("Cập nhật hội đồng thành công");
+        history.push(`/councils/${subjectDepartmentId}`);
+      });
     } else {
-      api
-        .post("/councils", form)
-        .then(() => history.push(`/councils/${subjectDepartmentId}`));
+      api.post("/councils", form).then(() => {
+        toastHolder.success("Tạo hội đồng thành công");
+        history.push(`/councils/${subjectDepartmentId}`);
+      });
     }
   };
 

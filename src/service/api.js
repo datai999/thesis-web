@@ -1,7 +1,6 @@
 import axios from "axios";
 import contextService from "./contextService";
-import { toastError } from "./toastService";
-
+import toastHolder from "./toastService";
 const config = {
   baseURL: "http://localhost:8080/api",
   headers: {
@@ -25,8 +24,11 @@ AxiosClient.interceptors.response.use(
         // TODO: redirect to login page
         window.location.replace(window.location.origin);
       }
-      if (error.response.status === 409) {
-        toastError(responseError.errorCode, responseError.errorMessage);
+      if ([400, 409].includes(error.response.status)) {
+        toastHolder.error(
+          responseError.errorCode,
+          responseError.errorMessage ?? responseError.error
+        );
       }
     }
     throw error;

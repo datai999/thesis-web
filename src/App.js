@@ -4,7 +4,7 @@ import LoadingOverlay from "react-loading-overlay";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./scss/style.scss";
 import { initContext } from "./service/contextService";
-import { toastHolder } from "./service/toastService";
+import toastHolder from "./service/toastService";
 
 const loading = (
   <div className="pt-3 text-center">

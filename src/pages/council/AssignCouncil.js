@@ -9,6 +9,7 @@ import {
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import api from "src/service/api";
+import toastHolder from "src/service/toastService";
 import AssignCouncilTable from "./AssignCouncilTable";
 import Council from "./Council";
 
@@ -20,12 +21,21 @@ const MainComponent = ({ location }) => {
   const subjectDepartmentId = paths[1];
   const councilId = paths[2];
 
-  const [assignedTopics, setAssignedTopics] = useState(location.state.topics);
+  const [assignedTopics, setAssignedTopics] = useState([]);
   const [unassignTopics, setUnassignTopics] = useState([]);
+  const [toggle, setToggle] = useState(false);
 
   const submit = () => {
-    // TODO
-    alert("submit");
+    api
+      .patch(
+        `/councils/${councilId}/assign-topics?topicIds=${assignedTopics.map(
+          (e) => e.id
+        )}`
+      )
+      .then(() => {
+        toastHolder.success("Phân công hội đồng thành công");
+        setToggle(!toggle);
+      });
   };
 
   const assign = (topic) => {
@@ -36,6 +46,12 @@ const MainComponent = ({ location }) => {
   const unassign = (topic) => {
     setAssignedTopics(assignedTopics.filter((e) => e.id !== topic.id));
     setUnassignTopics([...unassignTopics, topic]);
+  };
+
+  const getAssignedTopics = () => {
+    api
+      .get(`/councils/detail/${councilId}`)
+      .then((response) => setAssignedTopics(response.topics));
   };
 
   const getUnassignTopics = () => {
@@ -54,6 +70,7 @@ const MainComponent = ({ location }) => {
   };
 
   useEffect(() => {
+    getAssignedTopics();
     getUnassignTopics();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
