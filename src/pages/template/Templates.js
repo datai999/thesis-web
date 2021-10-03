@@ -59,7 +59,13 @@ const MainComponent = () => {
             </h4>
           </CCol>
           <CCol sm="7" className="d-none d-md-block">
-            <CButton color="primary" className="float-right" onClick={() => {}}>
+            <CButton
+              color="primary"
+              className="float-right"
+              onClick={() => {
+                history.push(`/templates/create`);
+              }}
+            >
               Thêm mẫu mới
             </CButton>
           </CCol>

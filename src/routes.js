@@ -158,6 +158,12 @@ let routes = [
     component: Templates,
   },
   {
+    path: "/templates/create",
+    exact: true,
+    name: "Soạn mẫu tiêu chí",
+    component: TemplateDetail,
+  },
+  {
     path: "/templates/:id",
     exact: true,
     name: "Chi tiết mẫu tiêu chí",

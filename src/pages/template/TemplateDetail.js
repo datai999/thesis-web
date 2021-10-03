@@ -14,18 +14,34 @@ import {
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import api from "src/service/api";
+import toastHolder from "src/service/toastService";
 import Criterion from "./Criterion";
 
 const MainComponent = () => {
-  const templateId = useLocation().pathname.match(/templates\/([0-9])/, "")[1];
+  const history = useHistory();
+  const templateIdPath = useLocation().pathname.match(
+    /templates\/([0-9]+)/,
+    ""
+  );
   const [data, setData] = useState({ children: [] });
-  const [edit, setEdit] = useState();
+  const [edit, setEdit] = useState(templateIdPath ? false : true);
 
   const submit = () => {
-    console.log(data);
-    setEdit(false);
+    if (templateIdPath)
+      api.patch(`/criterions`, data).then((response) => {
+        toastHolder.success(
+          `Cập nhật mẫu tiêu chí số ${response.id} thành công`
+        );
+        setData(response);
+        setEdit(false);
+      });
+    else
+      api.post(`/criterions`, data).then((response) => {
+        history.push(`/templates/${response.id}`);
+        toastHolder.success("Tạo mẫu tiêu chí thành công");
+      });
   };
 
   const setValueForm = (path, value) => {
@@ -42,9 +58,10 @@ const MainComponent = () => {
   };
 
   useEffect(() => {
-    api.get(`/criterions/detail/${templateId}`).then((res) => {
-      setData(res);
-    });
+    templateIdPath &&
+      api.get(`/criterions/detail/${templateIdPath[1]}`).then((res) => {
+        setData(res);
+      });
   }, []);
 
   return (
@@ -55,13 +72,17 @@ const MainComponent = () => {
             <CCol className="mt-2 mb-2">
               <h5>
                 <center>
-                  <strong>Mẫu tiêu chí số {data.id} </strong>
+                  <strong>
+                    {templateIdPath
+                      ? `Mẫu tiêu chí số ${data.id}`
+                      : "Tạo mẫu tiêu chí"}
+                  </strong>
                 </center>
               </h5>
             </CCol>
             <CCol md="0">
               {edit ? (
-                <CButton type="submit" color="primary" onClick={submit}>
+                <CButton color="primary" onClick={submit}>
                   <CIcon name="cil-save" /> Lưu
                 </CButton>
               ) : (

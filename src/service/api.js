@@ -24,7 +24,7 @@ AxiosClient.interceptors.response.use(
         // TODO: redirect to login page
         window.location.replace(window.location.origin);
       }
-      if ([400, 409].includes(error.response.status)) {
+      if ([400, 404, 409].includes(error.response.status)) {
         toastHolder.error(
           responseError.errorCode,
           responseError.errorMessage ?? responseError.error
