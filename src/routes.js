@@ -71,18 +71,21 @@ const TeacherCreate = React.lazy(() =>
 
 const Students = React.lazy(() => import("./views/pages/student/Students"));
 
-const Semesters = React.lazy(() => import("./pages/semester/Semesters"));
 const AssignReview = React.lazy(() =>
   import("./pages/assign/review/AssignReview")
 );
 const CouncilTable = React.lazy(() => import("./pages/council/CouncilTable"));
 const Council = React.lazy(() => import("./pages/council/Council"));
 const AssignCouncil = React.lazy(() => import("./pages/council/AssignCouncil"));
-
+const Semesters = React.lazy(() => import("./pages/semester/Semesters"));
+const Templates = React.lazy(() => import("./pages/template/Templates"));
+const TemplateDetail = React.lazy(() =>
+  import("./pages/template/TemplateDetail")
+);
+const ShareSetting = React.lazy(() => import("./pages/setting/ShareSetting"));
 const CouncilSetting = React.lazy(() =>
   import("./pages/setting/council/CouncilSetting")
 );
-const ShareSetting = React.lazy(() => import("./pages/setting/ShareSetting"));
 
 let routes = [
   { path: "/", exact: true, name: "Trang chủ" },
@@ -128,7 +131,6 @@ let routes = [
     component: TeacherCreate,
   },
   { path: "/students", exact: true, name: "Sinh viên", component: Students },
-  { path: "/semesters", exact: true, name: "Học kỳ", component: Semesters },
   {
     path: "/assign/review",
     exact: true,
@@ -144,9 +146,22 @@ let routes = [
   },
   { path: "/councils/:id/create", name: "Tạo hội đồng", component: Council },
   {
-    path: "/councils/:id/edit",
+    path: "/councils/:id/edit/:id",
     name: "Chỉnh sửa hội đồng",
     component: AssignCouncil,
+  },
+  { path: "/semesters", exact: true, name: "Học kỳ", component: Semesters },
+  {
+    path: "/templates",
+    exact: true,
+    name: "Mẫu tiêu chí",
+    component: Templates,
+  },
+  {
+    path: "/templates/:id",
+    exact: true,
+    name: "Chi tiết mẫu tiêu chí",
+    component: TemplateDetail,
   },
   {
     path: "/settings",

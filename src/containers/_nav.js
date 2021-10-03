@@ -34,7 +34,7 @@ const _nav = [
     _tag: "CSidebarNavDropdown",
     name: "Đề tài của tôi",
     to: "/my/topics",
-    icon: "cil-file",
+    icon: "cil-home",
     _children: [
       {
         _tag: "CSidebarNavItem",
@@ -84,12 +84,6 @@ const _nav = [
   // },
   {
     _tag: "CSidebarNavItem",
-    name: "Học kỳ",
-    to: "/semesters",
-    icon: "cil-chart-pie",
-  },
-  {
-    _tag: "CSidebarNavItem",
     name: "Phân công phản biện",
     to: "/assign/review",
     icon: "cil-speech",
@@ -99,6 +93,18 @@ const _nav = [
     name: "Hội đồng",
     to: "/councils",
     icon: "cil-people",
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Học kỳ",
+    to: "/semesters",
+    icon: "cil-chart-pie",
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Mẫu tiêu chí",
+    to: "/templates",
+    icon: "cil-file",
   },
   {
     _tag: "CSidebarNavDropdown",
