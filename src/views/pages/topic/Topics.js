@@ -1,12 +1,9 @@
 import {
-  CButton,
   CCard,
   CCardBody,
-  CCol,
   CNav,
   CNavItem,
   CNavLink,
-  CRow,
   CTabContent,
   CTabPane,
   CTabs
@@ -33,27 +30,14 @@ const MainComponent = () => {
           activeTab={activeThesisTab ? 1 : 0}
           onActiveTabChange={(index) => setActiveThesisTab(index === 1)}
         >
-          <CRow>
-            <CCol>
-              <CNav variant="tabs">
-                <CNavItem>
-                  <CNavLink>Đề cương</CNavLink>
-                </CNavItem>
-                <CNavItem>
-                  <CNavLink>Luận văn</CNavLink>
-                </CNavItem>
-              </CNav>
-            </CCol>
-            <CCol md="2">
-              <CButton
-                color="primary"
-                className="float-right"
-                onClick={() => history.push(`/topics/create`)}
-              >
-                Thêm đề tài
-              </CButton>
-            </CCol>
-          </CRow>
+          <CNav variant="tabs">
+            <CNavItem>
+              <CNavLink>Đề cương</CNavLink>
+            </CNavItem>
+            <CNavItem>
+              <CNavLink>Luận văn</CNavLink>
+            </CNavItem>
+          </CNav>
           <CTabContent>
             <CTabPane>{!isThesisTab && <TopicTable thesis={false} />}</CTabPane>
             <CTabPane>{isThesisTab && <TopicTable thesis={true} />}</CTabPane>

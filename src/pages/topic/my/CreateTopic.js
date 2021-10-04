@@ -340,7 +340,7 @@ const TopicCreate = ({ location }) => {
       </CCardBody>
       <CCardFooter>
         <CButton type="submit" color="info" onClick={create}>
-          <CIcon name="cil-scrubber" /> Lưu
+          <CIcon name="cil-save" /> Lưu
         </CButton>
       </CCardFooter>
     </CCard>

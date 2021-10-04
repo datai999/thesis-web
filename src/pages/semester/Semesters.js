@@ -1,3 +1,4 @@
+import CIcon from "@coreui/icons-react";
 import {
   CBadge,
   CButton,
@@ -38,7 +39,7 @@ const fields = [
   {
     key: "actions",
     label: "",
-    _style: { width: "10%" },
+    _style: { width: 1 },
     sorter: false,
     filter: false,
   },
@@ -64,8 +65,13 @@ const getAction = (
   switch (semester.status) {
     case "USING":
       return (
-        <CButton color="primary" variant="outline" onClick={editSemester}>
-          Chỉnh sửa
+        <CButton
+          color="primary"
+          variant="outline"
+          size="sm"
+          onClick={editSemester}
+        >
+          <CIcon name="cil-pencil" />
         </CButton>
       );
     case "USED":
@@ -73,9 +79,7 @@ const getAction = (
     default:
       return (
         <CDropdown variant="btn-group">
-          <CDropdownToggle color="primary" variant="outline">
-            Hành động
-          </CDropdownToggle>
+          <CDropdownToggle color="primary" variant="outline"></CDropdownToggle>
           <CDropdownMenu>
             <CDropdownItem onClick={setCurrentSemester}>
               Đặt làm học kỳ hiện tại
