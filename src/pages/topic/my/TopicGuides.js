@@ -1,41 +1,32 @@
+import CIcon from "@coreui/icons-react";
 import {
   CButton,
-  CCardBody,
-  CCol,
+  CButtonGroup,
   CCollapse,
   CDataTable,
-  CListGroupItem,
   CPagination,
-  CRow
+  CTooltip
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import api from "src/service/api";
+import TopicLineDetail from "./TopicLineDetail";
 
 const fields = [
-  { key: "id", label: "Mã", _style: { width: "1%" } },
-  { key: "names", label: "Tên đề tài", _style: { width: "30%" } },
-  { key: "semester", label: "Học kỳ", _style: { width: "1%" } },
+  { key: "id", label: "Mã", _style: { width: 1 } },
+  { key: "names", label: "Tên đề tài" },
+  { key: "semester", label: "Học kỳ", _style: { width: 1 } },
+  { key: "type", label: "Loại", _style: { width: 1 } },
   {
     key: "educationMethodNames",
     label: "Phương thức",
     _style: { width: "12%" },
   },
-  { key: "majorNames", label: "Ngành", _style: { width: "10%" } },
-  {
-    key: "studentCodeNames",
-    label: "Sinh viên thực hiện",
-    _style: { width: "25%" },
-  },
-  {
-    key: "studentsEmails",
-    label: "Email sinh viên",
-    _style: { width: "10%" },
-  },
+  { key: "majorNames", label: "Ngành", _style: { width: "12%" } },
   {
     key: "actions",
     label: "",
-    _style: { width: "1%" },
+    _style: { width: 1 },
     sorter: false,
     filter: false,
   },
@@ -76,18 +67,7 @@ const MainComponent = () => {
           direction: "DESC",
         },
       })
-      .then((response) => {
-        response.forEach((element) => {
-          element.studentCodeNames = element.students.map(
-            (student) =>
-              student.code + " " + student.firstName + " " + student.lastName
-          );
-          element.studentsEmails = element.students.map(
-            (student) => student.email
-          );
-        });
-        setData(response);
-      });
+      .then(setData);
   };
 
   useEffect(() => {
@@ -97,6 +77,7 @@ const MainComponent = () => {
   return (
     <div>
       <CDataTable
+        size="sm"
         items={data}
         fields={fields}
         hover
@@ -111,87 +92,47 @@ const MainComponent = () => {
           names: (item) => multiLine(item.names),
           educationMethodNames: (item) => multiLine(item.educationMethodNames),
           majorNames: (item) => multiLine(item.majorNames),
-          studentCodeNames: (item) =>
-            multiLine(
-              item.students.map((student) => (
-                <div>
-                  {student.code} {student.firstName} {student.lastName}
-                </div>
-              ))
-            ),
-          studentsEmails: (item) => multiLine(item.studentsEmails),
           actions: (item, index) => (
-            <td className="py-2">
-              <CButton
-                color="primary"
-                variant="outline"
-                shape="square"
-                size="sm"
-                onClick={() => {
-                  history.push("/my/topics/edit", item);
-                }}
+            <CButtonGroup vertical size="sm">
+              <CTooltip content={"Chỉnh sửa"}>
+                <CButton
+                  color="primary"
+                  variant="outline"
+                  onClick={() => {
+                    history.push("/my/topics/edit", item);
+                  }}
+                >
+                  <CIcon name="cil-pencil" />
+                </CButton>
+              </CTooltip>
+              <CTooltip
+                content={details.includes(index) ? "Ẩn bớt" : "Chi tiết"}
               >
-                Chỉnh sửa
-              </CButton>
-              <br />
-              <CButton
-                color="primary"
-                variant="outline"
-                shape="square"
-                size="sm"
-                onClick={() => {
-                  toggleDetails(index);
-                }}
-              >
-                {details.includes(index) ? "Ẩn bớt" : "Chi tiết"}
-              </CButton>
-            </td>
+                <CButton
+                  color="primary"
+                  variant="outline"
+                  onClick={() => {
+                    toggleDetails(index);
+                  }}
+                >
+                  <CIcon
+                    name={`cil-chevron-${
+                      details.includes(index) ? "top" : "bottom"
+                    }`}
+                  />
+                </CButton>
+              </CTooltip>
+            </CButtonGroup>
           ),
           details: (item, index) => (
             <CCollapse show={details.includes(index)}>
-              <CCardBody>
-                <CRow>
-                  <CCol md="4">
-                    Mô tả
-                    <br />
-                    {item.description}
-                  </CCol>
-                  <CCol md="5">
-                    Nhiệm vụ
-                    <br />
-                    {item.task}
-                    <br />
-                    Tài liệu
-                    <br />
-                    {item.documentReference}
-                  </CCol>
-                  <CCol>
-                    Giáo viên hướng dẫn:
-                    <br />
-                    {item.guideTeachers.map((guideTeacher) => (
-                      <CListGroupItem key={guideTeacher}>
-                        <CRow>
-                          <CCol>{guideTeacher.degree}</CCol>
-                          <CCol>{guideTeacher.code}</CCol>
-                        </CRow>
-                        <CRow>
-                          <CCol>
-                            {guideTeacher.firstName} {guideTeacher.lastName}
-                          </CCol>
-                        </CRow>
-                        <CRow>
-                          <CCol>{guideTeacher.email}</CCol>
-                        </CRow>
-                      </CListGroupItem>
-                    ))}
-                  </CCol>
-                </CRow>
-              </CCardBody>
+              <TopicLineDetail item={item} index={index} />
             </CCollapse>
           ),
         }}
       />
       <CPagination
+        size="sm"
         activePage={page}
         onActivePageChange={pageChange}
         align="center"
