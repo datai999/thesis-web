@@ -1,10 +1,14 @@
 import CIcon from "@coreui/icons-react";
 import {
   CButton,
-  CButtonGroup,
   CCol,
+  CDropdown,
+  CDropdownItem,
+  CDropdownMenu,
+  CDropdownToggle,
   CForm,
   CFormGroup,
+  CInput,
   CTextarea,
   CTooltip
 } from "@coreui/react";
@@ -73,36 +77,40 @@ const MainComponent = ({
         </CCol>
         {edit && (
           <CCol md="0">
-            <CButtonGroup size="sm">
+            <CDropdown>
               <CTooltip content={"Giữ và kéo để thay đổi thứ tự"}>
-                <CButton
-                  color="primary"
-                  variant={deep > 0 ? "outline" : "ghost"}
-                  disabled={deep < 1}
-                >
-                  <CIcon name="cil-cursor-move" />
-                </CButton>
-              </CTooltip>
-              <CTooltip content={"Thêm tiêu chí con"}>
-                <CButton
+                <CDropdownToggle
+                  size="sm"
                   color="primary"
                   variant="outline"
-                  onClick={addCriterion}
+                  split
                 >
-                  <CIcon name="cil-pencil" />
-                </CButton>
+                  <CIcon name="cil-cursor-move" />
+                </CDropdownToggle>
               </CTooltip>
-              <CTooltip content={"Xóa tiêu chí"}>
-                <CButton
-                  color="primary"
-                  variant={deep > 0 ? "outline" : "ghost"}
-                  disabled={deep < 1}
-                  onClick={removeCriterion}
-                >
-                  <CIcon name="cil-trash" />
-                </CButton>
-              </CTooltip>
-            </CButtonGroup>
+              <CDropdownMenu>
+                <CDropdownItem onClick={addCriterion}>
+                  Thêm tiêu chí con
+                </CDropdownItem>
+                {deep > 0 && (
+                  <>
+                    <CDropdownItem
+                      onClick={() => {
+                        updateCriterion({
+                          ...criterion,
+                          mark: !criterion.mark,
+                        });
+                      }}
+                    >
+                      {criterion.mark ? "Hủy chấm điểm" : "Chấm điểm tiêu chí"}
+                    </CDropdownItem>
+                    <CDropdownItem onClick={removeCriterion}>
+                      Xóa tiêu chí
+                    </CDropdownItem>
+                  </>
+                )}
+              </CDropdownMenu>
+            </CDropdown>
           </CCol>
         )}
       </CFormGroup>
@@ -113,6 +121,43 @@ const MainComponent = ({
         </ReactSortable>
       ) : (
         criterion?.children?.map(renderChildren)
+      )}
+
+      {criterion.mark && (
+        <CFormGroup row className="m-0 ml-2">
+          <CCol className="p-0" style={{ maxWidth: 60 }}>
+            <CInput size="sm" placeholder={"Điểm"} />
+          </CCol>
+          <CCol className="p-0">
+            <CTextarea
+              size="sm"
+              rows={1}
+              placeholder={`Bình luận cho: ${criterion.description?.slice(
+                0,
+                150
+              )}`}
+            />
+          </CCol>
+          {edit && (
+            <CCol md="0">
+              <CTooltip content={`Bỏ chấm điểm tiêu chí`}>
+                <CButton
+                  size="sm"
+                  color="primary"
+                  variant={"ghost"}
+                  onClick={() => {
+                    updateCriterion({
+                      ...criterion,
+                      mark: false,
+                    });
+                  }}
+                >
+                  <CIcon name="cil-trash" />
+                </CButton>
+              </CTooltip>
+            </CCol>
+          )}
+        </CFormGroup>
       )}
     </CForm>
   );
