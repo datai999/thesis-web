@@ -1,51 +1,81 @@
-import CIcon from "@coreui/icons-react";
-import { CButton, CCard, CCardBody, CCardFooter } from "@coreui/react";
+import {
+  CButton,
+  CCard,
+  CCardHeader,
+  CCol,
+  CListGroupItem,
+  CRow
+} from "@coreui/react";
 import React, { useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
 import api from "src/service/api";
-import toastHolder from "src/service/toastService";
+import TemplateCard from "./TemplateCard";
+import TemplateSearchModal from "./TemplateSearchModal";
 
 const MainComponent = () => {
-  const history = useHistory();
-  const templateIdPath = useLocation().pathname.match(
-    /templates\/([0-9]+)/,
-    ""
-  );
-  const [data, setData] = useState({ children: [] });
-  const [edit, setEdit] = useState(templateIdPath ? false : true);
+  const [data, setData] = useState({});
+  const [search, setSearch] = useState(false);
+  const [currentRole, setCurrentRole] = useState({});
 
-  const submit = () => {
-    if (templateIdPath)
-      api.patch(`/criterions`, data).then((response) => {
-        toastHolder.success(
-          `Cập nhật mẫu tiêu chí số ${response.id} thành công`
-        );
-        setData(response);
-        setEdit(false);
-      });
-    else
-      api.post(`/criterions`, data).then((response) => {
-        history.push(`/templates/${response.id}`);
-        toastHolder.success("Tạo mẫu tiêu chí thành công");
-      });
+  const getData = () => api.get(`/criterion-roles/template`).then(setData);
+
+  const searchTemplate = (role) => {
+    setCurrentRole(role);
+    setSearch(true);
+  };
+
+  const addTemplate = (template) => {
+    setSearch(false);
+    api.post(`/criterion-roles`, { ...currentRole, template }).then(getData);
   };
 
   useEffect(() => {
-    templateIdPath &&
-      api.get(`/criterions/detail/${templateIdPath[1]}`).then((res) => {
-        setData(res);
-      });
+    getData();
   }, []);
 
   return (
-    <CCard>
-      <CCardBody></CCardBody>
-      <CCardFooter>
-        <CButton type="submit" color="primary" size="sm" onClick={submit}>
-          <CIcon name="cil-save" /> Lưu
-        </CButton>
-      </CCardFooter>
-    </CCard>
+    <div className="mb-3">
+      <TemplateSearchModal
+        view={search}
+        disableView={() => setSearch(false)}
+        selected={addTemplate}
+      />
+      {Object.entries(data).map((entry) => (
+        <CCard className="mt-3">
+          <CCardHeader color="dark" className="text-white">
+            {entry[0] === "thesis" ? "Luận văn" : "Đề cương"}
+          </CCardHeader>
+
+          {entry[1]?.map((role) => (
+            <CListGroupItem key={role.name} action>
+              <CRow>
+                <CCol md="2">
+                  <strong>{role.name}</strong>
+                  <br />
+                  <CButton
+                    size="sm"
+                    color="primary"
+                    variant="outline"
+                    onClick={() => searchTemplate(role)}
+                  >
+                    Thêm mẫu tiêu chí
+                  </CButton>
+                </CCol>
+                <CCol>
+                  {role.templates
+                    .filter((roleTemplate) => !roleTemplate.deleted)
+                    .map((roleTemplate) => (
+                      <TemplateCard
+                        roleTemplate={roleTemplate}
+                        onDeleted={getData}
+                      />
+                    ))}
+                </CCol>
+              </CRow>
+            </CListGroupItem>
+          ))}
+        </CCard>
+      ))}
+    </div>
   );
 };
 
