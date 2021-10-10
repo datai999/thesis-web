@@ -16,7 +16,7 @@ import React from "react";
 import { ReactSortable } from "react-sortablejs";
 
 const MainComponent = ({
-  criterion,
+  criterion = { children: [] },
   deep,
   edit,
   updateCriterion = () => {},

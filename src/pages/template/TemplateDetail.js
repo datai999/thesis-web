@@ -25,13 +25,13 @@ const MainComponent = () => {
     /templates\/([0-9]+)/,
     ""
   );
-  const [data, setData] = useState({ children: [] });
-  const [edit, setEdit] = useState(false);
+  const [data, setData] = useState({});
+  const [edit, setEdit] = useState(templateIdPath ? false : true);
   const [toggle, setToggle] = useState(false);
 
   const submit = () => {
     if (templateIdPath)
-      api.patch(`/criterions`, data).then((response) => {
+      api.patch(`/templates`, data).then((response) => {
         toastHolder.success(
           `Cập nhật mẫu tiêu chí số ${response.id} thành công`
         );
@@ -39,7 +39,7 @@ const MainComponent = () => {
         setEdit(false);
       });
     else
-      api.post(`/criterions`, data).then((response) => {
+      api.post(`/templates`, data).then((response) => {
         history.push(`/templates/${response.id}`);
         toastHolder.success("Tạo mẫu tiêu chí thành công");
       });
@@ -65,8 +65,6 @@ const MainComponent = () => {
       });
   }, [toggle]);
 
-  console.log(edit);
-
   return (
     <CCard>
       <CCardHeader>
@@ -86,16 +84,19 @@ const MainComponent = () => {
             <CCol md="0">
               {edit ? (
                 <>
-                  <CButton
-                    color="primary"
-                    variant="outline"
-                    onClick={() => {
-                      setEdit(false);
-                      setToggle(!toggle);
-                    }}
-                  >
-                    <CIcon name="cil-x" /> Hủy
-                  </CButton>
+                  {templateIdPath && (
+                    <CButton
+                      color="primary"
+                      variant="outline"
+                      onClick={() => {
+                        setEdit(false);
+                        setToggle(!toggle);
+                      }}
+                    >
+                      <CIcon name="cil-x" /> Hủy
+                    </CButton>
+                  )}
+
                   <CButton color="primary" variant="outline" onClick={submit}>
                     <CIcon name="cil-save" /> Lưu
                   </CButton>
@@ -131,11 +132,11 @@ const MainComponent = () => {
       </CCardHeader>
       <CCardBody className="pl-0 mr-3">
         <Criterion
-          criterion={{ children: data.criterions ?? [] }}
+          criterion={data.rootCriterion}
           deep={0}
           edit={edit}
           updateCriterion={(nextCriterion) => {
-            const nextData = { ...data, criterions: nextCriterion.children };
+            const nextData = { ...data, rootCriterion: nextCriterion };
             setData(nextData);
           }}
         />
