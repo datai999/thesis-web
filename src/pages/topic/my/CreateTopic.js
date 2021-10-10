@@ -135,7 +135,9 @@ const TopicCreate = ({ location }) => {
           setGuideTeachers([...guideTeachers, teacher]);
         }}
       />
-      <CCardHeader>{form.id ? `Chỉnh sửa đề tài` : "Tạo đề tài"}</CCardHeader>
+      <CCardHeader>
+        <h5>{form.id ? `Chỉnh sửa đề tài` : "Tạo đề tài"}</h5>
+      </CCardHeader>
       <CCardBody>
         <CForm>
           <CFormGroup row>

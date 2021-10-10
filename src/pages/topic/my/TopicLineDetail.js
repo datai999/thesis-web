@@ -1,6 +1,14 @@
 import CIcon from "@coreui/icons-react";
-import { CCardBody, CCol, CDataTable, CRow, CTooltip } from "@coreui/react";
+import {
+  CCardBody,
+  CCol,
+  CDataTable,
+  CLink,
+  CRow,
+  CTooltip
+} from "@coreui/react";
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 const fields = [
   { key: "role", label: "Vai trò", _style: { width: "30%" } },
@@ -8,11 +16,21 @@ const fields = [
   { key: "name", label: "Họ tên và email" },
 ];
 
-const MainComponent = ({ item, index }) => {
+const MainComponent = ({ item }) => {
+  const history = useHistory();
+
   const getMember = (topic) => [
-    { role: "Giáo viên hướng dẫn", data: topic.guideTeachers },
-    { role: "Giáo viên phản biện", data: topic.reviewTeachers },
-    { role: "Sinh viên", data: topic.students },
+    {
+      roleId: "guideTeacher",
+      role: "Giáo viên hướng dẫn",
+      data: topic.guideTeachers,
+    },
+    {
+      roleId: "reviewTeacher",
+      role: "Giáo viên phản biện",
+      data: topic.reviewTeachers,
+    },
+    { roleId: "student", role: "Sinh viên", data: topic.students },
   ];
 
   return (
@@ -44,10 +62,30 @@ const MainComponent = ({ item, index }) => {
                 multiLine(
                   row.data.map((user) => (
                     <>
-                      {user.firstName} {user.lastName}{" "}
-                      <CTooltip content={user.email}>
-                        <CIcon name="cil-envelope-closed" className="mb-2" />
-                      </CTooltip>
+                      {user.firstName} {user.lastName}
+                      <div>
+                        <CTooltip content={user.email}>
+                          <CIcon name="cil-envelope-closed" className="mb-1" />
+                        </CTooltip>
+                        {row.roleId === "student" && (
+                          <CTooltip content={"Chấm điểm"}>
+                            <CLink
+                              onClick={() => {
+                                window.open(
+                                  `${window.location.origin}/my/topics/${
+                                    item.id
+                                  }/mark?role=${window.location.pathname
+                                    .split("/")
+                                    .pop()}&student=${user.code}`,
+                                  "_blank"
+                                );
+                              }}
+                            >
+                              <CIcon name="cil-calculator" className="ml-1" />
+                            </CLink>
+                          </CTooltip>
+                        )}
+                      </div>
                     </>
                   ))
                 ),

@@ -2,8 +2,10 @@ import CIcon from "@coreui/icons-react";
 import {
   CButton,
   CCard,
-  CCardBody, CDataTable,
-  CPagination, CTooltip
+  CCardBody,
+  CDataTable,
+  CPagination,
+  CTooltip
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
@@ -34,14 +36,12 @@ const MainComponent = () => {
   const [data, setData] = useState([]);
 
   const pageChange = (newPage) => {
-    currentPage !== newPage && history.push(`/templates?page=${newPage}`);
+    currentPage !== newPage && history.push(`/templates/list?page=${newPage}`);
     setPage(newPage);
   };
 
   useEffect(() => {
-    api
-      .get(`/criterions/templates`, { params: { direction: "DESC" } })
-      .then(setData);
+    api.get(`/templates`, { params: { direction: "DESC" } }).then(setData);
   }, [page]);
 
   return (

@@ -60,7 +60,7 @@ const MainComponent = ({
   };
 
   return (
-    <CForm className={`ml-4 ${deep > 0 ? `mt-${4 - deep}` : ""}`}>
+    <CForm className={`${deep > 0 ? `ml-4 mt-${4 - deep}` : ""}`}>
       <CFormGroup row className="pl-0 ml-0 mb-0">
         <CCol className="pl-0 pr-1">
           {edit && deep > 0 ? (
@@ -115,13 +115,15 @@ const MainComponent = ({
         )}
       </CFormGroup>
 
-      {edit ? (
-        <ReactSortable list={criterion.children} setList={updateChildren}>
-          {criterion?.children?.map(renderChildren)}
-        </ReactSortable>
-      ) : (
-        criterion?.children?.map(renderChildren)
-      )}
+      {criterion.children &&
+        criterion.children.length > 0 &&
+        (edit ? (
+          <ReactSortable list={criterion?.children} setList={updateChildren}>
+            {criterion?.children?.map(renderChildren)}
+          </ReactSortable>
+        ) : (
+          criterion?.children?.map(renderChildren)
+        ))}
 
       {criterion.mark && (
         <CFormGroup row className="m-0 ml-2">

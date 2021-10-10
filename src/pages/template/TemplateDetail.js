@@ -26,7 +26,8 @@ const MainComponent = () => {
     ""
   );
   const [data, setData] = useState({ children: [] });
-  const [edit, setEdit] = useState(templateIdPath ? false : true);
+  const [edit, setEdit] = useState(false);
+  const [toggle, setToggle] = useState(false);
 
   const submit = () => {
     if (templateIdPath)
@@ -59,10 +60,12 @@ const MainComponent = () => {
 
   useEffect(() => {
     templateIdPath &&
-      api.get(`/criterions/detail/${templateIdPath[1]}`).then((res) => {
+      api.get(`/templates/detail/${templateIdPath[1]}`).then((res) => {
         setData(res);
       });
-  }, []);
+  }, [toggle]);
+
+  console.log(edit);
 
   return (
     <CCard>
@@ -82,9 +85,21 @@ const MainComponent = () => {
             </CCol>
             <CCol md="0">
               {edit ? (
-                <CButton color="primary" onClick={submit}>
-                  <CIcon name="cil-save" /> Lưu
-                </CButton>
+                <>
+                  <CButton
+                    color="primary"
+                    variant="outline"
+                    onClick={() => {
+                      setEdit(false);
+                      setToggle(!toggle);
+                    }}
+                  >
+                    <CIcon name="cil-x" /> Hủy
+                  </CButton>
+                  <CButton color="primary" variant="outline" onClick={submit}>
+                    <CIcon name="cil-save" /> Lưu
+                  </CButton>
+                </>
               ) : (
                 <CTooltip content={"Chỉnh sửa mẫu tiêu chí"}>
                   <CButton
@@ -116,10 +131,13 @@ const MainComponent = () => {
       </CCardHeader>
       <CCardBody className="pl-0 mr-3">
         <Criterion
-          criterion={data}
+          criterion={{ children: data.criterions ?? [] }}
           deep={0}
           edit={edit}
-          updateCriterion={setData}
+          updateCriterion={(nextCriterion) => {
+            const nextData = { ...data, criterions: nextCriterion.children };
+            setData(nextData);
+          }}
         />
       </CCardBody>
     </CCard>
