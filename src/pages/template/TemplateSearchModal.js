@@ -30,7 +30,7 @@ const MainComponent = ({ view, disableView, selected }) => {
 
   useEffect(() => {
     api
-      .get("/criterions/templates", { params: { direction: "DESC" } })
+      .get("/templates", { params: { direction: "DESC" } })
       .then(setData);
   }, [page]);
 

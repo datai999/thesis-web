@@ -16,7 +16,7 @@ const MainComponent = () => {
   const [search, setSearch] = useState(false);
   const [currentRole, setCurrentRole] = useState({});
 
-  const getData = () => api.get(`/criterion-roles/template`).then(setData);
+  const getData = () => api.get(`/setting-templates/group-role`).then(setData);
 
   const searchTemplate = (role) => {
     setCurrentRole(role);
@@ -25,7 +25,7 @@ const MainComponent = () => {
 
   const addTemplate = (template) => {
     setSearch(false);
-    api.post(`/criterion-roles`, { ...currentRole, template }).then(getData);
+    api.post(`/templates`, { ...currentRole, template }).then(getData);
   };
 
   useEffect(() => {
@@ -62,12 +62,9 @@ const MainComponent = () => {
                 </CCol>
                 <CCol>
                   {role.templates
-                    .filter((roleTemplate) => !roleTemplate.deleted)
-                    .map((roleTemplate) => (
-                      <TemplateCard
-                        roleTemplate={roleTemplate}
-                        onDeleted={getData}
-                      />
+                    .filter((template) => !template.deleted)
+                    .map((template) => (
+                      <TemplateCard template={template} onDeleted={getData} />
                     ))}
                 </CCol>
               </CRow>
