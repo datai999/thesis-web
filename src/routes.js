@@ -119,6 +119,12 @@ let routes = [
     component: My,
   },
   {
+    path: "/my/topics/council",
+    exact: true,
+    name: "Hội đồng",
+    component: My,
+  },
+  {
     path: "/my/topics/create",
     exact: true,
     name: "Tạo đề tài",

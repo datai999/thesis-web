@@ -11,9 +11,10 @@ import {
   CTabPane,
   CTabs
 } from "@coreui/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import contextService from "src/service/contextService";
+import MyCouncil from "./MyCouncil";
 import TopicExecute from "./TopicExecutes";
 import TopicGuides from "./TopicGuides";
 import TopicReviews from "./TopicReviews";
@@ -23,19 +24,25 @@ const tabs = [
     url: "execute",
     roles: ["ADMIN", "STUDENT"],
     tabName: "Thực thi",
-    component: <TopicExecute />,
+    component: TopicExecute,
   },
   {
     url: "guide",
     roles: ["ADMIN", "TEACHER"],
     tabName: "Hướng dẫn",
-    component: <TopicGuides />,
+    component: TopicGuides,
   },
   {
     url: "review",
     roles: ["ADMIN", "TEACHER"],
     tabName: "Phản biện",
-    component: <TopicReviews />,
+    component: TopicReviews,
+  },
+  {
+    url: "council",
+    roles: ["ADMIN", "TEACHER"],
+    tabName: "Hội đồng",
+    component: MyCouncil,
   },
 ];
 
@@ -48,17 +55,16 @@ const MainComponent = () => {
   const tab = roleTabs
     .map((e) => e.url)
     .indexOf(location.pathname.split("/").pop());
-  const [tabIndex, setTabIndex] = useState(tab < 0 ? 0 : tab);
+  const tabIndex = tab < 0 ? 0 : tab;
 
-  useEffect(() => {
-    history.push(`/my/topics/${roleTabs[tabIndex].url}`);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabIndex]);
+  const pushTabIndex = (nextTab) => {
+    history.push(`/my/topics/${roleTabs[nextTab].url}`);
+  };
 
   return (
     <CCard>
       <CCardBody>
-        <CTabs activeTab={tabIndex} onActiveTabChange={setTabIndex}>
+        <CTabs activeTab={tabIndex} onActiveTabChange={pushTabIndex}>
           <CRow>
             <CCol>
               <CNav variant="tabs">
@@ -84,9 +90,9 @@ const MainComponent = () => {
             )}
           </CRow>
           <CTabContent>
-            {roleTabs.map((e) => (
+            {roleTabs.map((e, index) => (
               <CTabPane key={e.url}>
-                <CNavLink>{e.component}</CNavLink>
+                {index === tabIndex && <e.component />}
               </CTabPane>
             ))}
           </CTabContent>

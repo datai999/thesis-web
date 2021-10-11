@@ -51,11 +51,11 @@ const _nav = [
         name: "Phản biện",
         to: "/my/topics/review",
       },
-      // {
-      //   _tag: "CSidebarNavItem",
-      //   name: "Tạo đề tài",
-      //   to: "my/topics/create",
-      // },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Hội đồng",
+        to: "/my/topics/council",
+      },
     ],
   },
   // {
