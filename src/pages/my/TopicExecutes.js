@@ -12,7 +12,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import api from "src/service/api";
-import CancelTopicModal from "./CancelTopicModal";
+import CancelTopicModal from "./topic/CancelTopicModal";
 
 const TopicExecutes = () => {
   const history = useHistory();

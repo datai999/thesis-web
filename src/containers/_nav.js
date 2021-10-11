@@ -32,7 +32,7 @@ const _nav = [
   },
   {
     _tag: "CSidebarNavDropdown",
-    name: "Đề tài của tôi",
+    name: "Đề tài có tôi",
     to: "/my/topics",
     icon: "cil-home",
     _children: [

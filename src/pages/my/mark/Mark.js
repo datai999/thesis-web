@@ -13,7 +13,7 @@ import {
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import UserCard from "src/components/UserCard";
-import TopicCard from "src/pages/topic/TopicCard";
+import TopicCard from "src/pages/my/topic/TopicCard";
 import api from "src/service/api";
 import MarkTab from "./MarkTab";
 

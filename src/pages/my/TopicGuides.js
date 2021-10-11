@@ -10,7 +10,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import api from "src/service/api";
-import TopicLineDetail from "./TopicLineDetail";
+import TopicLineDetail from "./topic/TopicLineDetail";
 
 const fields = [
   { key: "id", label: "Mã", _style: { width: 1 } },
