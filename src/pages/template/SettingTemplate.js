@@ -25,7 +25,7 @@ const MainComponent = () => {
 
   const addTemplate = (template) => {
     setSearch(false);
-    api.post(`/templates`, { ...currentRole, template }).then(getData);
+    api.post(`/setting-templates`, { ...currentRole, template }).then(getData);
   };
 
   useEffect(() => {
@@ -62,9 +62,12 @@ const MainComponent = () => {
                 </CCol>
                 <CCol>
                   {role.templates
-                    .filter((template) => !template.deleted)
-                    .map((template) => (
-                      <TemplateCard template={template} onDeleted={getData} />
+                    .filter((settingTemplate) => !settingTemplate.deleted)
+                    .map((settingTemplate) => (
+                      <TemplateCard
+                        settingTemplate={settingTemplate}
+                        onDeleted={getData}
+                      />
                     ))}
                 </CCol>
               </CRow>

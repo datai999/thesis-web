@@ -10,12 +10,17 @@ import {
 import React from "react";
 import api from "src/service/api";
 
-const MainComponent = ({ template, onDeleted }) => {
+const MainComponent = ({ settingTemplate, onDeleted }) => {
   const viewTemplate = () =>
-    window.open(`${window.location.origin}/templates/${template.id}`, "_blank");
+    window.open(
+      `${window.location.origin}/templates/${settingTemplate.templateId}`,
+      "_blank"
+    );
 
   const removeTemplate = () => {
-    api.delete(`/criterion-roles/logic/${template.id}`).then(onDeleted);
+    api
+      .delete(`/setting-templates/logic/${settingTemplate.id}`)
+      .then(onDeleted);
   };
 
   return (
@@ -26,8 +31,10 @@ const MainComponent = ({ template, onDeleted }) => {
       header={
         <tr class="d-flex justify-content-between">
           <td>
-            <CTooltip content={`Xem chi tiết mẫu tiêu chí số ${template.id}`}>
-              <CLink onClick={viewTemplate}>{`${template.name}`}</CLink>
+            <CTooltip
+              content={`Xem chi tiết mẫu tiêu chí số ${settingTemplate.templateId}`}
+            >
+              <CLink onClick={viewTemplate}>{`${settingTemplate.name}`}</CLink>
             </CTooltip>
           </td>
           <td>
@@ -51,12 +58,12 @@ const MainComponent = ({ template, onDeleted }) => {
       }
       text={
         <small>{`${
-          template.description.slice(0, 300) +
-          (template.description.length > 300 ? "..." : "")
+          settingTemplate.description.slice(0, 300) +
+          (settingTemplate.description.length > 300 ? "..." : "")
         }`}</small>
       }
     >
-      {template.id}
+      {settingTemplate.templateId}
     </CWidgetIcon>
   );
 };
