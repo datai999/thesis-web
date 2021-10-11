@@ -31,7 +31,7 @@ const MainComponent = () => {
 
   useEffect(() => {
     api
-      .get(`/criterion-roles/topic`, {
+      .get(`/setting-templates/topic`, {
         params: {
           topicId,
           role: searchParams.get("role"),
@@ -66,14 +66,20 @@ const MainComponent = () => {
           <CNav variant="tabs">
             {data.map((e) => (
               <CNavItem key={e.id}>
-                <CNavLink>{e.name}</CNavLink>
+                <CNavLink>{e.template?.name}</CNavLink>
               </CNavItem>
             ))}
           </CNav>
           <CTabContent>
             {data.map((tabData, index) => (
               <CTabPane>
-                {index === tabIndex && <MarkTab data={tabData} />}
+                {index === tabIndex && (
+                  <MarkTab
+                    settingTemplate={tabData}
+                    topicId={topicId}
+                    studentId={student.id}
+                  />
+                )}
               </CTabPane>
             ))}
           </CTabContent>

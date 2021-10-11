@@ -21,7 +21,12 @@ const MainComponent = ({
   edit,
   updateCriterion = () => {},
   removeCriterion = () => {},
+  ...props
 }) => {
+  const score = props.scores?.find(
+    (e) => e.criterion.id.toString() === criterion.id.toString()
+  );
+
   const updateChildren = (children) =>
     updateCriterion({ ...criterion, children });
 
@@ -49,6 +54,7 @@ const MainComponent = ({
   const renderChildren = (item, index) => {
     return (
       <MainComponent
+        {...props}
         key={item.id}
         criterion={item}
         deep={deep + 1}
@@ -128,7 +134,18 @@ const MainComponent = ({
       {criterion.mark && (
         <CFormGroup row className="m-0 ml-2">
           <CCol className="p-0" style={{ maxWidth: 60 }}>
-            <CInput size="sm" placeholder={"Điểm"} />
+            <CInput
+              size="sm"
+              placeholder={"Điểm"}
+              value={score?.score}
+              onChange={(e) =>
+                props.updateScore({
+                  ...score,
+                  criterion: { id: criterion.id },
+                  score: e.target.value,
+                })
+              }
+            />
           </CCol>
           <CCol className="p-0">
             <CTextarea
@@ -138,6 +155,14 @@ const MainComponent = ({
                 0,
                 150
               )}`}
+              value={score?.comment}
+              onChange={(e) =>
+                props.updateScore({
+                  ...score,
+                  criterion: { id: criterion.id },
+                  comment: e.target.value,
+                })
+              }
             />
           </CCol>
           {edit && (

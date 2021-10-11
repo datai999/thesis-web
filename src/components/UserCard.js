@@ -6,8 +6,6 @@ const MainComponent = ({ user }) => {
     // TODO
   };
 
-  console.log(user);
-
   return (
     <CWidgetIcon
       color="info"

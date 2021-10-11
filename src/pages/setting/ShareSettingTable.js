@@ -65,8 +65,6 @@ const MainComponent = ({ props }) => {
               className="float-right"
               onClick={async () => {
                 await setDefaultForm({});
-                await console.log("table");
-                await console.log(defaultForm);
                 setModalView(true);
               }}
             >
