@@ -15,6 +15,7 @@ const MainComponent = ({
   items,
   scopedSlots,
   DetailComponent,
+  pagination = true,
   ...props
 }) => {
   const history = useHistory();
@@ -40,22 +41,24 @@ const MainComponent = ({
     setDetails(newDetails);
   };
 
+  console.log(props);
+
   return (
     <>
       <CDataTable
         size="sm"
-        items={items}
-        fields={fields}
         hover
         sorter
         columnFilter
         tableFilter
         itemsPerPageSelect
         itemsPerPage={props.size ?? 5}
+        // clickableRows
+        {...props.tableProps}
+        fields={fields}
+        items={items}
         activePage={page}
-        clickableRows
         scopedSlots={{
-          ...scopedSlots,
           actions: (item, index) => (
             <CButtonGroup vertical size="sm">
               {props?.ActionComponent && (
@@ -85,14 +88,17 @@ const MainComponent = ({
               <DetailComponent item={item} index={index} />
             </CCollapse>
           ),
+          ...scopedSlots,
         }}
       />
-      <CPagination
-        size="sm"
-        activePage={page}
-        onActivePageChange={pageChange}
-        align="center"
-      />
+      {pagination && (
+        <CPagination
+          size="sm"
+          activePage={page}
+          onActivePageChange={pageChange}
+          align="center"
+        />
+      )}
     </>
   );
 };

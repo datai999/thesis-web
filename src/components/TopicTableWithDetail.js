@@ -22,7 +22,7 @@ const fields = [
   },
 ];
 
-const MainComponent = ({ items, ActionComponent }) => {
+const MainComponent = ({ items, ActionComponent, ...props }) => {
   return (
     <TableWithDetail
       fields={fields}
@@ -34,6 +34,7 @@ const MainComponent = ({ items, ActionComponent }) => {
         majorNames: (item) => multiLine(item.majorNames),
       }}
       ActionComponent={ActionComponent}
+      {...props}
     />
   );
 };
