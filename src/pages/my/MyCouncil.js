@@ -1,5 +1,15 @@
 import CIcon from "@coreui/icons-react";
-import { CDataTable, CPagination, CTooltip } from "@coreui/react";
+import {
+  CButton,
+  CButtonGroup,
+  CCardBody,
+  CCol,
+  CCollapse,
+  CDataTable,
+  CPagination,
+  CRow,
+  CTooltip
+} from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
@@ -13,8 +23,14 @@ const fields = [
   { key: "location", label: "Địa điểm", _style: { width: "15%" } },
   { key: "members", label: "Thành viên", sorter: false },
   { key: "note", label: "Ghi chú" },
+  {
+    key: "actions",
+    label: "",
+    _style: { width: 1 },
+    sorter: false,
+    filter: false,
+  },
 ];
-
 const councilRoleFields = [
   { key: "role", label: "Vai trò" },
   { key: "code", label: "Mã số" },
@@ -28,12 +44,24 @@ const MainComponent = () => {
   const currentPage = Number(queryPage && queryPage[1] ? queryPage[1] : 1);
   const [page, setPage] = useState(currentPage);
   const [data, setData] = useState([]);
+  const [details, setDetails] = useState([]);
   const size = 5;
 
   const pageChange = (newPage) => {
     currentPage !== newPage &&
-      history.push(`/my/topics/council?page=${newPage}`);
+      history.push(`${window.location.pathname}?page=${newPage}`);
     setPage(newPage);
+  };
+
+  const toggleDetails = (item) => {
+    const position = details.indexOf(item);
+    let newDetails = details.slice();
+    if (position !== -1) {
+      newDetails.splice(position, 1);
+    } else {
+      newDetails = [...details, item];
+    }
+    setDetails(newDetails);
   };
 
   useEffect(() => {
@@ -51,6 +79,7 @@ const MainComponent = () => {
   return (
     <>
       <CDataTable
+        size="sm"
         items={data}
         fields={fields}
         hover
@@ -121,6 +150,43 @@ const MainComponent = () => {
                 />
               }
             </td>
+          ),
+          actions: (item) => (
+            <CButtonGroup vertical size="sm">
+              <CTooltip
+                content={details.includes(item.id) ? "Ẩn bớt" : "Chi tiết"}
+              >
+                <CButton
+                  color="primary"
+                  variant="outline"
+                  onClick={() => {
+                    toggleDetails(item.id);
+                  }}
+                >
+                  <CIcon
+                    name={`cil-chevron-${
+                      details.includes(item.id) ? "top" : "bottom"
+                    }`}
+                  />
+                </CButton>
+              </CTooltip>
+            </CButtonGroup>
+          ),
+          details: (item) => (
+            <CCollapse show={details.includes(item.id)}>
+              <CCardBody>
+                {item.topics.map((topic) => (
+                  <CRow>
+                    <CCol md="4">
+                      {topic.name?.vi}
+                      <br />
+                      {topic.name?.en}
+                    </CCol>
+                    <CCol> {topic.description}</CCol>
+                  </CRow>
+                ))}
+              </CCardBody>
+            </CCollapse>
           ),
         }}
       />

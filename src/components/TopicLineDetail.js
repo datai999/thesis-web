@@ -8,7 +8,6 @@ import {
   CTooltip
 } from "@coreui/react";
 import React from "react";
-import { useHistory } from "react-router-dom";
 
 const fields = [
   { key: "role", label: "Vai trò", _style: { width: "30%" } },
@@ -17,8 +16,6 @@ const fields = [
 ];
 
 const MainComponent = ({ item }) => {
-  const history = useHistory();
-
   const getMember = (topic) => [
     {
       roleId: "guideTeacher",

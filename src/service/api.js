@@ -26,8 +26,8 @@ AxiosClient.interceptors.response.use(
       }
       if ([400, 404, 409].includes(error.response.status)) {
         toastHolder.error(
-          responseError.errorCode,
-          responseError.errorMessage ?? responseError.error
+          responseError.errorMessage ?? responseError.error,
+          responseError.errorCode
         );
       }
     }

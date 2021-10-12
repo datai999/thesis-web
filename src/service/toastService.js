@@ -8,7 +8,15 @@ const toastSuccess = (message) => {
   );
 };
 
-const toastError = (code, message) =>
+const toastWarning = (message) => {
+  toastHolder.toast(
+    <CToast show fade color="warning" autohide={3000}>
+      <CToastBody>{message}</CToastBody>
+    </CToast>
+  );
+};
+
+const toastError = (message, code) =>
   toastHolder.toast(
     <CToast show fade color="danger" autohide={5000}>
       <CToastHeader>Lỗi {code}</CToastHeader>
@@ -19,6 +27,7 @@ const toastError = (code, message) =>
 const toastHolder = {
   toast: null,
   success: toastSuccess,
+  warning: toastWarning,
   error: toastError,
 };
 

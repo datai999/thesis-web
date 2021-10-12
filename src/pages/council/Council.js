@@ -86,6 +86,28 @@ const MainComponent = ({ location }) => {
     }
   };
 
+  const onFormSelected = (teacher) => {
+    setSearchTeachers(false);
+    let existed = false;
+    councilRoles.forEach((councilRole) =>
+      councilRole.teachers.forEach((teacher) => {
+        if (teacher.id == teacher.id) {
+          existed = true;
+        }
+      })
+    );
+    if (existed) {
+      toastHolder.error(
+        `Giáo viên ${teacher.firstName} ${teacher.lastName} đã là thành viên của hội đồng`
+      );
+    } else {
+      const nextRoles = _.cloneDeep(councilRoles);
+      const nextTeachers = [...councilRoles[currentRole].teachers, teacher];
+      nextRoles[currentRole].teachers = nextTeachers;
+      setCouncilRoles(nextRoles);
+    }
+  };
+
   useEffect(() => {
     if (location?.state) {
       setForm(location.state);
@@ -116,13 +138,7 @@ const MainComponent = ({ location }) => {
       <TeacherSearchModal
         view={searchTeachers}
         setView={() => setSearchTeachers(false)}
-        selected={(teacher) => {
-          setSearchTeachers(false);
-          const nextRoles = _.cloneDeep(councilRoles);
-          const nextTeachers = [...councilRoles[currentRole].teachers, teacher];
-          nextRoles[currentRole].teachers = nextTeachers;
-          setCouncilRoles(nextRoles);
-        }}
+        selected={onFormSelected}
       />
       <CCardHeader>
         <h5 className="card-title mb-0">

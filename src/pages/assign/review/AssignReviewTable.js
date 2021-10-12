@@ -40,7 +40,7 @@ const fields = [
   {
     key: "actions",
     label: "",
-    _style: { width: "1%" },
+    _style: { width: 1 },
     sorter: false,
     filter: false,
   },
