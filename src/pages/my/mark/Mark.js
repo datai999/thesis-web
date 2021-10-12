@@ -13,6 +13,7 @@ import {
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import UserCard from "src/components/UserCard";
+import CouncilCard from "src/pages/council/CouncilCard";
 import TopicCard from "src/pages/my/topic/TopicCard";
 import api from "src/service/api";
 import MarkTab from "./MarkTab";
@@ -53,6 +54,11 @@ const MainComponent = () => {
     <CCard>
       <CCardHeader className="pb-2">
         <CRow class="d-flex justify-content-center">
+          {searchParams.get("role") === "council" && (
+            <CCol md="4">
+              <CouncilCard council={topic.council} />
+            </CCol>
+          )}
           <CCol md="4">
             <TopicCard topic={topic} />
           </CCol>
