@@ -6,16 +6,15 @@ import {
   CNavLink,
   CTabContent,
   CTabPane,
-  CTabs
+  CTabs,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import TopicTable from "./TopicTable";
 
 const MainComponent = () => {
   const history = useHistory();
-  const location = useLocation();
-  const isThesisTab = location.pathname === "/topics/thesis";
+  const isThesisTab = window.location.pathname === "/topics/thesis";
   const [activeThesisTab, setActiveThesisTab] = useState(isThesisTab);
 
   useEffect(() => {

@@ -5,7 +5,7 @@ import {
   CCollapse,
   CDataTable,
   CPagination,
-  CTooltip
+  CTooltip,
 } from "@coreui/react";
 import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
@@ -40,8 +40,6 @@ const MainComponent = ({
     }
     setDetails(newDetails);
   };
-
-  console.log(props);
 
   return (
     <>

@@ -60,7 +60,7 @@ const Widgets = React.lazy(() => import("./views/widgets/Widgets"));
 const Users = React.lazy(() => import("./views/users/Users"));
 const User = React.lazy(() => import("./views/users/User"));
 
-const Topics = React.lazy(() => import("./views/pages/topic/Topics"));
+const Topics = React.lazy(() => import("./pages/topic/Topics"));
 const My = React.lazy(() => import("./pages/my/My"));
 const CreateTopic = React.lazy(() => import("./pages/my/topic/CreateTopic"));
 const Mark = React.lazy(() => import("./pages/my/mark/Mark"));

@@ -6,10 +6,10 @@ import {
   CModalFooter,
   CModalHeader,
   CModalTitle,
-  CRow
+  CRow,
 } from "@coreui/react";
 import React from "react";
-import api from "../../../service/api";
+import api from "src/service/api";
 
 const MainComponent = ({ view, disableView, confirm, topic }) => {
   const registerTopic = () => {
