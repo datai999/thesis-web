@@ -6,11 +6,11 @@ import {
   CCol,
   CCollapse,
   CListGroup,
-  CListGroupItem,
-  CRow
+  CRow,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import UserCard from "src/components/UserCard";
 import api from "src/service/api";
 import CancelTopicModal from "./topic/CancelTopicModal";
 
@@ -108,35 +108,19 @@ const TopicExecutes = () => {
                 </CCol>
                 <CCol md="4">
                   Giáo viên hướng dẫn
-                  <CListGroup>
-                    {topic.guideTeachers?.map((guideTeacher) => (
-                      <CListGroupItem key={guideTeacher} component="a" href="#">
-                        {guideTeacher.degreeName}
-                        {"  : "}
-                        {guideTeacher.firstName} {guideTeacher.lastName}
-                        <br />
-                        Mã số: {guideTeacher.code}
-                        <br />
-                        {guideTeacher.email}
-                      </CListGroupItem>
-                    ))}
-                  </CListGroup>
+                  {topic.guideTeachers?.map((guideTeacher) => (
+                    <UserCard key={guideTeacher.id} user={guideTeacher} />
+                  ))}
                 </CCol>
                 <CCol md="4">
                   Sinh viên thực hiện
                   <CListGroup>
                     {topic.students?.map((student) => (
-                      <CListGroupItem key={student} component="a" href="#">
-                        {student.firstName} {student.lastName}
-                        <br />
-                        Mã số: {student.code}
-                        <br />
-                        {student.email}
-                      </CListGroupItem>
+                      <UserCard key={student.id} user={student} />
                     ))}
                   </CListGroup>
                 </CCol>
-                <CCol>
+                <CCol md="1">
                   <CButton
                     block
                     color="danger"

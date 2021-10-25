@@ -12,44 +12,16 @@ import {
   CInputCheckbox,
   CInputRadio,
   CLabel,
-  CLink,
   CSelect,
-  CTextarea
+  CTextarea,
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import UserCard from "src/components/UserCard";
 import TeacherSearchModal from "src/pages/teacher/TeacherSearchModal";
 import api from "src/service/api";
 import contextHolder from "src/service/contextService";
-
-const TeacherCard = ({ teacher, remove }) => {
-  if (!teacher) return;
-  return (
-    <CCard>
-      <CCardHeader>
-        {teacher.code}
-        <div className="card-header-actions">
-          {remove && (
-            <CLink
-              className="card-header-action"
-              onClick={() => remove(teacher)}
-            >
-              <CIcon name="cil-x-circle" />
-            </CLink>
-          )}
-        </div>
-      </CCardHeader>
-      <CCardBody>
-        {teacher.firstName}
-        <br></br>
-        {teacher.lastName}
-        <br></br>
-        {teacher.email}
-      </CCardBody>
-    </CCard>
-  );
-};
 
 const TopicCreate = ({ location }) => {
   const history = useHistory();
@@ -286,11 +258,17 @@ const TopicCreate = ({ location }) => {
             <CCol md="6">
               <CLabel>Giáo viên hướng dẫn</CLabel>
               <CFormGroup row>
-                {guideTeachers.map((guideTeacher, index) => (
-                  <CCol key={index} md="4">
-                    <TeacherCard
-                      teacher={guideTeacher}
-                      remove={index > 0 && removeGuideTeacher}
+                <CCol md="6">
+                  <UserCard user={guideTeachers[0]} />
+                </CCol>
+              </CFormGroup>
+              <CLabel>Giáo viên đồng hướng dẫn</CLabel>
+              <CFormGroup row>
+                {guideTeachers.slice(1, 3).map((guideTeacher, index) => (
+                  <CCol key={index} md="6">
+                    <UserCard
+                      user={guideTeacher}
+                      remove={() => removeGuideTeacher(guideTeacher)}
                     />
                   </CCol>
                 ))}
