@@ -67,11 +67,13 @@ const MainComponent = () => {
     <CCard>
       <CCardHeader>
         <CRow class="d-flex justify-content-center">
+          {topic.council && (
+            <CCol md="4">
+              <CouncilCard council={topic.council} />
+            </CCol>
+          )}
           <CCol md="4">
             <TopicCard topic={topic} />
-          </CCol>
-          <CCol md="4">
-            <CouncilCard council={topic.council} />
           </CCol>
         </CRow>
 
