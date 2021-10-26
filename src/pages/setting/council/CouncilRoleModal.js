@@ -13,7 +13,7 @@ import {
   CModalTitle,
   CRow,
   CSelect,
-  CSwitch
+  CSwitch,
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";

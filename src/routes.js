@@ -78,6 +78,7 @@ const AssignReview = React.lazy(() =>
 const CouncilTable = React.lazy(() => import("./pages/council/CouncilTable"));
 const Council = React.lazy(() => import("./pages/council/Council"));
 const AssignCouncil = React.lazy(() => import("./pages/council/AssignCouncil"));
+const TopicScore = React.lazy(() => import("./pages/score/TopicScore"));
 const Semesters = React.lazy(() => import("./pages/semester/Semesters"));
 const Templates = React.lazy(() => import("./pages/template/Templates"));
 const TemplateDetail = React.lazy(() =>
@@ -161,6 +162,12 @@ let routes = [
     path: "/councils/:id/edit/:id",
     name: "Chỉnh sửa hội đồng",
     component: AssignCouncil,
+  },
+  {
+    path: "/score/topic/:id",
+    exact: true,
+    name: "Bảng điểm đề tài",
+    component: TopicScore,
   },
   { path: "/semesters", exact: true, name: "Học kỳ", component: Semesters },
   {

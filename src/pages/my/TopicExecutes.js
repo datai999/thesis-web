@@ -1,5 +1,7 @@
+import CIcon from "@coreui/icons-react";
 import {
   CButton,
+  CButtonGroup,
   CCard,
   CCardBody,
   CCardHeader,
@@ -7,6 +9,7 @@ import {
   CCollapse,
   CListGroup,
   CRow,
+  CTooltip,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -112,7 +115,7 @@ const TopicExecutes = () => {
                     <UserCard key={guideTeacher.id} user={guideTeacher} />
                   ))}
                 </CCol>
-                <CCol md="4">
+                <CCol>
                   Sinh viên thực hiện
                   <CListGroup>
                     {topic.students?.map((student) => (
@@ -120,20 +123,39 @@ const TopicExecutes = () => {
                     ))}
                   </CListGroup>
                 </CCol>
-                <CCol md="1">
-                  <CButton
-                    block
-                    color="danger"
-                    size="sm"
-                    className="m-0 p-0"
-                    onClick={() => {
-                      setTopicCancel(topic);
-                      setCancelTopicModal(true);
-                    }}
-                  >
-                    Hủy chọn đề tài
-                  </CButton>
-                </CCol>
+                <td className="mr-2">
+                  <CButtonGroup vertical size="sm">
+                    <CTooltip content={"Hội đồng"}>
+                      {/* TODO: Council view */}
+                      <CButton color="primary" variant="outline">
+                        <CIcon name="cil-people" />
+                      </CButton>
+                    </CTooltip>
+                    <CTooltip content={"Bảng điểm"}>
+                      <CButton
+                        color="primary"
+                        variant="outline"
+                        onClick={() => {
+                          history.push(`/score/topic/${topic.id}`);
+                        }}
+                      >
+                        <CIcon name="cil-calculator" />
+                      </CButton>
+                    </CTooltip>
+                    <CTooltip content={"Hủy đăng ký đề tài"}>
+                      <CButton
+                        color="primary"
+                        variant="outline"
+                        onClick={() => {
+                          setTopicCancel(topic);
+                          setCancelTopicModal(true);
+                        }}
+                      >
+                        <CIcon name="cil-x-circle" />
+                      </CButton>
+                    </CTooltip>
+                  </CButtonGroup>
+                </td>
               </CRow>
               <br />
               <CRow>

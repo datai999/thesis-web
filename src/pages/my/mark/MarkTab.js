@@ -4,7 +4,7 @@ import {
   CCard,
   CCardBody,
   CCardFooter,
-  CCardHeader
+  CCardHeader,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import Criterion from "src/pages/template/Criterion";
@@ -12,11 +12,17 @@ import api from "src/service/api";
 import contextHolder from "src/service/contextService";
 import toastHolder from "src/service/toastService";
 
-const MainComponent = ({ settingTemplate, topicId, studentId }) => {
+const MainComponent = ({
+  settingTemplate,
+  topicId,
+  studentId,
+  teacherId,
+  disableMark = false,
+}) => {
   const scoreExample = {
     settingTemplate: { id: settingTemplate.id },
     topic: { id: topicId },
-    teacher: { id: contextHolder.user.id },
+    teacher: { id: teacherId ?? contextHolder.user.id },
     student: { id: studentId },
   };
 
@@ -55,13 +61,16 @@ const MainComponent = ({ settingTemplate, topicId, studentId }) => {
           deep={0}
           scores={scores}
           updateScore={updateScore}
+          disableMark={disableMark}
         />
       </CCardBody>
-      <CCardFooter>
-        <CButton size="sm" color="primary" onClick={submit}>
-          <CIcon name="cil-save" /> Lưu
-        </CButton>
-      </CCardFooter>
+      {!disableMark && (
+        <CCardFooter>
+          <CButton size="sm" color="primary" onClick={submit}>
+            <CIcon name="cil-save" /> Lưu
+          </CButton>
+        </CCardFooter>
+      )}
     </CCard>
   );
 };

@@ -10,7 +10,7 @@ import {
   CFormGroup,
   CInput,
   CTextarea,
-  CTooltip
+  CTooltip,
 } from "@coreui/react";
 import React from "react";
 import { ReactSortable } from "react-sortablejs";
@@ -138,6 +138,7 @@ const MainComponent = ({
               size="sm"
               placeholder={"Điểm"}
               value={score?.score}
+              disabled={props.disableMark}
               onChange={(e) =>
                 props.updateScore({
                   ...score,
@@ -156,6 +157,7 @@ const MainComponent = ({
                 150
               )}`}
               value={score?.comment}
+              disabled={props.disableMark}
               onChange={(e) =>
                 props.updateScore({
                   ...score,
