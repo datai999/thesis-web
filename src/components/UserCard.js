@@ -1,10 +1,13 @@
 import CIcon from "@coreui/icons-react";
 import { CLink, CTooltip, CWidgetIcon } from "@coreui/react";
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 const MainComponent = ({ user, remove }) => {
+  const history = useHistory();
+
   const viewDetail = () => {
-    // TODO
+    history.push(`/users/${user.id}`);
   };
 
   if (!user) return null;

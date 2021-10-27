@@ -1,9 +1,12 @@
 import { CLink, CTooltip, CWidgetIcon } from "@coreui/react";
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 const MainComponent = ({ topic }) => {
+  const history = useHistory();
+
   const viewDetail = () => {
-    // TODO
+    history.push(`/topics/${topic.id}`);
   };
 
   return (

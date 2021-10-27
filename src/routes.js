@@ -90,6 +90,7 @@ const ShareSetting = React.lazy(() => import("./pages/setting/ShareSetting"));
 const CouncilSetting = React.lazy(() =>
   import("./pages/setting/council/CouncilSetting")
 );
+const UserDetail = React.lazy(() => import("./pages/user/UserDetail"));
 
 let routes = [
   { path: "/", exact: true, name: "Trang chủ" },
@@ -229,6 +230,12 @@ let routes = [
     name: "Thành viên hội đồng",
     component: CouncilSetting,
   },
+  {
+    path: "/users/:id",
+    exact: true,
+    name: "Thông tin người dùng",
+    component: UserDetail,
+  },
 
   { path: "/theme", name: "Theme", component: Colors, exact: true },
   { path: "/theme/colors", name: "Colors", component: Colors },
@@ -284,7 +291,6 @@ let routes = [
   { path: "/notifications/toaster", name: "Toaster", component: Toaster },
   { path: "/widgets", name: "Widgets", component: Widgets },
   { path: "/users", exact: true, name: "Users", component: Users },
-  { path: "/users/:id", exact: true, name: "User Details", component: User },
 ];
 
 export default routes;
