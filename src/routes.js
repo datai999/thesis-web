@@ -61,6 +61,7 @@ const Users = React.lazy(() => import("./views/users/Users"));
 const User = React.lazy(() => import("./views/users/User"));
 
 const Topics = React.lazy(() => import("./pages/topic/Topics"));
+const TopicDetail = React.lazy(() => import("./pages/topic/TopicDetail"));
 const My = React.lazy(() => import("./pages/my/My"));
 const CreateTopic = React.lazy(() => import("./pages/my/topic/CreateTopic"));
 const Mark = React.lazy(() => import("./pages/my/mark/Mark"));
@@ -77,6 +78,7 @@ const AssignReview = React.lazy(() =>
 );
 const CouncilTable = React.lazy(() => import("./pages/council/CouncilTable"));
 const Council = React.lazy(() => import("./pages/council/Council"));
+const CouncilDetail = React.lazy(() => import("./pages/council/CouncilDetail"));
 const AssignCouncil = React.lazy(() => import("./pages/council/AssignCouncil"));
 const TopicScore = React.lazy(() => import("./pages/score/TopicScore"));
 const Semesters = React.lazy(() => import("./pages/semester/Semesters"));
@@ -95,6 +97,12 @@ let routes = [
   { path: "/topics", exact: true, name: "Đề tài", component: Topics },
   { path: "/topics/outline", exact: true, name: "Đề cương", component: Topics },
   { path: "/topics/thesis", exact: true, name: "Luận văn", component: Topics },
+  {
+    path: "/topics/:id",
+    exact: true,
+    name: "Thông tin đề tài",
+    component: TopicDetail,
+  },
   {
     path: "/my/topics",
     exact: true,
@@ -156,6 +164,12 @@ let routes = [
     path: "/councils/:id",
     exact: true,
     component: CouncilTable,
+  },
+  {
+    path: "/councils/detail/:id",
+    exact: true,
+    name: "Thông tin hội đồng",
+    component: CouncilDetail,
   },
   { path: "/councils/:id/create", name: "Tạo hội đồng", component: Council },
   {

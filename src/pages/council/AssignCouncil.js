@@ -5,7 +5,7 @@ import {
   CCardBody,
   CCardFooter,
   CCol,
-  CRow
+  CRow,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import api from "src/service/api";
@@ -15,7 +15,7 @@ import Council from "./Council";
 
 const MainComponent = ({ location }) => {
   const paths = location.pathname.match(
-    /(?:\/councils\/)(\d)(?:\/edit\/)(\d)/,
+    /(?:\/councils\/)(\d+)(?:\/edit\/)(\d+)/,
     ""
   );
   const subjectDepartmentId = paths[1];

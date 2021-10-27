@@ -15,6 +15,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import UserCard from "src/components/UserCard";
 import api from "src/service/api";
+import toastHolder from "src/service/toastService";
 import CancelTopicModal from "./topic/CancelTopicModal";
 
 const TopicExecutes = () => {
@@ -33,6 +34,14 @@ const TopicExecutes = () => {
       newDetails = [...details, index];
     }
     setDetails(newDetails);
+  };
+
+  const viewCouncilDetail = (council) => {
+    if (council?.id) {
+      history.push(`/councils/detail/${council?.id}`);
+    } else {
+      toastHolder.warning("Đề tài không có hội đồng");
+    }
   };
 
   useEffect(() => {
@@ -126,8 +135,11 @@ const TopicExecutes = () => {
                 <td className="mr-2">
                   <CButtonGroup vertical size="sm">
                     <CTooltip content={"Hội đồng"}>
-                      {/* TODO: Council view */}
-                      <CButton color="primary" variant="outline">
+                      <CButton
+                        color="primary"
+                        variant="outline"
+                        onClick={() => viewCouncilDetail(topic.council)}
+                      >
                         <CIcon name="cil-people" />
                       </CButton>
                     </CTooltip>

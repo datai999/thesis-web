@@ -14,7 +14,7 @@ import {
   CRow,
   CTextarea,
   CTooltip,
-  CWidgetIcon
+  CWidgetIcon,
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
@@ -26,7 +26,7 @@ import toastHolder from "src/service/toastService";
 
 const MainComponent = ({ location }) => {
   const subjectDepartmentId = useLocation().pathname.match(
-    /(?:\/councils\/)(\d)/,
+    /(?:\/councils\/)(\d+)/,
     ""
   )[1];
 

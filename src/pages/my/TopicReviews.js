@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import TopicLineDetail from "src/components/TopicLineDetail";
 import TopicTableWithDetail from "src/components/TopicTableWithDetail";
 import api from "src/service/api";
+import toastHolder from "src/service/toastService";
 
 const MainComponent = () => {
   const [data, setData] = useState([]);
@@ -32,6 +33,14 @@ const MainComponent = () => {
 const ExtendDetail = ({ item, ...props }) => {
   const history = useHistory();
 
+  const viewCouncilDetail = (council) => {
+    if (council?.id) {
+      history.push(`/councils/detail/${council?.id}`);
+    } else {
+      toastHolder.warning("Đề tài không có hội đồng");
+    }
+  };
+
   return (
     <CRow className="m-0 p-0">
       <CCol className="m-0 p-0">
@@ -40,8 +49,11 @@ const ExtendDetail = ({ item, ...props }) => {
       <td className="r-5">
         <CButtonGroup vertical size="sm">
           <CTooltip content={"Hội đồng"}>
-            {/* TODO: Council view */}
-            <CButton color="primary" variant="outline">
+            <CButton
+              color="primary"
+              variant="outline"
+              onClick={() => viewCouncilDetail(item.council)}
+            >
               <CIcon name="cil-people" />
             </CButton>
           </CTooltip>
