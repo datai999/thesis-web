@@ -1,7 +1,24 @@
-import { CButton, CCardBody, CCol, CRow } from "@coreui/react";
+import CIcon from "@coreui/icons-react";
+import {
+  CButton,
+  CButtonGroup,
+  CCardBody,
+  CCol,
+  CRow,
+  CTooltip,
+} from "@coreui/react";
 import React from "react";
+import { useHistory } from "react-router-dom";
+import { loginUserHasAny, PERMISSIONS } from "src/service/permissionService";
 
 const MainComponent = ({ item, setTopicRegister, setRegisterTopicModal }) => {
+  const canRegister = loginUserHasAny([PERMISSIONS.STUDENT]);
+  const canViewScore = loginUserHasAny([
+    PERMISSIONS.EDUCATION_STAFF,
+    PERMISSIONS.TEACHER,
+  ]);
+  const history = useHistory();
+
   return (
     <CCardBody>
       <CRow>
@@ -35,22 +52,41 @@ const MainComponent = ({ item, setTopicRegister, setRegisterTopicModal }) => {
                   </CRow>
                 </div>
               ) : (
-                <CButton
-                  type="button"
-                  color="info"
-                  size="sm"
-                  onClick={() => {
-                    setTopicRegister(item);
-                    setRegisterTopicModal(true);
-                  }}
-                >
-                  Đăng ký
-                </CButton>
+                canRegister && (
+                  <CButton
+                    type="button"
+                    color="info"
+                    size="sm"
+                    onClick={() => {
+                      setTopicRegister(item);
+                      setRegisterTopicModal(true);
+                    }}
+                  >
+                    Đăng ký
+                  </CButton>
+                )
               )}
               <br></br>
             </div>
           ))}
         </CCol>
+        <td>
+          {canViewScore && (
+            <CButtonGroup vertical size="sm">
+              <CTooltip content={"Bảng điểm"}>
+                <CButton
+                  color="primary"
+                  variant="outline"
+                  onClick={() => {
+                    history.push(`/score/topic/${item.id}`);
+                  }}
+                >
+                  <CIcon name="cil-calculator" />
+                </CButton>
+              </CTooltip>
+            </CButtonGroup>
+          )}
+        </td>
       </CRow>
     </CCardBody>
   );
