@@ -8,22 +8,27 @@ import {
   CSidebarNavItem,
   CSidebarNavTitle,
 } from "@coreui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { permissionFilter } from "src/service/permissionService";
+import contextHolder from "./../service/contextService";
 // sidebar nav config
 import navigation from "./_nav";
 
 const TheSidebar = () => {
-  const permissionNavigation = navigation
-    .filter(permissionFilter)
-    .map((nav) => {
-      nav._children = nav._children?.filter(permissionFilter);
-      return nav;
-    });
-
   const dispatch = useDispatch();
   const show = useSelector((state) => state.sidebarShow);
+  const [permissionNavigation, setPermissionNavigation] = useState([]);
+
+  useEffect(() => {
+    setPermissionNavigation(
+      navigation.filter(permissionFilter).map((nav) => {
+        nav._children = nav._children?.filter(permissionFilter);
+        return nav;
+      })
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contextHolder.user]);
 
   return (
     <CSidebar

@@ -20,8 +20,8 @@ const MainComponent = ({ view, disableView }) => {
   const [userId, setUserId] = React.useState();
   const [user, setUser] = React.useState({});
 
-  const confirm = () => {
-    setLocalUser(user);
+  const confirm = async () => {
+    await setLocalUser(user);
     history.go(0);
   };
 

@@ -3,10 +3,8 @@ import {
   CButton,
   CButtonGroup,
   CCard,
-  CCardBody,
   CCardHeader,
   CCol,
-  CCollapse,
   CDataTable,
   CPagination,
   CRow,
@@ -17,6 +15,8 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import SubjectDepartmentTab from "src/components/SubjectDepartmentTab";
 import api from "src/service/api";
+import contextHolder from "src/service/contextService";
+import { loginUserHasAny, PERMISSIONS } from "src/service/permissionService";
 
 const fields = [
   { key: "id", label: "Mã", _style: { width: 1 } },
@@ -47,24 +47,17 @@ const CouncilTable = ({ subjectDepartmentId }) => {
   const currentPage = Number(queryPage && queryPage[1] ? queryPage[1] : 1);
   const [page, setPage] = useState(currentPage);
   const [data, setData] = useState([]);
-  const [details, setDetails] = useState([]);
   const size = 5;
+
+  const canEdit =
+    (loginUserHasAny([PERMISSIONS.HEAD_SUBJECT_DEPARTMENT]) &&
+      contextHolder.user.subjectDepartment?.id === subjectDepartmentId) ||
+    loginUserHasAny([PERMISSIONS.ADMIN]);
 
   const pageChange = (newPage) => {
     currentPage !== newPage &&
       history.push(`/councils/${subjectDepartmentId}?page=${newPage}`);
     setPage(newPage);
-  };
-
-  const toggleDetails = (index) => {
-    const position = details.indexOf(index);
-    let newDetails = details.slice();
-    if (position !== -1) {
-      newDetails.splice(position, 1);
-    } else {
-      newDetails = [...details, index];
-    }
-    setDetails(newDetails);
   };
 
   const getData = () => {
@@ -93,17 +86,19 @@ const CouncilTable = ({ subjectDepartmentId }) => {
           <CCol sm="5">
             <h5 className="card-title mb-0">Danh sách hội đồng</h5>
           </CCol>
-          <CCol sm="7" className="d-none d-md-block">
-            <CButton
-              color="primary"
-              className="float-right"
-              onClick={() => {
-                history.push(`/councils/${subjectDepartmentId}/create`);
-              }}
-            >
-              Tạo hội đồng mới
-            </CButton>
-          </CCol>
+          {canEdit && (
+            <CCol sm="7" className="d-none d-md-block">
+              <CButton
+                color="primary"
+                className="float-right"
+                onClick={() => {
+                  history.push(`/councils/${subjectDepartmentId}/create`);
+                }}
+              >
+                Tạo hội đồng mới
+              </CButton>
+            </CCol>
+          )}
         </CRow>
       </CCardHeader>
       <CDataTable
@@ -180,62 +175,25 @@ const CouncilTable = ({ subjectDepartmentId }) => {
           ),
           actions: (item) => (
             <td className="py-2">
-              <CButtonGroup vertical size="sm">
-                <CTooltip content={"Chỉnh sửa"}>
-                  <CButton
-                    color="primary"
-                    variant="outline"
-                    onClick={() => {
-                      history.push(
-                        `/councils/${subjectDepartmentId}/edit/${item.id}`,
-                        item
-                      );
-                    }}
-                  >
-                    <CIcon name="cil-pencil" />
-                  </CButton>
-                </CTooltip>
-                {/* <CTooltip
-                  content={details.includes(item.id) ? "Ẩn bớt" : "Chi tiết"}
-                >
-                  <CButton
-                    color="primary"
-                    variant="outline"
-                    onClick={() => {
-                      toggleDetails(item.id);
-                    }}
-                  >
-                    <CIcon
-                      name={`cil-chevron-${
-                        details.includes(item.id) ? "top" : "bottom"
-                      }`}
-                    />
-                  </CButton>
-                </CTooltip> */}
-              </CButtonGroup>
+              {canEdit && (
+                <CButtonGroup vertical size="sm">
+                  <CTooltip content={"Chỉnh sửa"}>
+                    <CButton
+                      color="primary"
+                      variant="outline"
+                      onClick={() => {
+                        history.push(
+                          `/councils/${subjectDepartmentId}/edit/${item.id}`,
+                          item
+                        );
+                      }}
+                    >
+                      <CIcon name="cil-pencil" />
+                    </CButton>
+                  </CTooltip>
+                </CButtonGroup>
+              )}
             </td>
-          ),
-          details: (item) => (
-            <CCollapse show={details.includes(item.id)}>
-              <CCardBody>
-                <CRow>
-                  <CCol md="4">
-                    Mô tả
-                    <br />
-                    {item.description}
-                  </CCol>
-                  <CCol md="5">
-                    Nhiệm vụ
-                    <br />
-                    {item.task}
-                    <br />
-                    Tài liệu
-                    <br />
-                    {item.documentReference}
-                  </CCol>
-                </CRow>
-              </CCardBody>
-            </CCollapse>
           ),
         }}
       />
