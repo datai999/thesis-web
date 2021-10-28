@@ -9,13 +9,15 @@ import {
   CListGroupItem,
   CPagination,
   CRow,
-  CTooltip
+  CTooltip,
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import TeacherSearchModal from "src/pages/teacher/TeacherSearchModal";
 import api from "src/service/api";
+import contextHolder from "src/service/contextService";
+import { loginUserHasAny, PERMISSIONS } from "src/service/permissionService";
 
 const fields = [
   { key: "id", label: "Mã", _style: { width: "1%" } },
@@ -56,6 +58,11 @@ const MainComponent = ({ subjectDepartmentId }) => {
   const [searchTeachers, setSearchTeachers] = useState(false);
   const [currentTopicIndex, setCurrentTopicIndex] = useState(-1);
   const size = 5;
+
+  const canAssign =
+    (loginUserHasAny([PERMISSIONS.HEAD_SUBJECT_DEPARTMENT]) &&
+      contextHolder.user.subjectDepartment?.id === subjectDepartmentId) ||
+    loginUserHasAny([PERMISSIONS.ADMIN]);
 
   const pageChange = (newPage) => {
     currentPage !== newPage &&
@@ -224,18 +231,21 @@ const MainComponent = ({ subjectDepartmentId }) => {
                 </CButtonGroup>
               ) : (
                 <CButtonGroup vertical size="sm">
-                  <CTooltip content={"Chỉnh sửa"}>
-                    <CButton
-                      color="primary"
-                      variant="outline"
-                      onClick={() => {
-                        if (!details.includes(item.id)) toggleDetails(item.id);
-                        setCurrentTopicIndex(index);
-                      }}
-                    >
-                      <CIcon name="cil-pencil" />
-                    </CButton>
-                  </CTooltip>
+                  {canAssign && (
+                    <CTooltip content={"Chỉnh sửa"}>
+                      <CButton
+                        color="primary"
+                        variant="outline"
+                        onClick={() => {
+                          if (!details.includes(item.id))
+                            toggleDetails(item.id);
+                          setCurrentTopicIndex(index);
+                        }}
+                      >
+                        <CIcon name="cil-pencil" />
+                      </CButton>
+                    </CTooltip>
+                  )}
                   <CTooltip
                     content={details.includes(item.id) ? "Ẩn bớt" : "Chi tiết"}
                   >
@@ -301,6 +311,7 @@ const MainComponent = ({ subjectDepartmentId }) => {
         }}
       />
       <CPagination
+        size="sm"
         activePage={page}
         onActivePageChange={pageChange}
         align="center"

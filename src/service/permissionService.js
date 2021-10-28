@@ -8,11 +8,12 @@ export const PERMISSIONS = {
   ADMIN: "ADMIN",
 };
 
-export const permissionFilter = (e) => {
-  return (
-    !e?.permissions ||
-    e?.permissions.some((permission) =>
-      contextHolder.user?.permissions.includes(permission)
-    )
+export const loginUserHasAny = (permissions) => {
+  return permissions.some((permission) =>
+    contextHolder.user?.permissions.includes(permission)
   );
+};
+
+export const permissionFilter = (e) => {
+  return !e?.permissions || loginUserHasAny(e.permissions);
 };

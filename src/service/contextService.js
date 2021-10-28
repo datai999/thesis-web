@@ -1,6 +1,6 @@
 import api from "./api";
 
-const contextHolder = {
+const context = {
   user: null,
   semester: null,
   majors: [],
@@ -8,23 +8,21 @@ const contextHolder = {
   subjectDepartments: [],
 
   refreshSemester: () =>
-    api.get("/semesters/current").then((res) => (contextHolder.semester = res)),
+    api.get("/semesters/current").then((res) => (context.semester = res)),
 };
 
 const initContext = async () => {
-  contextHolder.refreshSemester();
-  api.get("/majors").then((res) => (contextHolder.majors = res));
-  api
-    .get("/education-methods")
-    .then((res) => (contextHolder.educationMethods = res));
+  context.refreshSemester();
+  api.get("/majors").then((res) => (context.majors = res));
+  api.get("/education-methods").then((res) => (context.educationMethods = res));
   api
     .get("/subject-departments")
-    .then((res) => (contextHolder.subjectDepartments = res));
+    .then((res) => (context.subjectDepartments = res));
   const userId = await window.localStorage.getItem("userId");
-  api.get(`/users/detail/${userId}`).then((res) => (contextHolder.user = res));
+  api.get(`/users/detail/${userId}`).then((res) => (context.user = res));
   return true;
 };
 
 export { initContext };
 
-export default contextHolder;
+export default context;
