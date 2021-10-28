@@ -5,10 +5,11 @@ import {
   CCardBody,
   CDataTable,
   CPagination,
-  CTooltip
+  CTooltip,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
+import { loginUserHasAny, PERMISSIONS } from "src/service/permissionService";
 import api from "../../service/api";
 
 const fields = [
@@ -35,6 +36,8 @@ const MainComponent = () => {
   const [page, setPage] = useState(currentPage);
   const [data, setData] = useState([]);
 
+  const canEdit = loginUserHasAny([PERMISSIONS.EDUCATION_STAFF]);
+
   const pageChange = (newPage) => {
     currentPage !== newPage && history.push(`/templates/list?page=${newPage}`);
     setPage(newPage);
@@ -49,11 +52,12 @@ const MainComponent = () => {
       <CCardBody>
         <CDataTable
           items={data}
-          fields={fields}
+          fields={canEdit ? fields : fields.slice(0, -1)}
           activePage={page}
           itemsPerPage={5}
           hover
           sorter
+          striped
           columnFilter
           tableFilter
           itemsPerPageSelect
@@ -76,6 +80,7 @@ const MainComponent = () => {
           }}
         />
         <CPagination
+          size="sm"
           activePage={page}
           onActivePageChange={pageChange}
           align="center"

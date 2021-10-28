@@ -49,10 +49,16 @@ const CouncilTable = ({ subjectDepartmentId }) => {
   const [data, setData] = useState([]);
   const size = 5;
 
+  const currentUserInSubjectDepartment =
+    loginUserHasAny([PERMISSIONS.HEAD_SUBJECT_DEPARTMENT]) &&
+    contextHolder.user.subjectDepartment?.id === subjectDepartmentId;
+
+  const canCreate =
+    currentUserInSubjectDepartment || loginUserHasAny([PERMISSIONS.ADMIN]);
+
   const canEdit =
-    (loginUserHasAny([PERMISSIONS.HEAD_SUBJECT_DEPARTMENT]) &&
-      contextHolder.user.subjectDepartment?.id === subjectDepartmentId) ||
-    loginUserHasAny([PERMISSIONS.ADMIN]);
+    currentUserInSubjectDepartment ||
+    loginUserHasAny([PERMISSIONS.EDUCATION_STAFF, PERMISSIONS.ADMIN]);
 
   const pageChange = (newPage) => {
     currentPage !== newPage &&
@@ -86,7 +92,7 @@ const CouncilTable = ({ subjectDepartmentId }) => {
           <CCol sm="5">
             <h5 className="card-title mb-0">Danh sách hội đồng</h5>
           </CCol>
-          {canEdit && (
+          {canCreate && (
             <CCol sm="7" className="d-none d-md-block">
               <CButton
                 color="primary"

@@ -106,18 +106,21 @@ const _nav = [
     name: "Học kỳ",
     to: "/semesters",
     icon: "cil-chart-pie",
+    permissions: [PERMISSIONS.EDUCATION_STAFF],
   },
   {
     _tag: "CSidebarNavItem",
     name: "Mẫu tiêu chí",
     to: "/templates",
     icon: "cil-file",
+    permissions: [PERMISSIONS.TEACHER, PERMISSIONS.EDUCATION_STAFF],
   },
   {
     _tag: "CSidebarNavDropdown",
     name: "Cài đặt",
     to: "/settings",
     icon: "cil-settings",
+    permissions: [PERMISSIONS.EDUCATION_STAFF],
     _children: [
       {
         _tag: "CSidebarNavItem",

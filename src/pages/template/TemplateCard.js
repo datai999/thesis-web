@@ -5,12 +5,15 @@ import {
   CDropdownToggle,
   CLink,
   CTooltip,
-  CWidgetIcon
+  CWidgetIcon,
 } from "@coreui/react";
 import React from "react";
 import api from "src/service/api";
+import { loginUserHasAny, PERMISSIONS } from "src/service/permissionService";
 
 const MainComponent = ({ settingTemplate, onDeleted }) => {
+  const canDelete = loginUserHasAny([PERMISSIONS.EDUCATION_STAFF]);
+
   const viewTemplate = () =>
     window.open(
       `${window.location.origin}/templates/${settingTemplate.templateId}`,
@@ -37,23 +40,25 @@ const MainComponent = ({ settingTemplate, onDeleted }) => {
               <CLink onClick={viewTemplate}>{`${settingTemplate.name}`}</CLink>
             </CTooltip>
           </td>
-          <td>
-            <CDropdown style={{ top: 2, right: 5, position: "absolute" }}>
-              <CDropdownToggle
-                size="sm"
-                color="dark"
-                variant="outline"
-              ></CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem onClick={viewTemplate}>
-                  Xem chi tiết
-                </CDropdownItem>
-                <CDropdownItem onClick={removeTemplate}>
-                  Xóa mẫu tiêu chí
-                </CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-          </td>
+          {canDelete && (
+            <td>
+              <CDropdown style={{ top: 2, right: 5, position: "absolute" }}>
+                <CDropdownToggle
+                  size="sm"
+                  color="dark"
+                  variant="outline"
+                ></CDropdownToggle>
+                <CDropdownMenu>
+                  <CDropdownItem onClick={viewTemplate}>
+                    Xem chi tiết
+                  </CDropdownItem>
+                  <CDropdownItem onClick={removeTemplate}>
+                    Xóa mẫu tiêu chí
+                  </CDropdownItem>
+                </CDropdownMenu>
+              </CDropdown>
+            </td>
+          )}
         </tr>
       }
       text={

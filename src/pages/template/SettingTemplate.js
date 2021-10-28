@@ -4,10 +4,11 @@ import {
   CCardHeader,
   CCol,
   CListGroupItem,
-  CRow
+  CRow,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import api from "src/service/api";
+import { loginUserHasAny, PERMISSIONS } from "src/service/permissionService";
 import TemplateCard from "./TemplateCard";
 import TemplateSearchModal from "./TemplateSearchModal";
 
@@ -15,6 +16,8 @@ const MainComponent = () => {
   const [data, setData] = useState({});
   const [search, setSearch] = useState(false);
   const [currentRole, setCurrentRole] = useState({});
+
+  const canEdit = loginUserHasAny([PERMISSIONS.EDUCATION_STAFF]);
 
   const getData = () => api.get(`/setting-templates/group-role`).then(setData);
 
@@ -51,14 +54,16 @@ const MainComponent = () => {
                 <CCol md="2">
                   <strong>{role.name}</strong>
                   <br />
-                  <CButton
-                    size="sm"
-                    color="primary"
-                    variant="outline"
-                    onClick={() => searchTemplate(role)}
-                  >
-                    Thêm mẫu tiêu chí
-                  </CButton>
+                  {canEdit && (
+                    <CButton
+                      size="sm"
+                      color="primary"
+                      variant="outline"
+                      onClick={() => searchTemplate(role)}
+                    >
+                      Thêm mẫu tiêu chí
+                    </CButton>
+                  )}
                 </CCol>
                 <CCol>
                   {role.templates

@@ -10,16 +10,19 @@ import {
   CInput,
   CRow,
   CTextarea,
-  CTooltip
+  CTooltip,
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import api from "src/service/api";
+import { loginUserHasAny, PERMISSIONS } from "src/service/permissionService";
 import toastHolder from "src/service/toastService";
 import Criterion from "./Criterion";
 
 const MainComponent = () => {
+  const canEdit = loginUserHasAny([PERMISSIONS.EDUCATION_STAFF]);
+
   const history = useHistory();
   const templateIdPath = useLocation().pathname.match(
     /templates\/([0-9]+)/,
@@ -63,6 +66,7 @@ const MainComponent = () => {
       api.get(`/templates/detail/${templateIdPath[1]}`).then((res) => {
         setData(res);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toggle]);
 
   return (
@@ -102,15 +106,17 @@ const MainComponent = () => {
                   </CButton>
                 </>
               ) : (
-                <CTooltip content={"Chỉnh sửa mẫu tiêu chí"}>
-                  <CButton
-                    color="primary"
-                    variant="outline"
-                    onClick={() => setEdit(true)}
-                  >
-                    <CIcon name="cil-pencil" />
-                  </CButton>
-                </CTooltip>
+                canEdit && (
+                  <CTooltip content={"Chỉnh sửa mẫu tiêu chí"}>
+                    <CButton
+                      color="primary"
+                      variant="outline"
+                      onClick={() => setEdit(true)}
+                    >
+                      <CIcon name="cil-pencil" />
+                    </CButton>
+                  </CTooltip>
+                )
               )}
             </CCol>
           </CRow>
