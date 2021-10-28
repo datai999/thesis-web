@@ -8,7 +8,7 @@ import {
   CModalFooter,
   CModalHeader,
   CModalTitle,
-  CRow
+  CRow,
 } from "@coreui/react";
 import React from "react";
 import api, { setLocalUser } from "../service/api";
@@ -37,7 +37,7 @@ const MainComponent = ({ view, disableView }) => {
       </CModalHeader>
       <CModalBody>
         <CRow>
-          <CCol md="2">UserId</CCol>
+          <CCol md="3">UserId</CCol>
           <CCol>
             <CForm>
               <CInput
@@ -50,12 +50,16 @@ const MainComponent = ({ view, disableView }) => {
           </CCol>
         </CRow>
         <CRow>
-          <CCol md="2">Email</CCol>
+          <CCol md="3">Email</CCol>
           <CCol>{user.email}</CCol>
         </CRow>
         <CRow>
-          <CCol md="2">Type</CCol>
+          <CCol md="3">Type</CCol>
           <CCol>{user.type}</CCol>
+        </CRow>
+        <CRow>
+          <CCol md="3">Quyền hạn</CCol>
+          <CCol>{user.permissions?.join(", ")}</CCol>
         </CRow>
       </CModalBody>
       <CModalFooter>

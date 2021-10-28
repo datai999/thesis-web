@@ -10,10 +10,18 @@ import {
 } from "@coreui/react";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { permissionFilter } from "src/service/permissionService";
 // sidebar nav config
 import navigation from "./_nav";
 
 const TheSidebar = () => {
+  const permissionNavigation = navigation
+    .filter(permissionFilter)
+    .map((nav) => {
+      nav._children = nav._children?.filter(permissionFilter);
+      return nav;
+    });
+
   const dispatch = useDispatch();
   const show = useSelector((state) => state.sidebarShow);
 
@@ -36,7 +44,7 @@ const TheSidebar = () => {
       </CSidebarBrand> */}
       <CSidebarNav>
         <CCreateElement
-          items={navigation}
+          items={permissionNavigation}
           components={{
             CSidebarNavDivider,
             CSidebarNavDropdown,

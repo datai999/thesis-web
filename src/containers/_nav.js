@@ -35,26 +35,31 @@ const _nav = [
     name: "Đề tài có tôi",
     to: "/my/topics",
     icon: "cil-home",
+    permissions: ["STUDENT", "TEACHER"],
     _children: [
       {
         _tag: "CSidebarNavItem",
         name: "Thực thi",
         to: "/my/topics/execute",
+        permissions: ["STUDENT"],
       },
       {
         _tag: "CSidebarNavItem",
         name: "Hướng dẫn",
         to: "/my/topics/guide",
+        permissions: ["TEACHER"],
       },
       {
         _tag: "CSidebarNavItem",
         name: "Phản biện",
         to: "/my/topics/review",
+        permissions: ["TEACHER"],
       },
       {
         _tag: "CSidebarNavItem",
         name: "Hội đồng",
         to: "/my/topics/council",
+        permissions: ["TEACHER"],
       },
     ],
   },
@@ -76,23 +81,24 @@ const _nav = [
   //     },
   //   ],
   // },
-  // {
-  //   _tag: "CSidebarNavItem",
-  //   name: "Sinh viên",
-  //   to: "/students",
-  //   icon: "cil-user",
-  // },
   {
     _tag: "CSidebarNavItem",
     name: "Phân công phản biện",
     to: "/assign/review",
     icon: "cil-speech",
+    permissions: ["HEAD_SUBJECT_DEPARTMENT"],
   },
   {
     _tag: "CSidebarNavItem",
     name: "Hội đồng",
     to: "/councils",
     icon: "cil-people",
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Người dùng",
+    to: "/users",
+    icon: "cil-user",
   },
   {
     _tag: "CSidebarNavItem",

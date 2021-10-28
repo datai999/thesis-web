@@ -57,8 +57,6 @@ const Typography = React.lazy(() =>
   import("./views/theme/typography/Typography")
 );
 const Widgets = React.lazy(() => import("./views/widgets/Widgets"));
-const Users = React.lazy(() => import("./views/users/Users"));
-const User = React.lazy(() => import("./views/users/User"));
 
 const Topics = React.lazy(() => import("./pages/topic/Topics"));
 const TopicDetail = React.lazy(() => import("./pages/topic/TopicDetail"));
@@ -80,6 +78,8 @@ const CouncilTable = React.lazy(() => import("./pages/council/CouncilTable"));
 const Council = React.lazy(() => import("./pages/council/Council"));
 const CouncilDetail = React.lazy(() => import("./pages/council/CouncilDetail"));
 const AssignCouncil = React.lazy(() => import("./pages/council/AssignCouncil"));
+const UserTable = React.lazy(() => import("./pages/user/UserTable"));
+const UserDetail = React.lazy(() => import("./pages/user/UserDetail"));
 const TopicScore = React.lazy(() => import("./pages/score/TopicScore"));
 const Semesters = React.lazy(() => import("./pages/semester/Semesters"));
 const Templates = React.lazy(() => import("./pages/template/Templates"));
@@ -90,7 +90,6 @@ const ShareSetting = React.lazy(() => import("./pages/setting/ShareSetting"));
 const CouncilSetting = React.lazy(() =>
   import("./pages/setting/council/CouncilSetting")
 );
-const UserDetail = React.lazy(() => import("./pages/user/UserDetail"));
 
 let routes = [
   { path: "/", exact: true, name: "Trang chủ" },
@@ -179,6 +178,18 @@ let routes = [
     component: AssignCouncil,
   },
   {
+    path: "/users",
+    exact: true,
+    name: "Người dùng",
+    component: UserTable,
+  },
+  {
+    path: "/users/:id",
+    exact: true,
+    name: "Thông tin người dùng",
+    component: UserDetail,
+  },
+  {
     path: "/score/topic/:id",
     exact: true,
     name: "Bảng điểm đề tài",
@@ -229,12 +240,6 @@ let routes = [
     exact: true,
     name: "Thành viên hội đồng",
     component: CouncilSetting,
-  },
-  {
-    path: "/users/:id",
-    exact: true,
-    name: "Thông tin người dùng",
-    component: UserDetail,
   },
 
   { path: "/theme", name: "Theme", component: Colors, exact: true },
@@ -290,7 +295,6 @@ let routes = [
   { path: "/notifications/modals", name: "Modals", component: Modals },
   { path: "/notifications/toaster", name: "Toaster", component: Toaster },
   { path: "/widgets", name: "Widgets", component: Widgets },
-  { path: "/users", exact: true, name: "Users", component: Users },
 ];
 
 export default routes;

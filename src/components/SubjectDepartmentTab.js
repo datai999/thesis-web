@@ -6,7 +6,7 @@ import {
   CNavLink,
   CTabContent,
   CTabPane,
-  CTabs
+  CTabs,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
@@ -15,7 +15,7 @@ import contextHolder from "src/service/contextService";
 const tabs = contextHolder.subjectDepartments.map((e) => {
   return {
     id: e.id,
-    roles: ["ADMIN", "TEACHER"],
+    permissions: ["ADMIN", "HEAD_SUBJECT_DEPARTMENT", "TEACHER"],
     tabName: e.name,
   };
 });
@@ -24,7 +24,9 @@ const MainComponent = ({ URL, InnerComponent }) => {
   const history = useHistory();
   const location = useLocation();
   const roleTabs = tabs.filter((e) =>
-    e.roles.some((role) => contextHolder.user.roles.includes(role))
+    e.permissions.some((permission) =>
+      contextHolder.user.permissions.includes(permission)
+    )
   );
   const tab = roleTabs
     .map((e) => e.id.toString())

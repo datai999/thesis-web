@@ -9,11 +9,12 @@ import {
   CRow,
   CTabContent,
   CTabPane,
-  CTabs
+  CTabs,
 } from "@coreui/react";
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import contextService from "src/service/contextService";
+import { permissionFilter } from "src/service/permissionService";
 import MyCouncil from "./MyCouncil";
 import TopicExecute from "./TopicExecutes";
 import TopicGuides from "./TopicGuides";
@@ -22,25 +23,25 @@ import TopicReviews from "./TopicReviews";
 const tabs = [
   {
     url: "execute",
-    roles: ["ADMIN", "STUDENT"],
+    permissions: ["STUDENT"],
     tabName: "Thực thi",
     component: TopicExecute,
   },
   {
     url: "guide",
-    roles: ["ADMIN", "TEACHER"],
+    permissions: ["TEACHER"],
     tabName: "Hướng dẫn",
     component: TopicGuides,
   },
   {
     url: "review",
-    roles: ["ADMIN", "TEACHER"],
+    permissions: ["TEACHER"],
     tabName: "Phản biện",
     component: TopicReviews,
   },
   {
     url: "council",
-    roles: ["ADMIN", "TEACHER"],
+    permissions: ["TEACHER"],
     tabName: "Hội đồng",
     component: MyCouncil,
   },
@@ -49,16 +50,14 @@ const tabs = [
 const MainComponent = () => {
   const history = useHistory();
   const location = useLocation();
-  const roleTabs = tabs.filter((e) =>
-    e.roles.some((role) => contextService.user.roles.includes(role))
-  );
-  const tab = roleTabs
+  const permissionTabs = tabs.filter(permissionFilter);
+  const tab = permissionTabs
     .map((e) => e.url)
     .indexOf(location.pathname.split("/").pop());
   const tabIndex = tab < 0 ? 0 : tab;
 
   const pushTabIndex = (nextTab) => {
-    history.push(`/my/topics/${roleTabs[nextTab].url}`);
+    history.push(`/my/topics/${permissionTabs[nextTab].url}`);
   };
 
   return (
@@ -68,7 +67,7 @@ const MainComponent = () => {
           <CRow>
             <CCol>
               <CNav variant="tabs">
-                {roleTabs.map((e) => (
+                {permissionTabs.map((e) => (
                   <CNavItem key={e.url}>
                     <CNavLink>{e.tabName}</CNavLink>
                   </CNavItem>
@@ -76,7 +75,7 @@ const MainComponent = () => {
               </CNav>
             </CCol>
             {["ADMIN", "TEACHER"].some((role) =>
-              contextService.user.roles.includes(role)
+              contextService.user.permissions.includes(role)
             ) && (
               <CCol md="2">
                 <CButton
@@ -90,7 +89,7 @@ const MainComponent = () => {
             )}
           </CRow>
           <CTabContent>
-            {roleTabs.map((e, index) => (
+            {permissionTabs.map((e, index) => (
               <CTabPane key={e.url}>
                 {index === tabIndex && <e.component />}
               </CTabPane>

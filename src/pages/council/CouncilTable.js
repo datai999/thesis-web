@@ -10,7 +10,7 @@ import {
   CDataTable,
   CPagination,
   CRow,
-  CTooltip
+  CTooltip,
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
@@ -240,6 +240,7 @@ const CouncilTable = ({ subjectDepartmentId }) => {
         }}
       />
       <CPagination
+        size="sm"
         activePage={page}
         onActivePageChange={pageChange}
         align="center"
