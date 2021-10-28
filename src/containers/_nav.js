@@ -1,5 +1,6 @@
 import CIcon from "@coreui/icons-react";
 import React from "react";
+import { PERMISSIONS } from "src/service/permissionService";
 
 const _nav = [
   {
@@ -35,31 +36,31 @@ const _nav = [
     name: "Đề tài có tôi",
     to: "/my/topics",
     icon: "cil-home",
-    permissions: ["STUDENT", "TEACHER"],
+    permissions: [PERMISSIONS.STUDENT, PERMISSIONS.TEACHER],
     _children: [
       {
         _tag: "CSidebarNavItem",
         name: "Thực thi",
         to: "/my/topics/execute",
-        permissions: ["STUDENT"],
+        permissions: [PERMISSIONS.STUDENT],
       },
       {
         _tag: "CSidebarNavItem",
         name: "Hướng dẫn",
         to: "/my/topics/guide",
-        permissions: ["TEACHER"],
+        permissions: [PERMISSIONS.TEACHER],
       },
       {
         _tag: "CSidebarNavItem",
         name: "Phản biện",
         to: "/my/topics/review",
-        permissions: ["TEACHER"],
+        permissions: [PERMISSIONS.TEACHER],
       },
       {
         _tag: "CSidebarNavItem",
         name: "Hội đồng",
         to: "/my/topics/council",
-        permissions: ["TEACHER"],
+        permissions: [PERMISSIONS.TEACHER],
       },
     ],
   },
@@ -86,7 +87,7 @@ const _nav = [
     name: "Phân công phản biện",
     to: "/assign/review",
     icon: "cil-speech",
-    permissions: ["HEAD_SUBJECT_DEPARTMENT"],
+    permissions: [PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
   },
   {
     _tag: "CSidebarNavItem",

@@ -23,7 +23,7 @@ const Page500 = React.lazy(() => import("./views/pages/page500/Page500"));
 
 const App = () => {
   const [toasts, addToasts] = useState([]);
-  const [sleep, setSleep] = React.useState(true);
+  const [sleep, setSleep] = useState(true);
 
   useEffect(() => {
     const init = async () => {

@@ -11,15 +11,18 @@ import {
   CRow,
 } from "@coreui/react";
 import React from "react";
-import api, { setLocalUser } from "../service/api";
+import { useHistory } from "react-router-dom";
+import api, { setLocalUser } from "src/service/api";
 
 const MainComponent = ({ view, disableView }) => {
+  const history = useHistory();
+
   const [userId, setUserId] = React.useState();
   const [user, setUser] = React.useState({});
 
   const confirm = () => {
     setLocalUser(user);
-    disableView();
+    history.go(0);
   };
 
   React.useEffect(() => {

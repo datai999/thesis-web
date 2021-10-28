@@ -4,11 +4,10 @@ import {
   CHeader,
   CHeaderNav,
   CLink,
-  CToggler
+  CToggler,
 } from "@coreui/react";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
 // routes config
 import routes from "../routes";
 import ActionUserModal from "./ActionUserModal";
@@ -17,11 +16,10 @@ import {
   TheHeaderDropdown,
   TheHeaderDropdownMssg,
   TheHeaderDropdownNotif,
-  TheHeaderDropdownTasks
+  TheHeaderDropdownTasks,
 } from "./index";
 
-const TheHeader = ({ refreshPage }) => {
-  const history = useHistory();
+const TheHeader = () => {
   const dispatch = useDispatch();
   const sidebarShow = useSelector((state) => state.sidebarShow);
   const [actionUserModal, setActionUserModal] = React.useState(false);
@@ -62,7 +60,7 @@ const TheHeader = ({ refreshPage }) => {
         <ActionUserModal
           view={actionUserModal}
           disableView={() => {
-            history.go(0);
+            setActionUserModal(false);
           }}
         />
         <CLink onClick={() => setActionUserModal(true)}>

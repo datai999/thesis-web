@@ -14,7 +14,7 @@ import {
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import contextService from "src/service/contextService";
-import { permissionFilter } from "src/service/permissionService";
+import { permissionFilter, PERMISSIONS } from "src/service/permissionService";
 import MyCouncil from "./MyCouncil";
 import TopicExecute from "./TopicExecutes";
 import TopicGuides from "./TopicGuides";
@@ -23,25 +23,25 @@ import TopicReviews from "./TopicReviews";
 const tabs = [
   {
     url: "execute",
-    permissions: ["STUDENT"],
+    permissions: [PERMISSIONS.STUDENT],
     tabName: "Thực thi",
     component: TopicExecute,
   },
   {
     url: "guide",
-    permissions: ["TEACHER"],
+    permissions: [PERMISSIONS.TEACHER],
     tabName: "Hướng dẫn",
     component: TopicGuides,
   },
   {
     url: "review",
-    permissions: ["TEACHER"],
+    permissions: [PERMISSIONS.TEACHER],
     tabName: "Phản biện",
     component: TopicReviews,
   },
   {
     url: "council",
-    permissions: ["TEACHER"],
+    permissions: [PERMISSIONS.TEACHER],
     tabName: "Hội đồng",
     component: MyCouncil,
   },
@@ -74,7 +74,7 @@ const MainComponent = () => {
                 ))}
               </CNav>
             </CCol>
-            {["ADMIN", "TEACHER"].some((role) =>
+            {[PERMISSIONS.TEACHER].some((role) =>
               contextService.user.permissions.includes(role)
             ) && (
               <CCol md="2">

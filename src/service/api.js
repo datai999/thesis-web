@@ -35,10 +35,10 @@ AxiosClient.interceptors.response.use(
   }
 );
 
-export const setLocalUser = (user) => {
+export const setLocalUser = async (user) => {
   contextService.user = user;
-  window.localStorage.setItem("token", user.email);
-  window.localStorage.setItem("userId", user.id);
+  await window.localStorage.setItem("token", user.email);
+  await window.localStorage.setItem("userId", user.id);
 };
 
 AxiosClient.interceptors.request.use(async (config) => {
