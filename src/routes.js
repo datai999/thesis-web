@@ -43,7 +43,6 @@ const ButtonGroups = React.lazy(() =>
 );
 const Buttons = React.lazy(() => import("./views/buttons/buttons/Buttons"));
 const Charts = React.lazy(() => import("./views/charts/Charts"));
-const Dashboard = React.lazy(() => import("./views/dashboard/Dashboard"));
 const CoreUIIcons = React.lazy(() =>
   import("./views/icons/coreui-icons/CoreUIIcons")
 );
@@ -58,6 +57,9 @@ const Typography = React.lazy(() =>
 );
 const Widgets = React.lazy(() => import("./views/widgets/Widgets"));
 
+// ---------------------------------------------------------------------------------
+
+const Dashboard = React.lazy(() => import("./pages/dashboard/Dashboard"));
 const Topics = React.lazy(() => import("./pages/topic/Topics"));
 const TopicDetail = React.lazy(() => import("./pages/topic/TopicDetail"));
 const My = React.lazy(() => import("./pages/my/My"));
@@ -92,8 +94,7 @@ const CouncilSetting = React.lazy(() =>
 );
 
 let routes = [
-  { path: "/", exact: true, name: "Trang chủ" },
-  { path: "/dashboard", name: "Dashboard", component: Dashboard },
+  { path: "/dashboard", name: "Trang chủ", component: Dashboard },
   { path: "/topics", exact: true, name: "Đề tài", component: Topics },
   { path: "/topics/outline", exact: true, name: "Đề cương", component: Topics },
   { path: "/topics/thesis", exact: true, name: "Luận văn", component: Topics },

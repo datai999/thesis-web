@@ -1,16 +1,12 @@
 import { PERMISSIONS } from "src/service/permissionService";
 
 const _nav = [
-  // {
-  //   _tag: "CSidebarNavItem",
-  //   name: "Dashboard",
-  //   to: "/dashboard",
-  //   icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon" />,
-  //   badge: {
-  //     color: "info",
-  //     text: "NEW",
-  //   },
-  // },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Trang chủ",
+    to: "/dashboard",
+    icon: "cil-speedometer",
+  },
   {
     _tag: "CSidebarNavDropdown",
     name: "Đề tài",
