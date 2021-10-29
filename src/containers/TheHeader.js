@@ -11,13 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 // routes config
 import routes from "../routes";
 import ActionUserModal from "./ActionUserModal";
-import {
-  Notification,
-  TheHeaderDropdown,
-  TheHeaderDropdownMssg,
-  TheHeaderDropdownNotif,
-  TheHeaderDropdownTasks,
-} from "./index";
+import UserHeader from "./header/UserHeader";
+import { Notification } from "./index";
 
 const TheHeader = () => {
   const dispatch = useDispatch();
@@ -66,11 +61,12 @@ const TheHeader = () => {
         <CLink onClick={() => setActionUserModal(true)}>
           <CIcon name="cil-user" className="mfe-2" />
         </CLink>
-        <TheHeaderDropdownNotif />
+        {/* <TheHeaderDropdownNotif />
         <TheHeaderDropdownTasks />
-        <TheHeaderDropdownMssg />
+        <TheHeaderDropdownMssg /> */}
         <Notification />
-        <TheHeaderDropdown />
+        {/* <TheHeaderDropdown /> */}
+        <UserHeader />
       </CHeaderNav>
     </CHeader>
   );
