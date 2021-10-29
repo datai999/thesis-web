@@ -2,6 +2,7 @@ import { CToaster } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import LoadingOverlay from "react-loading-overlay";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { holderLoading } from "src/service/loadingService";
 import "./scss/style.scss";
 import { initContext } from "./service/contextService";
 import toastHolder from "./service/toastService";
@@ -33,6 +34,7 @@ const App = () => {
       }, 100);
     };
     init();
+    holderLoading.setState = setSleep;
   }, []);
 
   useEffect(() => {
