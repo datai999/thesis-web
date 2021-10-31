@@ -16,7 +16,7 @@ const MainComponent = ({ settingTemplate, onDeleted }) => {
 
   const viewTemplate = () =>
     window.open(
-      `${window.location.origin}/templates/${settingTemplate.templateId}`,
+      `${window.location.origin}/thesis-web/templates/${settingTemplate.templateId}`,
       "_blank"
     );
 
