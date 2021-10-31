@@ -1,16 +1,21 @@
 import CIcon from "@coreui/icons-react";
 import {
+  CButton,
   CCard,
   CCardBody,
   CCardHeader,
   CCol,
   CRow,
+  CTooltip,
   CWidgetIcon,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import api from "src/service/api";
+import { loginUserHasAny, PERMISSIONS } from "src/service/permissionService";
 
 const MainComponent = () => {
+  const canEdit = loginUserHasAny([PERMISSIONS.EDUCATION_STAFF]);
+
   const userId = window.location.pathname.match(/(?:\/users\/)(\d+)/, "")[1];
 
   const [user, setUser] = useState({});
@@ -52,6 +57,18 @@ const MainComponent = () => {
           }
         >
           <CIcon width={48} name="cil-user" />
+          {canEdit && (
+            <CTooltip content={"Chỉnh sửa thông tin"}>
+              <CButton
+                style={{ position: "absolute", right: 0, top: 0 }}
+                variant="outline"
+                color="primary"
+                size="sm"
+              >
+                <CIcon name="cil-pencil" />
+              </CButton>
+            </CTooltip>
+          )}
         </CWidgetIcon>
       </CCardHeader>
       <CCardBody>
