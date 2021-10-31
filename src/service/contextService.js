@@ -19,7 +19,7 @@ const initContext = async () => {
     .get("/subject-departments")
     .then((res) => (context.subjectDepartments = res));
   const userId = await window.localStorage.getItem("userId");
-  api.get(`/users/detail/${userId}`).then((res) => (context.user = res));
+  await api.get(`/users/detail/${userId}`).then((res) => (context.user = res));
   return true;
 };
 

@@ -75,7 +75,7 @@ const MainComponent = () => {
               </CNav>
             </CCol>
             {[PERMISSIONS.TEACHER].some((role) =>
-              contextService.user.permissions.includes(role)
+              contextService.user?.permissions.includes(role)
             ) && (
               <CCol md="2">
                 <CButton

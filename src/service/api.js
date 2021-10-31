@@ -3,6 +3,7 @@ import contextService from "./contextService";
 import toastHolder from "./toastService";
 const config = {
   baseURL: "http://localhost:8080/api",
+  // baseURL: "https://datai-thesis.herokuapp.com/api",
   headers: {
     "content-type": "application/json",
     "Access-Control-Allow-Origin": "*",
@@ -20,9 +21,7 @@ AxiosClient.interceptors.response.use(
     if (error && error.response && error.response.data) {
       const responseError = error.response.data;
       if (responseError.errorCode === "EXPIRED_ID_TOKEN") {
-        alert(error.response.data.error);
-        // TODO: redirect to login page
-        window.location.replace(window.location.origin);
+        window.location.replace(window.location.origin + "/login");
       }
       if ([400, 404, 409].includes(error.response.status)) {
         toastHolder.error(

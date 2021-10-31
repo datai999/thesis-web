@@ -24,15 +24,24 @@ const Page500 = React.lazy(() => import("./views/pages/page500/Page500"));
 
 const App = () => {
   const [toasts, addToasts] = useState([]);
-  const [sleep, setSleep] = useState(true);
+  const [sleep, setSleep] = useState(false);
+  const [waitingInit, setWaitingInit] = useState(false);
+
+  const init = async () => {
+    setWaitingInit(true);
+    const token = await window.localStorage.getItem("token");
+    if (!token) {
+      await window.localStorage.setItem(
+        "token",
+        "tai.nguyen.cse.datai@hcmut.edu.vn"
+      );
+      await window.localStorage.setItem("userId", 1);
+    }
+    const initResponse = await initContext();
+    setWaitingInit(!initResponse);
+  };
 
   useEffect(() => {
-    const init = async () => {
-      const init = await initContext();
-      setTimeout(() => {
-        setSleep(!init);
-      }, 100);
-    };
     init();
     holderLoading.setState = setSleep;
   }, []);
@@ -75,11 +84,13 @@ const App = () => {
               name="Page 500"
               render={(props) => <Page500 {...props} />}
             />
-            <Route
-              path="/"
-              name="Home"
-              render={(props) => <TheLayout {...props} />}
-            />
+            {!waitingInit && (
+              <Route
+                path="/"
+                name="Home"
+                render={(props) => <TheLayout {...props} />}
+              />
+            )}
           </Switch>
         </React.Suspense>
       </BrowserRouter>

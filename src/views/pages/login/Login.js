@@ -20,6 +20,12 @@ const Login = () => {
     history.push(`/my/topics`);
   };
 
+  const tryAsAdmin = async () => {
+    window.localStorage.setItem("token", "tai.nguyen.cse.datai@hcmut.edu.vn");
+    window.localStorage.setItem("userId", 1);
+    history.push(`/dashboard`);
+  };
+
   return (
     <div className="c-app c-default-layout flex-row align-items-center">
       <CContainer>
@@ -28,10 +34,22 @@ const Login = () => {
             <CCard className="p-4">
               <CForm>
                 <h2>Hệ thống đánh giá luận văn</h2>
-                <CRow className="pt-4">
+                {/* <CRow className="pt-4">
                   <CCol md="7">Sử dụng mail@hcmut.edu.vn</CCol>
                   <CCol>
                     <CButton color="primary" className="px-4" onClick={login}>
+                      Đăng nhập
+                    </CButton>
+                  </CCol>
+                </CRow> */}
+                <CRow className="pt-4">
+                  <CCol md="7">Thử nghiệm hệ thống với vai trò admin</CCol>
+                  <CCol>
+                    <CButton
+                      color="primary"
+                      className="px-4"
+                      onClick={tryAsAdmin}
+                    >
                       Đăng nhập
                     </CButton>
                   </CCol>

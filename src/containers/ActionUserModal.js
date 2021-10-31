@@ -57,8 +57,8 @@ const MainComponent = ({ view, disableView }) => {
           <CCol>{user.email}</CCol>
         </CRow>
         <CRow>
-          <CCol md="3">Type</CCol>
-          <CCol>{user.type}</CCol>
+          <CCol md="3">Tên</CCol>
+          <CCol>{user.fullName}</CCol>
         </CRow>
         <CRow>
           <CCol md="3">Quyền hạn</CCol>
