@@ -14,7 +14,7 @@ import React, { useEffect, useState } from "react";
 import api from "src/service/api";
 
 const limitMessage = 20;
-const scheduleMilliseconds = 1000 * 1;
+const scheduleMilliseconds = 1 * 5000;
 
 const MainComponent = () => {
   const [allMessages, setAllMessages] = useState([]);

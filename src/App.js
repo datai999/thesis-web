@@ -44,6 +44,7 @@ const App = () => {
   useEffect(() => {
     init();
     holderLoading.setState = setSleep;
+    console.log("10.31.23.56");
   }, []);
 
   useEffect(() => {
