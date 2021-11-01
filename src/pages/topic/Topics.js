@@ -16,9 +16,6 @@ const MainComponent = () => {
   const history = useHistory();
   const isThesisTab = window.location.pathname === "/topics/thesis";
 
-  console.log(window.location);
-  console.log(isThesisTab);
-
   return (
     <CCard>
       <CCardBody>
