@@ -66,7 +66,7 @@ const MainComponent = ({ subjectDepartmentId }) => {
 
   const pageChange = (newPage) => {
     currentPage !== newPage &&
-      history.push(`/assign/review/${subjectDepartmentId}?page=${newPage}`);
+      history.push(`/assign-review/${subjectDepartmentId}?page=${newPage}`);
     setPage(newPage);
   };
 
