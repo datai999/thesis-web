@@ -54,7 +54,7 @@ const App = () => {
           <div key={index}>{toast}</div>
         ))}
       </CToaster>
-      <BrowserRouter basename="/thesis-web">
+      <BrowserRouter>
         <React.Suspense fallback={loading}>
           <Switch>
             <Route
