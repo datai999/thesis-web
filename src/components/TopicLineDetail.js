@@ -5,7 +5,7 @@ import {
   CDataTable,
   CLink,
   CRow,
-  CTooltip,
+  CTooltip
 } from "@coreui/react";
 import React from "react";
 
@@ -68,11 +68,8 @@ const MainComponent = ({ item }) => {
                           <CTooltip content={"Chấm điểm"}>
                             <CLink
                               onClick={() => {
-                                console.log(window.location);
                                 window.open(
-                                  `${
-                                    window.location.origin
-                                  }/thesis-web/my/topics/${
+                                  `${window.location.origin}/my/topics/${
                                     item.id
                                   }/mark?role=${window.location.pathname
                                     .split("/")

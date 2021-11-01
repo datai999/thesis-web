@@ -21,7 +21,7 @@ AxiosClient.interceptors.response.use(
     if (error && error.response && error.response.data) {
       const responseError = error.response.data;
       if (responseError.errorCode === "EXPIRED_ID_TOKEN") {
-        window.location.replace(window.location.origin + "/thesis-web/login");
+        window.location.replace(window.location.origin + "/login");
       }
       if ([400, 404, 409].includes(error.response.status)) {
         toastHolder.error(
