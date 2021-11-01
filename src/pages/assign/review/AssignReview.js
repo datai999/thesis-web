@@ -4,7 +4,7 @@ import AssignReviewTable from "./AssignReviewTable";
 
 const MainComponent = () => (
   <SubjectDepartmentTab
-    URL="/assign/review"
+    URL="/assign-review"
     InnerComponent={AssignReviewTable}
   />
 );

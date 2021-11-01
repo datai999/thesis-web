@@ -79,7 +79,7 @@ const _nav = [
   {
     _tag: "CSidebarNavItem",
     name: "Phân công phản biện",
-    to: "/assign/review",
+    to: "/assign-review",
     icon: "cil-speech",
     permissions: [PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
   },

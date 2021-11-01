@@ -163,18 +163,12 @@ let routes = [
     component: TeacherCreate,
   },
   {
-    path: "/assign",
-    exact: true,
-    name: "Phân công",
-    component: AssignReview,
-  },
-  {
-    path: "/assign/review",
+    path: "/assign-review",
     exact: true,
     name: "Phân công phản biện",
     component: AssignReview,
   },
-  { path: "/assign/review/:id", component: AssignReview },
+  { path: "/assign-review/:id", component: AssignReview },
   { path: "/councils", exact: true, name: "Hội đồng", component: CouncilTable },
   {
     path: "/councils/:id",
