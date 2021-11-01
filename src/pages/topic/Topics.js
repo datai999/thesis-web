@@ -17,7 +17,10 @@ const MainComponent = () => {
   const isThesisTab = window.location.pathname === "/topics/thesis";
   const [activeThesisTab, setActiveThesisTab] = useState(isThesisTab);
 
+  console.log(window.location);
+
   useEffect(() => {
+    console.log("push");
     history.push(`/topics/${activeThesisTab ? "thesis" : "outline"}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isThesisTab, activeThesisTab]);

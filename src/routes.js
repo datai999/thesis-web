@@ -172,7 +172,7 @@ let routes = [
   { path: "/councils", exact: true, name: "Hội đồng", component: CouncilTable },
   {
     path: "/councils/:id",
-    exact: false,
+    exact: true,
     component: CouncilTable,
   },
   {
