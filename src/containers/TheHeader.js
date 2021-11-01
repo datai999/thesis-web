@@ -5,6 +5,7 @@ import {
   CHeaderNav,
   CLink,
   CToggler,
+  CTooltip,
 } from "@coreui/react";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -58,9 +59,11 @@ const TheHeader = () => {
             setActionUserModal(false);
           }}
         />
-        <CLink onClick={() => setActionUserModal(true)}>
-          <CIcon name="cil-user" className="mfe-2" />
-        </CLink>
+        <CTooltip content={"Backdoor for dev only"}>
+          <CLink onClick={() => setActionUserModal(true)}>
+            <CIcon name="cil-user" className="mfe-2" />
+          </CLink>
+        </CTooltip>
         {/* <TheHeaderDropdownNotif />
         <TheHeaderDropdownTasks />
         <TheHeaderDropdownMssg /> */}
