@@ -10,7 +10,6 @@ import {
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loading, unLoading } from "src/service/loadingService";
 import { permissionFilter } from "src/service/permissionService";
 import contextHolder from "./../service/contextService";
 // sidebar nav config
@@ -23,13 +22,11 @@ const TheSidebar = () => {
 
   useEffect(() => {
     const permissionNav = async () => {
-      loading();
       const newNav = navigation.filter(permissionFilter).map((nav) => {
         nav._children = nav._children?.filter(permissionFilter);
         return nav;
       });
       await setPermissionNavigation(newNav);
-      unLoading();
     };
 
     return permissionNav();
