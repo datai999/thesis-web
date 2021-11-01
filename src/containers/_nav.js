@@ -130,26 +130,26 @@ const _nav = [
   },
 
   // -----------------------------------------------------------------------------------------------------------------------------------------
-  // {
-  //   _tag: "CSidebarNavTitle",
-  //   _children: ["Theme"],
-  // },
-  // {
-  //   _tag: "CSidebarNavItem",
-  //   name: "Colors",
-  //   to: "/theme/colors",
-  //   icon: "cil-drop",
-  // },
-  // {
-  //   _tag: "CSidebarNavItem",
-  //   name: "Typography",
-  //   to: "/theme/typography",
-  //   icon: "cil-pencil",
-  // },
-  // {
-  //   _tag: "CSidebarNavTitle",
-  //   _children: ["Components"],
-  // },
+  {
+    _tag: "CSidebarNavTitle",
+    _children: ["Theme"],
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Colors",
+    to: "/theme/colors",
+    icon: "cil-drop",
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Typography",
+    to: "/theme/typography",
+    icon: "cil-pencil",
+  },
+  {
+    _tag: "CSidebarNavTitle",
+    _children: ["Components"],
+  },
   // {
   //   _tag: "CSidebarNavDropdown",
   //   name: "Base",
