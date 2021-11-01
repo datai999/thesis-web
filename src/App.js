@@ -40,7 +40,7 @@ const App = () => {
 
   useEffect(() => {
     init();
-    console.log("11.01.20.17");
+    console.log("11.01.21.55");
   }, []);
 
   useEffect(() => {
