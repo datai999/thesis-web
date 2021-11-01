@@ -11,7 +11,7 @@ import {
   CTabPane,
   CTabs,
 } from "@coreui/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { loginUserHasAny, PERMISSIONS } from "src/service/permissionService";
 import SettingTemplate from "./SettingTemplate";
@@ -33,25 +33,23 @@ const tabs = [
 const MainComponent = () => {
   const history = useHistory();
   const lastPath = useLocation().pathname.split("/").pop();
-  const [tabIndex, setTabIndex] = useState(
-    ["templates", "list"].includes(lastPath) ? 0 : 1
-  );
+  const tabIndex = ["templates", "list"].includes(lastPath) ? 0 : 1;
 
   const canCreate = loginUserHasAny([PERMISSIONS.EDUCATION_STAFF]);
-
-  useEffect(() => {
-    history.push(
-      `/templates${
-        !canCreate && tabIndex === 0 ? "/setting" : tabs[tabIndex].url
-      }`
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabIndex]);
 
   return (
     <CCard>
       <CCardBody>
-        <CTabs activeTab={tabIndex} onActiveTabChange={setTabIndex}>
+        <CTabs
+          activeTab={tabIndex}
+          onActiveTabChange={(nextTab) =>
+            history.push(
+              `/templates${
+                !canCreate && nextTab === 0 ? "/setting" : tabs[nextTab].url
+              }`
+            )
+          }
+        >
           {canCreate && (
             <CRow>
               <CCol>
