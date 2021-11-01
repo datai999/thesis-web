@@ -8,7 +8,7 @@ import {
   CTabPane,
   CTabs,
 } from "@coreui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import contextHolder from "src/service/contextService";
 import { PERMISSIONS } from "./../service/permissionService";
@@ -34,7 +34,7 @@ const MainComponent = ({ URL, InnerComponent }) => {
     (e) => e.id.toString() === subjectDepartmentId?.toString()
   );
 
-  const [tabIndex, setTabIndex] = useState(initTabIndex < 0 ? 0 : initTabIndex);
+  const tabIndex = initTabIndex < 0 ? 0 : initTabIndex;
 
   useEffect(() => {
     if (headSubjectDepartment) {
@@ -43,15 +43,15 @@ const MainComponent = ({ URL, InnerComponent }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    history.push(`${URL}/${tabs[tabIndex].id}`);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabIndex]);
-
   return (
     <CCard>
       <CCardBody>
-        <CTabs activeTab={tabIndex} onActiveTabChange={setTabIndex}>
+        <CTabs
+          activeTab={tabIndex}
+          onActiveTabChange={(nextTab) =>
+            history.push(`${URL}/${tabs[nextTab].id}`)
+          }
+        >
           <CNav variant="tabs">
             {tabs.map((e) => (
               <CNavItem key={e.id}>
