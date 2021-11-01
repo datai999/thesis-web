@@ -8,29 +8,25 @@ import {
   CTabPane,
   CTabs,
 } from "@coreui/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useHistory } from "react-router-dom";
 import TopicTable from "./TopicTable";
 
 const MainComponent = () => {
   const history = useHistory();
   const isThesisTab = window.location.pathname === "/topics/thesis";
-  const [activeThesisTab, setActiveThesisTab] = useState(isThesisTab);
 
   console.log(window.location);
-
-  useEffect(() => {
-    console.log("push");
-    history.push(`/topics/${activeThesisTab ? "thesis" : "outline"}`);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isThesisTab, activeThesisTab]);
+  console.log(isThesisTab);
 
   return (
     <CCard>
       <CCardBody>
         <CTabs
-          activeTab={activeThesisTab ? 1 : 0}
-          onActiveTabChange={(index) => setActiveThesisTab(index === 1)}
+          activeTab={isThesisTab ? 1 : 0}
+          onActiveTabChange={(index) =>
+            history.push(`/topics/${index === 1 ? "thesis" : "outline"}`)
+          }
         >
           <CNav variant="tabs">
             <CNavItem>
@@ -41,8 +37,12 @@ const MainComponent = () => {
             </CNavItem>
           </CNav>
           <CTabContent>
-            <CTabPane>{!isThesisTab && <TopicTable thesis={false} />}</CTabPane>
-            <CTabPane>{isThesisTab && <TopicTable thesis={true} />}</CTabPane>
+            <CTabPane>
+              {!isThesisTab && <TopicTable thesis={isThesisTab} />}
+            </CTabPane>
+            <CTabPane>
+              {isThesisTab && <TopicTable thesis={isThesisTab} />}
+            </CTabPane>
           </CTabContent>
         </CTabs>
       </CCardBody>

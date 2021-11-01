@@ -2,8 +2,8 @@ import axios from "axios";
 import contextService from "./contextService";
 import toastHolder from "./toastService";
 const config = {
-  baseURL: "http://localhost:8080/api",
-  // baseURL: "https://datai-thesis.herokuapp.com/api",
+  // baseURL: "http://localhost:8080/api",
+  baseURL: "https://datai-thesis.herokuapp.com/api",
   headers: {
     "content-type": "application/json",
     "Access-Control-Allow-Origin": "*",
