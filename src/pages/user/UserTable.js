@@ -65,6 +65,7 @@ const Component = () => {
         <CDataTable
           items={data}
           fields={fields}
+          size="sm"
           hover
           striped
           sorter

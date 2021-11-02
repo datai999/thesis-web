@@ -55,6 +55,7 @@ const MainComponent = () => {
           fields={canEdit ? fields : fields.slice(0, -1)}
           activePage={page}
           itemsPerPage={5}
+          size="sm"
           hover
           sorter
           striped

@@ -12,7 +12,7 @@ import {
   CDropdownMenu,
   CDropdownToggle,
   CPagination,
-  CRow
+  CRow,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
@@ -159,7 +159,9 @@ const MainComponent = () => {
         <CDataTable
           items={data}
           fields={fields}
+          size="sm"
           hover
+          striped
           activePage={page}
           scopedSlots={{
             status: (item) => (
@@ -194,6 +196,7 @@ const MainComponent = () => {
           }}
         />
         <CPagination
+          size="sm"
           activePage={page}
           onActivePageChange={pageChange}
           align="center"

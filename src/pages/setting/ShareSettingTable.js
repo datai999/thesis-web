@@ -7,7 +7,7 @@ import {
   CCardHeader,
   CCol,
   CDataTable,
-  CRow
+  CRow,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import api from "src/service/api";
@@ -77,6 +77,7 @@ const MainComponent = ({ props }) => {
         <CDataTable
           items={data}
           fields={fields}
+          size="sm"
           striped
           itemsPerPage={5}
           scopedSlots={{
