@@ -110,6 +110,7 @@ const CouncilTable = ({ subjectDepartmentId }) => {
       <CDataTable
         items={data}
         fields={fields}
+        size="sm"
         hover
         sorter
         columnFilter
