@@ -82,6 +82,7 @@ const CouncilDetail = React.lazy(() => import("./pages/council/CouncilDetail"));
 const AssignCouncil = React.lazy(() => import("./pages/council/AssignCouncil"));
 const UserTable = React.lazy(() => import("./pages/user/UserTable"));
 const UserDetail = React.lazy(() => import("./pages/user/UserDetail"));
+const EditUser = React.lazy(() => import("./pages/user/EditUser"));
 const TopicScore = React.lazy(() => import("./pages/score/TopicScore"));
 const Semesters = React.lazy(() => import("./pages/semester/Semesters"));
 const Templates = React.lazy(() => import("./pages/template/Templates"));
@@ -195,9 +196,15 @@ let routes = [
   },
   {
     path: "/users/:id",
-    exact: false,
+    exact: true,
     name: "Thông tin người dùng",
     component: UserDetail,
+  },
+  {
+    path: "/users/:id/edit",
+    exact: false,
+    name: "Chỉnh sửa thông tin người dùng",
+    component: EditUser,
   },
   {
     path: "/score/topic/:id",

@@ -79,7 +79,7 @@ const Component = () => {
           scopedSlots={{
             permissions: (item) => (
               <td>
-                {item.permissions.map((e) => (
+                {item.permissions?.map((e) => (
                   <div>{e}</div>
                 ))}
               </td>

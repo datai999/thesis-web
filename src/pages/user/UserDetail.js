@@ -3,19 +3,21 @@ import {
   CButton,
   CCard,
   CCardBody,
-  CCardHeader,
+  CCardFooter,
   CCol,
   CRow,
   CTooltip,
   CWidgetIcon,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import api from "src/service/api";
 import { loginUserHasAny, PERMISSIONS } from "src/service/permissionService";
 
 const MainComponent = () => {
   const canEdit = loginUserHasAny([PERMISSIONS.EDUCATION_STAFF]);
 
+  const history = useHistory();
   const userId = window.location.pathname.match(/(?:\/users\/)(\d+)/, "")[1];
 
   const [user, setUser] = useState({});
@@ -27,7 +29,7 @@ const MainComponent = () => {
 
   return (
     <CCard style={{ minWidth: "50%", maxWidth: 600, margin: "auto" }}>
-      <CCardHeader>
+      <CCardBody>
         <CWidgetIcon
           color="gradient-info"
           iconPadding={false}
@@ -49,6 +51,12 @@ const MainComponent = () => {
               </CRow>
               <CRow>
                 <CCol md="3" className="pl-3">
+                  Email:
+                </CCol>
+                <CCol>{user.email}</CCol>
+              </CRow>
+              <CRow>
+                <CCol md="3" className="pl-3">
                   Giới tính:
                 </CCol>
                 <CCol>{user.gender}</CCol>
@@ -57,52 +65,50 @@ const MainComponent = () => {
           }
         >
           <CIcon width={48} name="cil-user" />
-          {canEdit && (
-            <CTooltip content={"Chỉnh sửa thông tin"}>
-              <CButton
-                style={{ position: "absolute", right: 0, top: 0 }}
-                variant="outline"
-                color="primary"
-                size="sm"
-              >
-                <CIcon name="cil-pencil" />
-              </CButton>
-            </CTooltip>
-          )}
         </CWidgetIcon>
-      </CCardHeader>
-      <CCardBody>
-        <div className="mx-5">
-          {user.type === "TEACHER" ? (
+
+        <div className="ml-5">
+          {user.permissions?.includes("STUDENT") && (
             <>
               <CRow>
-                <CCol md="3">Học vị:</CCol>
-                <CCol>{user.degreeName}</CCol>
-              </CRow>
-              <CRow>
-                <CCol md="3">Phòng ban:</CCol>
-                <CCol>{user.subjectDepartmentName}</CCol>
-              </CRow>
-            </>
-          ) : (
-            <>
-              <CRow>
-                <CCol md="3">Chuyên ngành:</CCol>
+                <CCol md="4">Chuyên ngành:</CCol>
                 <CCol>{user.majorName}</CCol>
               </CRow>
               <CRow>
-                <CCol md="3">Phương thức đào tạo:</CCol>
+                <CCol md="4">Phương thức đào tạo:</CCol>
                 <CCol>{user.educationMethodName}</CCol>
               </CRow>
             </>
           )}
-
-          <CRow>
-            <CCol md="3">Email:</CCol>
-            <CCol>{user.email}</CCol>
-          </CRow>
+          {user.permissions?.some((e) =>
+            ["TEACHER", "HEAD_SUBJECT_DEPARTMENT"].includes(e)
+          ) && (
+            <>
+              <CRow>
+                <CCol md="4">Học vị:</CCol>
+                <CCol>{user.degreeName}</CCol>
+              </CRow>
+              <CRow>
+                <CCol md="4">Phòng ban:</CCol>
+                <CCol>{user.subjectDepartmentName}</CCol>
+              </CRow>
+            </>
+          )}
         </div>
       </CCardBody>
+      {canEdit && (
+        <CCardFooter>
+          <CTooltip content={"Chỉnh sửa thông tin"}>
+            <CButton
+              color="primary"
+              size="sm"
+              onClick={() => history.push(`/users/${userId}/edit`)}
+            >
+              <CIcon name="cil-pencil" /> Chinh sửa
+            </CButton>
+          </CTooltip>
+        </CCardFooter>
+      )}
     </CCard>
   );
 };
