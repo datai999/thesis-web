@@ -9,8 +9,22 @@ export const PERMISSIONS = {
 };
 
 export const loginUserHasAny = (permissions) => {
-  return permissions.some((permission) =>
-    contextHolder.user?.permissions?.includes(permission)
+  return permissions.includes(contextHolder.user?.permissions);
+};
+
+export const loginUserIsStudent = () => {
+  return [PERMISSIONS.STUDENT].includes(contextHolder.user?.permission);
+};
+
+export const loginUserIsHead = () => {
+  return [PERMISSIONS.HEAD_SUBJECT_DEPARTMENT].includes(
+    contextHolder.user?.permission
+  );
+};
+
+export const loginUserIsTeacher = () => {
+  return [PERMISSIONS.TEACHER, PERMISSIONS.HEAD_SUBJECT_DEPARTMENT].includes(
+    contextHolder.user?.permission
   );
 };
 

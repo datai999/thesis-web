@@ -12,10 +12,18 @@ import {
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import api from "src/service/api";
-import { loginUserHasAny, PERMISSIONS } from "src/service/permissionService";
+import {
+  loginUserHasAny,
+  loginUserIsStudent,
+  loginUserIsTeacher,
+  PERMISSIONS,
+} from "src/service/permissionService";
 
 const MainComponent = () => {
-  const canEdit = loginUserHasAny([PERMISSIONS.EDUCATION_STAFF]);
+  const canEdit = loginUserHasAny([
+    PERMISSIONS.ADMIN,
+    PERMISSIONS.EDUCATION_STAFF,
+  ]);
 
   const history = useHistory();
   const userId = window.location.pathname.match(/(?:\/users\/)(\d+)/, "")[1];
@@ -68,7 +76,7 @@ const MainComponent = () => {
         </CWidgetIcon>
 
         <div className="ml-5">
-          {user.permissions?.includes("STUDENT") && (
+          {loginUserIsStudent() && (
             <>
               <CRow>
                 <CCol md="4">Chuyên ngành:</CCol>
@@ -80,9 +88,7 @@ const MainComponent = () => {
               </CRow>
             </>
           )}
-          {user.permissions?.some((e) =>
-            ["TEACHER", "HEAD_SUBJECT_DEPARTMENT"].includes(e)
-          ) && (
+          {loginUserIsTeacher() && (
             <>
               <CRow>
                 <CCol md="4">Học vị:</CCol>

@@ -8,7 +8,6 @@ import {
   CForm,
   CFormGroup,
   CInput,
-  CInputCheckbox,
   CInputRadio,
   CLabel,
   CRow,
@@ -18,6 +17,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import api from "src/service/api";
 import contextHolder from "src/service/contextService";
+import { PERMISSIONS } from "src/service/permissionService";
 
 const MainComponent = () => {
   const userId = window.location.pathname.match(/(?:\/users\/)(\d+)/, "")[1];
@@ -160,24 +160,31 @@ const MainComponent = () => {
             <CFormGroup row>
               <CCol md="4">Quyền hạn</CCol>
               <CCol>
-                {permissions.map((permission) => (
-                  <CFormGroup key={permission} variant="custom-checkbox">
-                    <CInputCheckbox
+                {permissions.map((e) => (
+                  <CFormGroup key={e.id} variant="custom-radio">
+                    <CInputRadio
                       custom
-                      id={permission}
-                      value={permission}
-                      checked={user.permissions?.includes(permission)}
-                      onChange={(event) => onChangeCheck(event, "permissions")}
+                      id={e}
+                      value={e}
+                      checked={user.permission === e}
+                      onChange={() =>
+                        setValueForm(
+                          "permissions",
+                          e === PERMISSIONS.HEAD_SUBJECT_DEPARTMENT
+                            ? [e, PERMISSIONS.TEACHER]
+                            : [e]
+                        )
+                      }
                     />
-                    <CLabel variant="custom-checkbox" htmlFor={permission}>
-                      {permission}
+                    <CLabel variant="custom-checkbox" htmlFor={e}>
+                      {e}
                     </CLabel>
                   </CFormGroup>
                 ))}
               </CCol>
             </CFormGroup>
 
-            {user.permissions?.includes("STUDENT") && (
+            {user.permission === PERMISSIONS.STUDENT && (
               <>
                 <CFormGroup row>
                   <CCol md="4">Chuyên ngành:</CCol>
@@ -190,8 +197,8 @@ const MainComponent = () => {
               </>
             )}
 
-            {user.permissions?.some((e) =>
-              ["TEACHER", "HEAD_SUBJECT_DEPARTMENT"].includes(e)
+            {["TEACHER", "HEAD_SUBJECT_DEPARTMENT"].includes(
+              user.permission
             ) && (
               <>
                 <CFormGroup row>

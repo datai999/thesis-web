@@ -72,7 +72,7 @@ const MainComponent = () => {
                       id={e.id}
                       value={e.id}
                       selected={
-                        e.id.toString() === querySemester.id?.toString()
+                        e.id?.toString() === querySemester.id?.toString()
                       }
                     >
                       {e.name}

@@ -80,6 +80,7 @@ const CouncilTable = React.lazy(() => import("./pages/council/CouncilTable"));
 const Council = React.lazy(() => import("./pages/council/Council"));
 const CouncilDetail = React.lazy(() => import("./pages/council/CouncilDetail"));
 const AssignCouncil = React.lazy(() => import("./pages/council/AssignCouncil"));
+const Users = React.lazy(() => import("./pages/user/Users"));
 const UserTable = React.lazy(() => import("./pages/user/UserTable"));
 const UserDetail = React.lazy(() => import("./pages/user/UserDetail"));
 const EditUser = React.lazy(() => import("./pages/user/EditUser"));
@@ -192,7 +193,37 @@ let routes = [
     path: "/users",
     exact: true,
     name: "Người dùng",
-    component: UserTable,
+    component: Users,
+  },
+  {
+    path: "/users/student",
+    exact: false,
+    name: "Sinh viên",
+    component: Users,
+  },
+  {
+    path: "/users/teacher",
+    exact: false,
+    name: "Giáo viên",
+    component: Users,
+  },
+  {
+    path: "/users/head",
+    exact: false,
+    name: "Trưởng bộ môn",
+    component: Users,
+  },
+  {
+    path: "/users/edu-staff",
+    exact: false,
+    name: "Giáo vụ",
+    component: Users,
+  },
+  {
+    path: "/users/admin",
+    exact: false,
+    name: "Quản trị hệ thống",
+    component: Users,
   },
   {
     path: "/users/:id",

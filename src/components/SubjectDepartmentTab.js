@@ -11,7 +11,7 @@ import {
 import React, { useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import contextHolder from "src/service/contextService";
-import { PERMISSIONS } from "./../service/permissionService";
+import { loginUserIsHead } from "./../service/permissionService";
 
 const tabs = contextHolder.subjectDepartments.map((e) => {
   return {
@@ -23,9 +23,7 @@ const tabs = contextHolder.subjectDepartments.map((e) => {
 const MainComponent = ({ URL, InnerComponent }) => {
   const history = useHistory();
   const location = useLocation();
-  const headSubjectDepartment = contextHolder.user.permissions.includes(
-    PERMISSIONS.HEAD_SUBJECT_DEPARTMENT
-  );
+  const headSubjectDepartment = loginUserIsHead();
 
   const subjectDepartmentId = !headSubjectDepartment
     ? location.pathname.split("/").pop()

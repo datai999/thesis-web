@@ -14,39 +14,33 @@ import {
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import {
-  loginUserIsTeacher,
+  loginUserHasAny,
   permissionFilter,
   PERMISSIONS,
 } from "src/service/permissionService";
-import MyCouncil from "./MyCouncil";
-import TopicExecute from "./TopicExecutes";
-import TopicGuides from "./TopicGuides";
-import TopicReviews from "./TopicReviews";
+import UserList from "./UserList";
 
 const tabs = [
   {
-    url: "execute",
-    permissions: [PERMISSIONS.STUDENT],
-    tabName: "Thực thi",
-    component: TopicExecute,
+    url: "student",
+    tabName: "Sinh viên",
   },
   {
-    url: "guide",
-    permissions: [PERMISSIONS.TEACHER],
-    tabName: "Hướng dẫn",
-    component: TopicGuides,
+    url: "teacher",
+    tabName: "Giáo viên",
   },
   {
-    url: "review",
-    permissions: [PERMISSIONS.TEACHER],
-    tabName: "Phản biện",
-    component: TopicReviews,
+    url: "head",
+    tabName: "Trưởng phòng ban",
   },
   {
-    url: "council",
-    permissions: [PERMISSIONS.TEACHER],
-    tabName: "Hội đồng",
-    component: MyCouncil,
+    url: "edu-staff",
+    tabName: "Giáo vụ",
+  },
+  {
+    url: "admin",
+    permissions: [PERMISSIONS.ADMIN],
+    tabName: "Admin",
   },
 ];
 
@@ -60,7 +54,7 @@ const MainComponent = () => {
   const tabIndex = tab < 0 ? 0 : tab;
 
   const pushTabIndex = (nextTab) => {
-    history.push(`/my/topics/${permissionTabs[nextTab].url}`);
+    history.push(`/users/${permissionTabs[nextTab].url}`);
   };
 
   return (
@@ -77,14 +71,17 @@ const MainComponent = () => {
                 ))}
               </CNav>
             </CCol>
-            {loginUserIsTeacher() && (
+            {loginUserHasAny([
+              PERMISSIONS.ADMIN,
+              PERMISSIONS.EDUCATION_STAFF,
+            ]) && (
               <CCol md="2">
                 <CButton
                   color="primary"
                   className="float-right"
                   onClick={() => history.push(`/my/topics/create`)}
                 >
-                  Thêm đề tài
+                  Thêm {tabs[tabIndex].tabName}
                 </CButton>
               </CCol>
             )}
@@ -92,7 +89,7 @@ const MainComponent = () => {
           <CTabContent>
             {permissionTabs.map((e, index) => (
               <CTabPane key={e.url}>
-                {index === tabIndex && <e.component />}
+                {index === tabIndex && <UserList />}
               </CTabPane>
             ))}
           </CTabContent>

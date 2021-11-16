@@ -62,7 +62,7 @@ const MainComponent = ({ view, disableView }) => {
         </CRow>
         <CRow>
           <CCol md="3">Quyền hạn</CCol>
-          <CCol>{user.permissions?.join(", ")}</CCol>
+          <CCol>{user.permission}</CCol>
         </CRow>
       </CModalBody>
       <CModalFooter>
