@@ -43,8 +43,8 @@ const MainComponent = ({ thesis }) => {
       .then((response) => {
         response.forEach((e) => {
           e.studentCount = `${
-            e.students.length === e.maxStudentTake ? "Đủ" : "Đã đăng ký"
-          }  ${e.students.length}/${e.maxStudentTake}`;
+            e.students?.length === e.maxStudentTake ? "Đủ" : "Đã đăng ký"
+          }  ${e.students?.length}/${e.maxStudentTake}`;
         });
         setData(response);
       });

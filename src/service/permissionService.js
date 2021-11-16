@@ -10,7 +10,7 @@ export const PERMISSIONS = {
 
 export const loginUserHasAny = (permissions) => {
   return permissions.some((permission) =>
-    contextHolder.user?.permissions.includes(permission)
+    contextHolder.user?.permissions?.includes(permission)
   );
 };
 

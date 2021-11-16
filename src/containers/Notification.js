@@ -8,13 +8,13 @@ import {
   CDropdownToggle,
   CLink,
   CRow,
-  CSwitch
+  CSwitch,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import api from "src/service/api";
 
 const limitMessage = 20;
-const scheduleMilliseconds = 1000 * 5000;
+const scheduleMilliseconds = 100 * 5000;
 
 const MainComponent = () => {
   const [allMessages, setAllMessages] = useState([]);
