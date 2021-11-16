@@ -38,8 +38,9 @@ const MainComponent = () => {
   }, []);
 
   React.useEffect(() => {
-    console.log("todo: " + querySemester.name);
-    history.push(`${window.location.pathname}?semester=${querySemester.name}`);
+    history.push(
+      `/topics/${isThesisTab ? "thesis" : "outline"}/${querySemester.name}`
+    );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [querySemester]);

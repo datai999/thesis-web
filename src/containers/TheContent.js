@@ -1,12 +1,15 @@
-import { CContainer, CFade } from "@coreui/react";
+import { CContainer, CFade, CSpinner } from "@coreui/react";
 import React, { Suspense } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 // routes config
 import routes from "../routes";
 
 const loading = (
-  <div className="pt-3 text-center">
-    <div className="sk-spinner sk-spinner-pulse"></div>
+  <div
+    class="d-flex justify-content-center align-items-center"
+    style={{ marginTop: "20%" }}
+  >
+    <CSpinner />
   </div>
 );
 

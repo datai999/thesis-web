@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import TableWithDetail from "src/components/TableWithDetail";
 import api from "src/service/api";
+import context from "src/service/contextService";
 import RegisterTopicModal from "./RegisterTopicModal";
 import StudentRegisterTopicList from "./StudentRegisterTopicList";
 
@@ -31,14 +32,27 @@ const fields = [
 
 const MainComponent = ({ thesis }) => {
   const history = useHistory();
+  const semesterName = window.location.pathname.split("/").pop();
+
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [registerTopicModal, setRegisterTopicModal] = useState(false);
   const [topicRegister, setTopicRegister] = useState();
 
-  useEffect(() => {
+  const getData = () => {
+    setLoading(true);
     api
-      .get(`/topics/type`, {
-        params: { type: thesis ? "thesis" : "outline", direction: "DESC" },
+      .post(`/topics-property/example`, {
+        topic: {
+          thesis,
+          semester: {
+            name: semesterName,
+          },
+          subjectDepartment: context.user.subjectDepartment?.id,
+        },
+        educationMethod: context.user.educationMethod?.id,
+        major: context.user.major?.id,
+        direction: "DESC",
       })
       .then((response) => {
         response.forEach((e) => {
@@ -47,9 +61,16 @@ const MainComponent = ({ thesis }) => {
           }  ${e.students?.length}/${e.maxStudentTake}`;
         });
         setData(response);
+        setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [semesterName]);
+
+  if (loading) throw new Promise(() => {});
 
   return (
     <>

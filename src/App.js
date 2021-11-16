@@ -1,4 +1,4 @@
-import { CToaster } from "@coreui/react";
+import { CSpinner, CToaster } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./scss/style.scss";
@@ -6,8 +6,11 @@ import { initContext } from "./service/contextService";
 import toastHolder from "./service/toastService";
 
 const loading = (
-  <div className="pt-3 text-center">
-    <div className="sk-spinner sk-spinner-pulse"></div>
+  <div
+    class="d-flex justify-content-center align-items-center"
+    style={{ marginTop: "20%" }}
+  >
+    <CSpinner />
   </div>
 );
 

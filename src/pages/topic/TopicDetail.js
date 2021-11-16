@@ -7,14 +7,12 @@ import {
   CRow,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import UserCard from "src/components/UserCard";
 import api from "src/service/api";
 
 const TopicCreate = () => {
   const topicId = window.location.pathname.match(/topics\/(\d+)/, "")[1];
 
-  const history = useHistory();
   const [topic, setTopic] = useState({ guideTeachers: [] });
 
   useEffect(() => {
