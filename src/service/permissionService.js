@@ -9,7 +9,7 @@ export const PERMISSIONS = {
 };
 
 export const loginUserHasAny = (permissions) => {
-  return permissions.includes(contextHolder.user?.permissions);
+  return permissions.includes(contextHolder.user?.permission);
 };
 
 export const loginUserIsStudent = () => {

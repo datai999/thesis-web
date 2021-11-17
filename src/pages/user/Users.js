@@ -51,11 +51,14 @@ const MainComponent = () => {
   const tab = permissionTabs
     .map((e) => e.url)
     .indexOf(location.pathname.split("/").pop());
+
   const tabIndex = tab < 0 ? 0 : tab;
 
   const pushTabIndex = (nextTab) => {
     history.push(`/users/${permissionTabs[nextTab].url}`);
   };
+
+  if (tab < 0) pushTabIndex(0);
 
   return (
     <CCard>

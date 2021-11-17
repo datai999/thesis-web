@@ -167,14 +167,7 @@ const MainComponent = () => {
                       id={e}
                       value={e}
                       checked={user.permission === e}
-                      onChange={() =>
-                        setValueForm(
-                          "permissions",
-                          e === PERMISSIONS.HEAD_SUBJECT_DEPARTMENT
-                            ? [e, PERMISSIONS.TEACHER]
-                            : [e]
-                        )
-                      }
+                      onChange={() => setValueForm("permission", e)}
                     />
                     <CLabel variant="custom-checkbox" htmlFor={e}>
                       {e}

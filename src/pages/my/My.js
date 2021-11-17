@@ -32,19 +32,19 @@ const tabs = [
   },
   {
     url: "guide",
-    permissions: [PERMISSIONS.TEACHER],
+    permissions: [PERMISSIONS.TEACHER, PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
     tabName: "Hướng dẫn",
     component: TopicGuides,
   },
   {
     url: "review",
-    permissions: [PERMISSIONS.TEACHER],
+    permissions: [PERMISSIONS.TEACHER, PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
     tabName: "Phản biện",
     component: TopicReviews,
   },
   {
     url: "council",
-    permissions: [PERMISSIONS.TEACHER],
+    permissions: [PERMISSIONS.TEACHER, PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
     tabName: "Hội đồng",
     component: MyCouncil,
   },
@@ -60,8 +60,10 @@ const MainComponent = () => {
   const tabIndex = tab < 0 ? 0 : tab;
 
   const pushTabIndex = (nextTab) => {
-    history.push(`/my/topics/${permissionTabs[nextTab].url}`);
+    history.push(`/my/topics/${permissionTabs[nextTab]?.url}`);
   };
+
+  if (tab < 0) pushTabIndex(0);
 
   return (
     <CCard>

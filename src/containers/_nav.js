@@ -30,7 +30,11 @@ const _nav = [
     name: "Đề tài có tôi",
     to: "/my/topics",
     icon: "cil-home",
-    permissions: [PERMISSIONS.STUDENT, PERMISSIONS.TEACHER],
+    permissions: [
+      PERMISSIONS.STUDENT,
+      PERMISSIONS.TEACHER,
+      PERMISSIONS.HEAD_SUBJECT_DEPARTMENT,
+    ],
     _children: [
       {
         _tag: "CSidebarNavItem",
@@ -42,19 +46,19 @@ const _nav = [
         _tag: "CSidebarNavItem",
         name: "Hướng dẫn",
         to: "/my/topics/guide",
-        permissions: [PERMISSIONS.TEACHER],
+        permissions: [PERMISSIONS.TEACHER, PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
       },
       {
         _tag: "CSidebarNavItem",
         name: "Phản biện",
         to: "/my/topics/review",
-        permissions: [PERMISSIONS.TEACHER],
+        permissions: [PERMISSIONS.TEACHER, PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
       },
       {
         _tag: "CSidebarNavItem",
         name: "Hội đồng",
         to: "/my/topics/council",
-        permissions: [PERMISSIONS.TEACHER],
+        permissions: [PERMISSIONS.TEACHER, PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
       },
     ],
   },

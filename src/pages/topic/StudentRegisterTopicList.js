@@ -16,6 +16,7 @@ const MainComponent = ({ item, setTopicRegister, setRegisterTopicModal }) => {
   const canViewScore = loginUserHasAny([
     PERMISSIONS.EDUCATION_STAFF,
     PERMISSIONS.TEACHER,
+    PERMISSIONS.HEAD_SUBJECT_DEPARTMENT,
   ]);
   const history = useHistory();
 
