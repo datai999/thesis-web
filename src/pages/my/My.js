@@ -79,14 +79,14 @@ const MainComponent = () => {
                 ))}
               </CNav>
             </CCol>
-            {loginUserIsTeacher() && (
+            {loginUserIsTeacher() && tabIndex === 0 && (
               <CCol md="2">
                 <CButton
                   color="primary"
                   className="float-right"
                   onClick={() => history.push(`/my/topics/create`)}
                 >
-                  Thêm đề tài
+                  Tạo đề tài
                 </CButton>
               </CCol>
             )}

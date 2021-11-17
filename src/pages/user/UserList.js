@@ -61,10 +61,13 @@ const Component = () => {
 
   useEffect(() => {
     api
-      .post("/users/example", {
-        direction: "DESC",
-        permission: getPermission(userType),
-      })
+      .post(
+        "/users/example",
+        {
+          permission: getPermission(userType),
+        },
+        { params: { direction: "DESC" } }
+      )
       .then(setData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

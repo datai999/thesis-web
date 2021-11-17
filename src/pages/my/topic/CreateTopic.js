@@ -101,11 +101,12 @@ const TopicCreate = ({ location }) => {
     <CCard>
       <TeacherSearchModal
         view={searchTeachers}
-        setView={() => setSearchTeachers(false)}
+        disableView={() => setSearchTeachers(false)}
         selected={(teacher) => {
           setSearchTeachers(false);
           setGuideTeachers([...guideTeachers, teacher]);
         }}
+        removeLoginUser={true}
       />
       <CCardHeader>
         <h5>{form.id ? `Chỉnh sửa đề tài` : "Tạo đề tài"}</h5>
