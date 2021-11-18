@@ -4,7 +4,6 @@ import {
   CNav,
   CNavItem,
   CNavLink,
-  CSelect,
   CTabContent,
   CTabPane,
   CTabs,
@@ -13,6 +12,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import api from "src/service/api";
 import context from "src/service/contextService";
+import { loginUserIsStudent } from "src/service/permissionService";
 import TopicTable from "./TopicTable";
 
 const MainComponent = () => {
@@ -21,31 +21,15 @@ const MainComponent = () => {
     ? true
     : false;
 
-  const [semesters, setSemesters] = React.useState([]);
-  const [querySemester, setQuerySemester] = React.useState(context.semester);
-
-  const onChangeSemester = (event) => {
-    let nextSemester = semesters.find(
-      (semester) => semester.id.toString() === event.currentTarget.value
-    );
-    setQuerySemester(nextSemester);
-  };
+  const [studentDoneOutline, setStudentDoneOutline] = React.useState(true);
 
   React.useEffect(() => {
-    api.post(`/semesters/example`, { status: "USED" }).then((res) => {
-      res.push(context.semester);
-      setSemesters(res);
-    });
+    if (loginUserIsStudent())
+      api
+        .get(`/students/${context.user.id}/done-outline`)
+        .then(setStudentDoneOutline);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  React.useEffect(() => {
-    history.push(
-      `/topics/${isThesisTab ? "thesis" : "outline"}/${querySemester.name}`
-    );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [querySemester]);
 
   return (
     <CCard>
@@ -64,45 +48,22 @@ const MainComponent = () => {
             <CNavItem>
               <CNavLink>Đề cương</CNavLink>
             </CNavItem>
-            <CNavItem>
-              <CNavLink>Luận văn</CNavLink>
-            </CNavItem>
+            {studentDoneOutline && (
+              <CNavItem>
+                <CNavLink>Luận văn</CNavLink>
+              </CNavItem>
+            )}
           </CNav>
-
-          <div
-            style={{
-              position: "absolute",
-              marginLeft: 300,
-              zIndex: 1,
-            }}
-          >
-            <tr style={{ position: "absolute", top: 8, width: 300 }}>
-              <td style={{ paddingRight: 10 }}>Học kỳ</td>
-              <td>
-                <CSelect onChange={onChangeSemester}>
-                  {semesters.map((e) => (
-                    <option
-                      id={e.id}
-                      value={e.id}
-                      selected={
-                        e.id?.toString() === querySemester.id?.toString()
-                      }
-                    >
-                      {e.name}
-                    </option>
-                  ))}
-                </CSelect>
-              </td>
-            </tr>
-          </div>
 
           <CTabContent>
             <CTabPane>
               {!isThesisTab && <TopicTable thesis={isThesisTab} />}
             </CTabPane>
-            <CTabPane>
-              {isThesisTab && <TopicTable thesis={isThesisTab} />}
-            </CTabPane>
+            {studentDoneOutline && (
+              <CTabPane>
+                {isThesisTab && <TopicTable thesis={isThesisTab} />}
+              </CTabPane>
+            )}
           </CTabContent>
         </CTabs>
       </CCardBody>

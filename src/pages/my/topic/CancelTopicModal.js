@@ -6,16 +6,21 @@ import {
   CModalFooter,
   CModalHeader,
   CModalTitle,
-  CRow
+  CRow,
 } from "@coreui/react";
 import React from "react";
 import api from "src/service/api";
+import { context } from "src/service/contextService";
 
 const MainComponent = ({ view, disableView, confirm, topic }) => {
   const registerTopic = () => {
-    api.delete(`/topics/${topic.id}/students/cancel`).then((response) => {
-      confirm(response.data);
-    });
+    api
+      .delete(`/students/${context.user.id}/topic-cancel`, {
+        params: { topicId: topic.id },
+      })
+      .then((response) => {
+        confirm(response.data);
+      });
     disableView();
   };
 

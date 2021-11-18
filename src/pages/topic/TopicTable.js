@@ -91,6 +91,7 @@ const MainComponent = ({ thesis }) => {
             : fields
         }
         items={data}
+        tableProps={{ selectSemester: true }}
         DetailComponent={({ item }) => (
           <StudentRegisterTopicList
             item={item}
@@ -127,7 +128,7 @@ const MainComponent = ({ thesis }) => {
       <RegisterTopicModal
         view={registerTopicModal}
         disableView={() => setRegisterTopicModal(false)}
-        confirm={() => history.push("/my/topics/execute")}
+        confirm={() => history.push("/execute")}
         topic={topicRegister}
       />
     </>

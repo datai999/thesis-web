@@ -28,7 +28,9 @@ const MainComponent = ({ item, setTopicRegister, setRegisterTopicModal }) => {
       loginUserHasAny([PERMISSIONS.STUDENT]) &&
       item.semester.id === context.semester.id
     )
-      api.get(`/semesters/allow-student-register-cancel`).then(setCanRegister);
+      api
+        .get(`/students/${context.user.id}/allow-register-topic`)
+        .then(setCanRegister);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
