@@ -25,7 +25,6 @@ const MainComponent = ({
       <CDataTable
         size="sm"
         hover
-        striped
         sorter
         columnFilter
         tableFilter

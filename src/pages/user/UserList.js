@@ -77,6 +77,7 @@ const Component = () => {
       fields={userFields}
       items={data}
       tableProps={{
+        striped: true,
         clickableRows: true,
         onRowClick: (item) => history.push(`/users/${item.id}`),
       }}

@@ -17,7 +17,9 @@ import TopicTable from "./TopicTable";
 
 const MainComponent = () => {
   const history = useHistory();
-  const isThesisTab = window.location.pathname === "/topics/thesis";
+  const isThesisTab = window.location.pathname.match("/topics/thesis")
+    ? true
+    : false;
 
   const [semesters, setSemesters] = React.useState([]);
   const [querySemester, setQuerySemester] = React.useState(context.semester);
@@ -51,19 +53,30 @@ const MainComponent = () => {
         <CTabs
           activeTab={isThesisTab ? 1 : 0}
           onActiveTabChange={(index) =>
-            history.push(`/topics/${index === 1 ? "thesis" : "outline"}`)
+            history.push(
+              `/topics/${index === 1 ? "thesis" : "outline"}/${
+                context.semester.name
+              }`
+            )
           }
         >
-          <div class="d-flex justify-content-between">
-            <CNav variant="tabs">
-              <CNavItem>
-                <CNavLink>Đề cương</CNavLink>
-              </CNavItem>
-              <CNavItem>
-                <CNavLink>Luận văn</CNavLink>
-              </CNavItem>
-            </CNav>
-            <tr>
+          <CNav variant="tabs">
+            <CNavItem>
+              <CNavLink>Đề cương</CNavLink>
+            </CNavItem>
+            <CNavItem>
+              <CNavLink>Luận văn</CNavLink>
+            </CNavItem>
+          </CNav>
+
+          <div
+            style={{
+              position: "absolute",
+              marginLeft: 300,
+              zIndex: 1,
+            }}
+          >
+            <tr style={{ position: "absolute", top: 8, width: 300 }}>
               <td style={{ paddingRight: 10 }}>Học kỳ</td>
               <td>
                 <CSelect onChange={onChangeSemester}>

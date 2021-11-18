@@ -5,19 +5,23 @@ import { useHistory } from "react-router-dom";
 import TableWithDetail from "src/components/TableWithDetail";
 import api from "src/service/api";
 import context from "src/service/contextService";
+import {
+  loginUserHasAny,
+  loginUserIsStudent,
+  PERMISSIONS,
+} from "src/service/permissionService";
 import RegisterTopicModal from "./RegisterTopicModal";
 import StudentRegisterTopicList from "./StudentRegisterTopicList";
 
 const fields = [
   { key: "id", label: "Mã", _style: { width: "1%" } },
   { key: "names", label: "Tên đề tài" },
-  { key: "semester", label: "Học kỳ", _style: { width: "1%" } },
   {
     key: "educationMethodNames",
     label: "Phương thức",
     _style: { width: "12%" },
   },
-  { key: "majorNames", label: "Ngành" },
+  { key: "majorNames", label: "Chuyên ngành" },
   { key: "subjectDepartmentName", label: "Bộ môn" },
   { key: "guideTeachers", label: "Giáo viên hướng dẫn" },
   { key: "studentCount", label: "Số SV đăng ký", _style: { width: "1%" } },
@@ -42,18 +46,21 @@ const MainComponent = ({ thesis }) => {
   const getData = () => {
     setLoading(true);
     api
-      .post(`/topics-property/example`, {
-        topic: {
+      .post(
+        `/topics/example`,
+        {
           thesis,
           semester: {
             name: semesterName,
           },
           subjectDepartment: context.user.subjectDepartment?.id,
+          educationMethods: loginUserIsStudent()
+            ? [context.user.educationMethod?.id]
+            : null,
+          majors: loginUserIsStudent() ? [context.user.major?.id] : null,
         },
-        educationMethod: context.user.educationMethod?.id,
-        major: context.user.major?.id,
-        direction: "DESC",
-      })
+        { params: { direction: "DESC" } }
+      )
       .then((response) => {
         response.forEach((e) => {
           e.studentCount = `${
@@ -75,7 +82,14 @@ const MainComponent = ({ thesis }) => {
   return (
     <>
       <TableWithDetail
-        fields={fields}
+        fields={
+          loginUserHasAny([
+            PERMISSIONS.HEAD_SUBJECT_DEPARTMENT,
+            PERMISSIONS.TEACHER,
+          ])
+            ? fields.filter((e) => e.key !== "subjectDepartmentName")
+            : fields
+        }
         items={data}
         DetailComponent={({ item }) => (
           <StudentRegisterTopicList
