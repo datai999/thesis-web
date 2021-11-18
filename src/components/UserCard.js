@@ -22,7 +22,7 @@ const MainComponent = ({ user, remove }) => {
           <CTooltip content={`Xem chi tiết thông tin về ${user.lastName}`}>
             <CLink onClick={viewDetail}>
               <td>
-                {`${user.degreeName} mã số ${user.code}`}
+                {`${user.degreeName ?? "Sinh viên"} mã số ${user.code}`}
                 <br />
                 {`${user.firstName} ${user.lastName}`}
               </td>

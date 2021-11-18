@@ -25,6 +25,6 @@ const initContext = async () => {
   return true;
 };
 
-export { initContext };
+export { initContext, context };
 
 export default context;

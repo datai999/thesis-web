@@ -10,12 +10,17 @@ import {
 } from "@coreui/react";
 import React from "react";
 import api from "src/service/api";
+import context from "src/service/contextService";
 
 const MainComponent = ({ view, disableView, confirm, topic }) => {
   const registerTopic = () => {
-    api.post(`/topics/${topic.id}/students`).then((response) => {
-      confirm(response.data);
-    });
+    api
+      .post(`/students/${context.user.id}/topic-register`, null, {
+        params: { topicId: topic.id },
+      })
+      .then((response) => {
+        confirm(response.data);
+      });
     disableView();
   };
 

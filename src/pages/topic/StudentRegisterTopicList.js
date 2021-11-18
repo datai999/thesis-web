@@ -9,16 +9,28 @@ import {
 } from "@coreui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
+import api from "src/service/api";
+import context from "src/service/contextService";
 import { loginUserHasAny, PERMISSIONS } from "src/service/permissionService";
 
 const MainComponent = ({ item, setTopicRegister, setRegisterTopicModal }) => {
-  const canRegister = loginUserHasAny([PERMISSIONS.STUDENT]);
   const canViewScore = loginUserHasAny([
     PERMISSIONS.EDUCATION_STAFF,
     PERMISSIONS.TEACHER,
     PERMISSIONS.HEAD_SUBJECT_DEPARTMENT,
   ]);
   const history = useHistory();
+
+  const [canRegister, setCanRegister] = React.useState(false);
+
+  React.useEffect(() => {
+    if (
+      loginUserHasAny([PERMISSIONS.STUDENT]) &&
+      item.semester.id === context.semester.id
+    )
+      api.get(`/semesters/allow-student-register-cancel`).then(setCanRegister);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <CCardBody>

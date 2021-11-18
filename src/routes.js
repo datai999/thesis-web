@@ -62,6 +62,7 @@ const Widgets = React.lazy(() => import("./views/widgets/Widgets"));
 const Dashboard = React.lazy(() => import("./pages/dashboard/Dashboard"));
 const Topics = React.lazy(() => import("./pages/topic/Topics"));
 const TopicDetail = React.lazy(() => import("./pages/topic/TopicDetail"));
+const TopicExecutes = React.lazy(() => import("./pages/execute/TopicExecutes"));
 const My = React.lazy(() => import("./pages/my/My"));
 const CreateTopic = React.lazy(() => import("./pages/my/topic/CreateTopic"));
 const Mark = React.lazy(() => import("./pages/my/mark/Mark"));
@@ -110,6 +111,12 @@ let routes = [
     exact: false,
     name: "Thông tin đề tài",
     component: TopicDetail,
+  },
+  {
+    path: "/execute",
+    exact: false,
+    name: "Đề tài thực hiện",
+    component: TopicExecutes,
   },
   {
     path: "/my",

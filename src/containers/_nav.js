@@ -26,22 +26,19 @@ const _nav = [
     ],
   },
   {
+    _tag: "CSidebarNavItem",
+    name: "Đề tài thực hiện",
+    to: "/execute",
+    icon: "cil-home",
+    permissions: [PERMISSIONS.STUDENT],
+  },
+  {
     _tag: "CSidebarNavDropdown",
     name: "Đề tài có tôi",
     to: "/my/topics",
     icon: "cil-home",
-    permissions: [
-      PERMISSIONS.STUDENT,
-      PERMISSIONS.TEACHER,
-      PERMISSIONS.HEAD_SUBJECT_DEPARTMENT,
-    ],
+    permissions: [PERMISSIONS.TEACHER, PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
     _children: [
-      {
-        _tag: "CSidebarNavItem",
-        name: "Thực thi",
-        to: "/my/topics/execute",
-        permissions: [PERMISSIONS.STUDENT],
-      },
       {
         _tag: "CSidebarNavItem",
         name: "Hướng dẫn",

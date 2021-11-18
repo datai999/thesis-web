@@ -14,38 +14,24 @@ import {
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import context from "src/service/contextService";
-import {
-  loginUserIsTeacher,
-  permissionFilter,
-  PERMISSIONS,
-} from "src/service/permissionService";
+import { loginUserIsTeacher } from "src/service/permissionService";
 import MyCouncil from "./MyCouncil";
-import TopicExecute from "./TopicExecutes";
 import TopicGuides from "./TopicGuides";
 import TopicReviews from "./TopicReviews";
 
 const tabs = [
   {
-    url: "execute",
-    permissions: [PERMISSIONS.STUDENT],
-    tabName: "Thực thi",
-    component: TopicExecute,
-  },
-  {
     url: "guide",
-    permissions: [PERMISSIONS.TEACHER, PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
     tabName: "Hướng dẫn",
     component: TopicGuides,
   },
   {
     url: "review",
-    permissions: [PERMISSIONS.TEACHER, PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
     tabName: "Phản biện",
     component: TopicReviews,
   },
   {
     url: "council",
-    permissions: [PERMISSIONS.TEACHER, PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
     tabName: "Hội đồng",
     component: MyCouncil,
   },
@@ -54,16 +40,11 @@ const tabs = [
 const MainComponent = () => {
   const history = useHistory();
   const location = useLocation();
-  const permissionTabs = tabs.filter(permissionFilter);
-  const tab = permissionTabs
-    .map((e) => e.url)
-    .indexOf(location.pathname.split("/")[3]);
+  const tab = tabs.map((e) => e.url).indexOf(location.pathname.split("/")[3]);
   const tabIndex = tab < 0 ? 0 : tab;
 
   const pushTabIndex = (nextTab) => {
-    history.push(
-      `/my/topics/${permissionTabs[nextTab]?.url}/${context.semester.name}`
-    );
+    history.push(`/my/topics/${tabs[nextTab]?.url}/${context.semester.name}`);
   };
 
   if (tab < 0) pushTabIndex(0);
@@ -75,7 +56,7 @@ const MainComponent = () => {
           <CRow>
             <CCol>
               <CNav variant="tabs">
-                {permissionTabs.map((e) => (
+                {tabs.map((e) => (
                   <CNavItem key={e.url}>
                     <CNavLink>{e.tabName}</CNavLink>
                   </CNavItem>
@@ -95,7 +76,7 @@ const MainComponent = () => {
             )}
           </CRow>
           <CTabContent>
-            {permissionTabs.map((e, index) => (
+            {tabs.map((e, index) => (
               <CTabPane key={e.url}>
                 {index === tabIndex && <e.component />}
               </CTabPane>
