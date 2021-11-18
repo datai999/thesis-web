@@ -36,7 +36,7 @@ const MainComponent = ({ view, disableView, confirm, topic }) => {
         <CRow>
           <CCol md="2">Đào tạo:</CCol>
           <CCol>{multiLine(topic.educationMethodNames)}</CCol>
-          <CCol md="2">Ngành:</CCol>
+          <CCol md="2">Chuyên ngành:</CCol>
           <CCol>{multiLine(topic.majorNames)}</CCol>
         </CRow>
         <br></br>

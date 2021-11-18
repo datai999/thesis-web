@@ -5,19 +5,19 @@ import { useHistory } from "react-router-dom";
 import TopicLineDetail from "src/components/TopicLineDetail";
 import TopicTableWithDetail from "src/components/TopicTableWithDetail";
 import api from "src/service/api";
+import context from "src/service/contextService";
 import toastHolder from "src/service/toastService";
 
 const MainComponent = () => {
+  const semesterName = window.location.pathname.split("/").pop();
+
   const [data, setData] = useState([]);
 
   const getData = async () => {
-    const userId = await window.localStorage.getItem("userId");
     api
-      .get(`/topics/user`, {
+      .get(`/guide-teachers/${context.user.id}/topics`, {
         params: {
-          userId: userId,
-          topicRole: "GUIDE_TEACHER",
-          direction: "DESC",
+          semesterName,
         },
       })
       .then(setData);
@@ -25,9 +25,18 @@ const MainComponent = () => {
 
   useEffect(() => {
     getData();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [semesterName]);
 
-  return <TopicTableWithDetail items={data} DetailComponent={ExtendDetail} />;
+  return (
+    <>
+      <TopicTableWithDetail
+        items={data}
+        DetailComponent={ExtendDetail}
+        tableProps={{ selectSemester: true }}
+      />
+    </>
+  );
 };
 
 const ExtendDetail = ({ item, ...props }) => {

@@ -13,6 +13,7 @@ import {
 } from "@coreui/react";
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
+import context from "src/service/contextService";
 import {
   loginUserIsTeacher,
   permissionFilter,
@@ -56,11 +57,13 @@ const MainComponent = () => {
   const permissionTabs = tabs.filter(permissionFilter);
   const tab = permissionTabs
     .map((e) => e.url)
-    .indexOf(location.pathname.split("/").pop());
+    .indexOf(location.pathname.split("/")[3]);
   const tabIndex = tab < 0 ? 0 : tab;
 
   const pushTabIndex = (nextTab) => {
-    history.push(`/my/topics/${permissionTabs[nextTab]?.url}`);
+    history.push(
+      `/my/topics/${permissionTabs[nextTab]?.url}/${context.semester.name}`
+    );
   };
 
   if (tab < 0) pushTabIndex(0);

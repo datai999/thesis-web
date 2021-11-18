@@ -131,18 +131,36 @@ let routes = [
   },
   {
     path: "/my/topics/guide",
+    exact: true,
+    name: "Hướng dẫn",
+    component: My,
+  },
+  {
+    path: "/my/topics/guide/:id",
     exact: false,
     name: "Hướng dẫn",
     component: My,
   },
   {
     path: "/my/topics/review",
-    exact: false,
+    exact: true,
+    name: "Phản biện",
+    component: My,
+  },
+  {
+    path: "/my/topics/review/:id",
+    exact: true,
     name: "Phản biện",
     component: My,
   },
   {
     path: "/my/topics/council",
+    exact: true,
+    name: "Hội đồng",
+    component: My,
+  },
+  {
+    path: "/my/topics/council/:id",
     exact: false,
     name: "Hội đồng",
     component: My,
