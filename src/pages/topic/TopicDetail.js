@@ -15,13 +15,13 @@ import api from "src/service/api";
 import context from "src/service/contextService";
 import { loginUserHasAny, PERMISSIONS } from "src/service/permissionService";
 
-const TopicCreate = () => {
+const MainComponent = () => {
   const history = useHistory();
   const topicId = window.location.pathname.match(/topics\/(\d+)/, "")[1];
 
   const [topic, setTopic] = useState({ guideTeachers: [] });
-  const [registerTopicModal, setRegisterTopicModal] = useState(false);
   const [canRegister, setCanRegister] = useState(false);
+  const [registerTopicModal, setRegisterTopicModal] = useState(false);
 
   useEffect(() => {
     api.get(`/topics/detail/${topicId}`).then((res) => {
@@ -43,96 +43,130 @@ const TopicCreate = () => {
         <h5>{topic.name?.vi}</h5>
         <h5>{topic.name?.en}</h5>
       </CCardHeader>
-      <CCardBody className="mx-5">
-        <CRow>
-          <CCol md="3">
-            <div>
-              <strong>Mã số: </strong>
-              {topic.id}
-            </div>
-            <div>
-              <strong>Loại đề tài: </strong>
-              {topic.type}
-            </div>
-          </CCol>
+      <RegisterTopicModal
+        view={registerTopicModal}
+        disableView={() => setRegisterTopicModal(false)}
+        confirm={() => history.push("/execute")}
+        topic={topic}
+      />
+      <TopicDetailBody
+        topic={topic}
+        setRegisterTopicModal={setRegisterTopicModal}
+        canRegister={canRegister}
+      />
+    </CCard>
+  );
+};
+
+const TopicDetailBody = ({
+  topic = { guideTeachers: [], students: [] },
+  setRegisterTopicModal,
+  canRegister = false,
+}) => {
+  const sliceGuideTeacher = 12 / topic.guideTeachers?.length;
+  let mdGuideTeacher = sliceGuideTeacher > 4 ? 4 : sliceGuideTeacher;
+  mdGuideTeacher = mdGuideTeacher < 2 ? 2 : mdGuideTeacher;
+  const mdGuideTeacherToo = (mdGuideTeacher * 12) / (12 - mdGuideTeacher);
+
+  const sliceStudent = 12 / topic.students?.length;
+  const mdStudent = sliceStudent > 4 ? 4 : sliceStudent;
+
+  return (
+    <CCardBody>
+      <CRow>
+        <CCol md="3">
+          <div>
+            <strong>Mã số: </strong>
+            {topic.id}
+          </div>
+          <div>
+            <strong>Học kỳ: </strong>
+            {topic.semester?.name}
+          </div>
+          <div>
+            <strong>Loại đề tài: </strong>
+            {topic.type}
+          </div>
+        </CCol>
+        <CCol>
+          <div>
+            <strong>Đào tạo: </strong>
+            {topic.educationMethodNames?.join(", ")}
+          </div>
+          <div>
+            <strong>Chuyên ngành: </strong>
+            {topic.majorNames?.join(", ")}
+          </div>
+        </CCol>
+      </CRow>
+
+      <br />
+
+      <CRow>
+        <CCol md={mdGuideTeacher}>
+          <strong>Giáo viên hướng dẫn</strong>
+          {topic.guideTeachers && <UserCard user={topic.guideTeachers[0]} />}
+        </CCol>
+        {topic.guideTeachers.length > 1 && (
           <CCol>
-            <div>
-              <strong>Đào tạo: </strong>
-              {topic.educationMethodNames?.join(", ")}
-            </div>
-            <div>
-              <strong>Chuyên ngành: </strong>
-              {topic.majorNames?.join(", ")}
-            </div>
-          </CCol>
-        </CRow>
-
-        <br />
-
-        <CRow>
-          <CCol md="4">
-            <strong>Giáo viên hướng dẫn</strong>
-            {topic.guideTeachers && <UserCard user={topic.guideTeachers[0]} />}
-          </CCol>
-          {topic.guideTeachers.length > 1 && (
-            <CCol>
-              <strong>Giáo viên đồng hướng dẫn</strong>
+            <strong>Giáo viên đồng hướng dẫn</strong>
+            <CRow>
               {topic.guideTeachers?.slice(1, 3).map((guideTeacher) => (
-                <UserCard key={guideTeacher.id} user={guideTeacher} />
+                <CCol md={mdGuideTeacherToo}>
+                  <UserCard key={guideTeacher.id} user={guideTeacher} />
+                </CCol>
               ))}
-            </CCol>
-          )}
-        </CRow>
+            </CRow>
+          </CCol>
+        )}
+      </CRow>
 
-        <RegisterTopicModal
-          view={registerTopicModal}
-          disableView={() => setRegisterTopicModal(false)}
-          confirm={() => history.push("/execute")}
-          topic={topic}
-        />
-
-        <strong>Sinh viên thực hiện</strong>
-        <CRow>
-          {topic.students?.map((student) => (
-            <CCol>
-              <UserCard key={student.id} user={student} />
-            </CCol>
-          ))}
-          {_.range(topic.students?.length, topic.maxStudentTake).map((e) => (
-            <CCol key={e} className="border mx-3 py-3">
+      <strong>Sinh viên thực hiện</strong>
+      <CRow>
+        {topic.students?.map((student) => (
+          <CCol md={mdStudent}>
+            <UserCard key={student.id} user={student} />
+          </CCol>
+        ))}
+        {_.range(topic.students?.length, topic.maxStudentTake).map((e) => (
+          <CCol key={e} md={mdStudent} className="border mx-3 py-3">
+            {canRegister ? (
               <CButton
                 type="button"
                 color="info"
-                disabled={!canRegister}
                 onClick={() => {
                   setRegisterTopicModal(true);
                 }}
               >
                 Đăng ký
               </CButton>
-            </CCol>
-          ))}
-        </CRow>
+            ) : (
+              <div>SV</div>
+            )}
+          </CCol>
+        ))}
+      </CRow>
 
-        <br />
+      <br />
 
-        <div className="my-2">
-          <strong>Mô tả</strong>
-          <div className="border p-2">{topic.description}</div>
-        </div>
+      <div className="my-2">
+        <strong>Mô tả</strong>
+        <div className="border p-2">{topic.description}</div>
+      </div>
 
-        <div className="my-2">
-          <strong>Nhiệm vụ</strong>
-          <div className="border p-2">{topic.task}</div>
-        </div>
+      <div className="my-2">
+        <strong>Nhiệm vụ</strong>
+        <div className="border p-2">{topic.task}</div>
+      </div>
 
-        <div className="my-2">
-          <strong>Tài liệu</strong>
-          <div className="border p-2">{topic.documentReference}</div>
-        </div>
-      </CCardBody>
-    </CCard>
+      <div className="my-2">
+        <strong>Tài liệu</strong>
+        <div className="border p-2">{topic.documentReference}</div>
+      </div>
+    </CCardBody>
   );
 };
 
-export default TopicCreate;
+export { TopicDetailBody };
+
+export default MainComponent;

@@ -89,6 +89,11 @@ const _nav = [
     name: "Hội đồng",
     to: "/councils",
     icon: "cil-people",
+    permissions: [
+      PERMISSIONS.EDUCATION_STAFF,
+      PERMISSIONS.TEACHER,
+      PERMISSIONS.EDUCATION_STAFF,
+    ],
   },
   {
     _tag: "CSidebarNavItem",

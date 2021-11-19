@@ -18,29 +18,31 @@ const MainComponent = ({ user, remove }) => {
       iconPadding={false}
       className="mb-0"
       header={
-        <tr class="d-flex justify-content-between">
-          <CTooltip content={`Xem chi tiết thông tin về ${user.lastName}`}>
-            <CLink onClick={viewDetail}>
-              <td>
-                {`${user.degreeName ?? "Sinh viên"} mã số ${user.code}`}
-                <br />
-                {`${user.firstName} ${user.lastName}`}
-              </td>
-            </CLink>
-          </CTooltip>
-          {remove && (
-            <CTooltip content={"Xóa"}>
-              <CLink
-                style={{ right: 5, position: "absolute" }}
-                onClick={remove}
-              >
-                <CIcon name="cil-x-circle" />
+        <div>
+          <tr class="d-flex justify-content-between">
+            <CTooltip content={`Xem chi tiết thông tin về ${user.lastName}`}>
+              <CLink onClick={viewDetail}>
+                <td>
+                  {`${user.degreeName ?? "Sinh viên"} mã số ${user.code}`}
+                  <br />
+                  {`${user.firstName} ${user.lastName}`}
+                </td>
               </CLink>
             </CTooltip>
-          )}
-        </tr>
+            {remove && (
+              <CTooltip content={"Xóa"}>
+                <CLink
+                  style={{ right: 5, position: "absolute" }}
+                  onClick={remove}
+                >
+                  <CIcon name="cil-x-circle" />
+                </CLink>
+              </CTooltip>
+            )}
+          </tr>
+          <small>{user.email}</small>
+        </div>
       }
-      text={<small>{user.email}</small>}
     >
       <CIcon width={24} name="cil-user" />
     </CWidgetIcon>
