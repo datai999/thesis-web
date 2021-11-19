@@ -1,12 +1,4 @@
-import CIcon from "@coreui/icons-react";
-import {
-  CButton,
-  CCard,
-  CCardBody,
-  CDataTable,
-  CPagination,
-  CTooltip,
-} from "@coreui/react";
+import { CCard, CCardBody, CDataTable, CPagination } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { loginUserHasAny, PERMISSIONS } from "src/service/permissionService";
@@ -14,20 +6,8 @@ import api from "../../service/api";
 
 const fields = [
   { key: "id", label: "Mã", _style: { width: 1 } },
-  // {
-  //   key: "displayOrder",
-  //   label: "Thứ tự hiển thị",
-  //   _style: { minWidth: 30 },
-  // },
   { key: "name", label: "Tên mẫu" },
   { key: "description", label: "Mô tả" },
-  {
-    key: "actions",
-    label: "",
-    _style: { width: 1 },
-    sorter: false,
-    filter: false,
-  },
 ];
 const MainComponent = () => {
   const history = useHistory();
@@ -62,23 +42,8 @@ const MainComponent = () => {
           columnFilter
           tableFilter
           itemsPerPageSelect
-          scopedSlots={{
-            actions: (item) => (
-              <td>
-                <CTooltip content={"Chỉnh sửa"}>
-                  <CButton
-                    color="primary"
-                    variant="outline"
-                    onClick={() => {
-                      history.push(`/templates/${item.id}`, item);
-                    }}
-                  >
-                    <CIcon name="cil-pencil" />
-                  </CButton>
-                </CTooltip>
-              </td>
-            ),
-          }}
+          clickableRows
+          onRowClick={(item) => history.push(`/templates/${item.id}`, item)}
         />
         <CPagination
           size="sm"

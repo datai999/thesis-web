@@ -9,6 +9,7 @@ import {
   CFormGroup,
   CInput,
   CRow,
+  CSwitch,
   CTextarea,
   CTooltip,
 } from "@coreui/react";
@@ -71,7 +72,7 @@ const MainComponent = () => {
 
   return (
     <CCard>
-      <CCardHeader>
+      <CCardHeader className="mx-3">
         <CForm>
           <CRow>
             <CCol className="mt-2 mb-2">
@@ -79,7 +80,7 @@ const MainComponent = () => {
                 <center>
                   <strong>
                     {templateIdPath
-                      ? `Mẫu tiêu chí số ${data.id}`
+                      ? `Mã số ${data.id} : ${data.name}`
                       : "Tạo mẫu tiêu chí"}
                   </strong>
                 </center>
@@ -120,20 +121,35 @@ const MainComponent = () => {
               )}
             </CCol>
           </CRow>
-          <fieldset disabled={!edit}>
+          {edit && (
             <CFormGroup row>
-              <CCol md="1">Tên mẫu tiêu chí</CCol>
-              <CCol>
-                <CInput {...setGetForm("name")} />
-              </CCol>
+              <strong>Tên mẫu tiêu chí</strong>
+              <CInput {...setGetForm("name")} />
             </CFormGroup>
+          )}
+
+          <CFormGroup row>
+            <strong>Sử dụng thang điểm số</strong>
+            <CSwitch
+              color="primary"
+              labelOn={"\u2713"}
+              labelOff={"\u2715"}
+              className="ml-3"
+              defaultChecked={data.numberMark}
+              disabled={!edit}
+              onChange={(e) =>
+                setValueForm("numberMark", e.currentTarget.checked)
+              }
+            />
+          </CFormGroup>
+          {edit ? (
             <CFormGroup row>
-              <CCol md="1">Mô tả</CCol>
-              <CCol>
-                <CTextarea rows="3" {...setGetForm("description")} />
-              </CCol>
+              <strong>Mô tả</strong>
+              <CTextarea rows="3" {...setGetForm("description")} />
             </CFormGroup>
-          </fieldset>
+          ) : (
+            <div>{data.description}</div>
+          )}
         </CForm>
       </CCardHeader>
       <CCardBody className="pl-0 mr-3">

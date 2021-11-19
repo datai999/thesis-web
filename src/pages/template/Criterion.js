@@ -1,11 +1,10 @@
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 import CIcon from "@coreui/icons-react";
 import {
   CButton,
+  CButtonGroup,
   CCol,
-  CDropdown,
-  CDropdownItem,
-  CDropdownMenu,
-  CDropdownToggle,
   CForm,
   CFormGroup,
   CInput,
@@ -70,53 +69,86 @@ const MainComponent = ({
       <CFormGroup row className="pl-0 ml-0 mb-0">
         <CCol className="pl-0 pr-1">
           {edit && deep > 0 ? (
-            <CTextarea
-              rows={parseInt(criterion.description?.length / 130) + 1}
-              value={criterion.description}
-              onChange={(e) =>
-                updateCriterion({ ...criterion, description: e.target.value })
+            // <CTextarea
+            //   rows={parseInt(criterion.description?.length / 130) + 1}
+            //   value={criterion.description}
+            //   onChange={(e) =>
+            //     updateCriterion({ ...criterion, description: e.target.value })
+            //   }
+            // />
+            <CKEditor
+              editor={ClassicEditor}
+              data={criterion.description}
+              onChange={(event, editor) =>
+                updateCriterion({ ...criterion, description: editor.getData() })
               }
             />
-          ) : (
-            <>{deep > 0 ? criterion.description : null}</>
-          )}
+          ) : deep > 0 ? (
+            <div
+              dangerouslySetInnerHTML={{ __html: criterion.description }}
+            ></div>
+          ) : null}
         </CCol>
-        {edit && (
+        {edit && deep < 1 && (
+          <CTooltip content={"Thêm mục con"}>
+            <CButton
+              size="sm"
+              color="primary"
+              variant="outline"
+              onClick={addCriterion}
+            >
+              <CIcon name="cil-file" />
+            </CButton>
+          </CTooltip>
+        )}
+        {edit && deep > 0 && (
           <CCol md="0">
-            <CDropdown>
+            <CButtonGroup size="sm">
               <CTooltip content={"Giữ và kéo để thay đổi thứ tự"}>
-                <CDropdownToggle
-                  size="sm"
+                <CButton color="primary" variant="outline">
+                  <CIcon name="cil-cursor-move" />
+                </CButton>
+              </CTooltip>
+              <CTooltip content={"Thêm mục con"}>
+                <CButton
                   color="primary"
                   variant="outline"
-                  split
+                  onClick={addCriterion}
                 >
-                  <CIcon name="cil-cursor-move" />
-                </CDropdownToggle>
+                  <CIcon name="cil-file" />
+                </CButton>
               </CTooltip>
-              <CDropdownMenu>
-                <CDropdownItem onClick={addCriterion}>
-                  Thêm tiêu chí con
-                </CDropdownItem>
-                {deep > 0 && (
-                  <>
-                    <CDropdownItem
-                      onClick={() => {
-                        updateCriterion({
-                          ...criterion,
-                          mark: !criterion.mark,
-                        });
-                      }}
-                    >
-                      {criterion.mark ? "Hủy chấm điểm" : "Chấm điểm tiêu chí"}
-                    </CDropdownItem>
-                    <CDropdownItem onClick={removeCriterion}>
-                      Xóa tiêu chí
-                    </CDropdownItem>
-                  </>
-                )}
-              </CDropdownMenu>
-            </CDropdown>
+            </CButtonGroup>
+            <br />
+            <CButtonGroup size="sm">
+              <CTooltip
+                content={
+                  criterion.mark ? "Hủy chấm điểm" : "Chấm điểm tiêu chí"
+                }
+              >
+                <CButton
+                  color="primary"
+                  variant="outline"
+                  onClick={() => {
+                    updateCriterion({
+                      ...criterion,
+                      mark: !criterion.mark,
+                    });
+                  }}
+                >
+                  <CIcon name="cil-calculator" />
+                </CButton>
+              </CTooltip>
+              <CTooltip content={"Xóa mục này"}>
+                <CButton
+                  color="primary"
+                  variant="outline"
+                  onClick={removeCriterion}
+                >
+                  <CIcon name="cil-trash" />
+                </CButton>
+              </CTooltip>
+            </CButtonGroup>
           </CCol>
         )}
       </CFormGroup>
@@ -152,10 +184,7 @@ const MainComponent = ({
             <CTextarea
               size="sm"
               rows={1}
-              placeholder={`Bình luận cho: ${criterion.description?.slice(
-                0,
-                150
-              )}`}
+              placeholder={`Bình luận...`}
               value={score?.comment}
               disabled={props.disableMark}
               onChange={(e) =>
