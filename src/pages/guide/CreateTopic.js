@@ -1,3 +1,5 @@
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 import CIcon from "@coreui/icons-react";
 import {
   CButton,
@@ -13,7 +15,6 @@ import {
   CInputRadio,
   CLabel,
   CSelect,
-  CTextarea,
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
@@ -47,6 +48,13 @@ const TopicCreate = ({ location }) => {
     return {
       value: _.get(form, getPath),
       onChange: (e) => setValueForm(getPath ?? setPath, e.target.value),
+    };
+  };
+
+  const editorProps = (path) => {
+    return {
+      data: _.get(form, path),
+      onChange: (event, editor) => setValueForm(path, editor.getData()),
     };
   };
 
@@ -297,32 +305,38 @@ const TopicCreate = ({ location }) => {
 
           <CFormGroup>
             <CLabel htmlFor="description">Mô tả</CLabel>
-            <CTextarea
+            <CKEditor editor={ClassicEditor} {...editorProps("description")} />
+            {/* <CTextarea
               id="description"
               rows="9"
               placeholder="Content..."
               {...setGetForm("description")}
-            />
+            /> */}
           </CFormGroup>
 
           <CFormGroup>
             <CLabel htmlFor="task">Nhiệm vụ</CLabel>
-            <CTextarea
+            <CKEditor editor={ClassicEditor} {...editorProps("task")} />
+            {/* <CTextarea
               id="task"
               rows="9"
               placeholder="Content..."
               {...setGetForm("task")}
-            />
+            /> */}
           </CFormGroup>
 
           <CFormGroup>
             <CLabel htmlFor="documentReference">Tài liệu tham khảo</CLabel>
-            <CTextarea
+            <CKEditor
+              editor={ClassicEditor}
+              {...editorProps("documentReference")}
+            />
+            {/* <CTextarea
               id="documentReference"
               rows="5"
               placeholder="Content..."
               {...setGetForm("documentReference")}
-            />
+            /> */}
           </CFormGroup>
         </CForm>
       </CCardBody>
