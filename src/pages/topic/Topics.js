@@ -13,7 +13,7 @@ import { useHistory } from "react-router-dom";
 import api from "src/service/api";
 import context from "src/service/contextService";
 import { loginUserIsStudent } from "src/service/permissionService";
-import TopicTable from "./TopicTable";
+import TopicList from "./TopicList";
 
 const MainComponent = () => {
   const history = useHistory();
@@ -22,6 +22,12 @@ const MainComponent = () => {
     : false;
 
   const [studentDoneOutline, setStudentDoneOutline] = React.useState(true);
+
+  const pushTabIndex = (index) => {
+    history.push(
+      `/topics/${index === 1 ? "thesis" : "outline"}/${context.semester.name}`
+    );
+  };
 
   React.useEffect(() => {
     if (loginUserIsStudent())
@@ -34,16 +40,7 @@ const MainComponent = () => {
   return (
     <CCard>
       <CCardBody>
-        <CTabs
-          activeTab={isThesisTab ? 1 : 0}
-          onActiveTabChange={(index) =>
-            history.push(
-              `/topics/${index === 1 ? "thesis" : "outline"}/${
-                context.semester.name
-              }`
-            )
-          }
-        >
+        <CTabs activeTab={isThesisTab ? 1 : 0} onActiveTabChange={pushTabIndex}>
           <CNav variant="tabs">
             <CNavItem>
               <CNavLink>Đề cương</CNavLink>
@@ -57,11 +54,11 @@ const MainComponent = () => {
 
           <CTabContent>
             <CTabPane>
-              {!isThesisTab && <TopicTable thesis={isThesisTab} />}
+              {!isThesisTab && <TopicList thesis={isThesisTab} />}
             </CTabPane>
             {studentDoneOutline && (
               <CTabPane>
-                {isThesisTab && <TopicTable thesis={isThesisTab} />}
+                {isThesisTab && <TopicList thesis={isThesisTab} />}
               </CTabPane>
             )}
           </CTabContent>

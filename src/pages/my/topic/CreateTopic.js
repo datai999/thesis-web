@@ -31,6 +31,7 @@ const TopicCreate = ({ location }) => {
     majors: [],
     minStudentTake: 1,
     maxStudentTake: 3,
+    documentReference: "Liên hệ GVHD",
   });
   const [thesis, setThesis] = useState(false);
   const [guideTeachers, setGuideTeachers] = useState([]);

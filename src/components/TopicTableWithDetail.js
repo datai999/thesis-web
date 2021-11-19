@@ -5,11 +5,10 @@ import TopicLineDetail from "./TopicLineDetail";
 const fields = [
   { key: "id", label: "Mã", _style: { width: 1 } },
   { key: "names", label: "Tên đề tài" },
-  { key: "semester", label: "Học kỳ", _style: { width: 1 } },
-  { key: "type", label: "Loại", _style: { width: 1 } },
+  { key: "type", label: "Loại", _style: { width: 100 } },
   {
     key: "educationMethodNames",
-    label: "Phương thức",
+    label: "Đào tạo",
     _style: { width: "12%" },
   },
   { key: "majorNames", label: "Ngành", _style: { width: "12%" } },
