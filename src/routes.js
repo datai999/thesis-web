@@ -317,20 +317,15 @@ let routes = [
     component: TemplateDetail,
   },
   {
-    path: "/settings",
-    exact: true,
-    name: "Cài đặt",
-  },
-  {
-    path: "/settings/common",
+    path: "/setting-common",
     exact: false,
-    name: "Chung",
+    name: "Cài đặt cấu trúc hệ thống",
     component: ShareSetting,
   },
   {
-    path: "/settings/council",
+    path: "/setting-council",
     exact: false,
-    name: "Thành viên hội đồng",
+    name: "Cài đặt thành viên hội đồng",
     component: CouncilSetting,
   },
 

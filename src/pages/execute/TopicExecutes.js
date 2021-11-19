@@ -21,6 +21,7 @@ const TopicExecutes = () => {
   const [details, setDetails] = useState([0, 1]);
   const [cancelTopicModal, setCancelTopicModal] = useState(false);
   const [topicCancel, setTopicCancel] = useState();
+  const [canCancel, setCanCancel] = useState(false);
 
   const toggleDetails = (index) => {
     const position = details.indexOf(index);
@@ -43,16 +44,9 @@ const TopicExecutes = () => {
 
   useEffect(() => {
     api.get(`/students/${context.user.id}/topics`).then((res) => {
-      res.forEach((e) => {
-        e.canCancel = false;
-        if (e.semester.id === context.semester.id) {
-          api
-            .get(`/semesters/allow-student-register-cancel`)
-            .then((canCancel) => (e.canCancel = canCancel));
-        }
-      });
       setData(res);
     });
+    api.get(`/semesters/allow-student-register-cancel`).then(setCanCancel);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -99,19 +93,21 @@ const TopicExecutes = () => {
                 </CTooltip>
               )}
 
-              <CTooltip content={"Bảng điểm"}>
-                <CButton
-                  color="primary"
-                  variant="outline"
-                  onClick={() => {
-                    history.push(`/score/topic/${topic.id}`);
-                  }}
-                >
-                  <CIcon name="cil-calculator" />
-                </CButton>
-              </CTooltip>
+              {!canCancel && (
+                <CTooltip content={"Bảng điểm"}>
+                  <CButton
+                    color="primary"
+                    variant="outline"
+                    onClick={() => {
+                      history.push(`/score/topic/${topic.id}`);
+                    }}
+                  >
+                    <CIcon name="cil-calculator" />
+                  </CButton>
+                </CTooltip>
+              )}
 
-              {topic.canCancel && (
+              {topic.semester.id === context.semester.id && canCancel && (
                 <CTooltip content={"Hủy đăng ký đề tài"}>
                   <CButton
                     color="primary"

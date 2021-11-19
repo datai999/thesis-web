@@ -12,6 +12,12 @@ const _nav = [
     name: "Danh sách đề tài",
     to: "/topics",
     icon: "cil-notes",
+    permissions: [
+      PERMISSIONS.EDUCATION_STAFF,
+      PERMISSIONS.HEAD_SUBJECT_DEPARTMENT,
+      PERMISSIONS.TEACHER,
+      PERMISSIONS.STUDENT,
+    ],
     _children: [
       {
         _tag: "CSidebarNavItem",
@@ -67,8 +73,7 @@ const _nav = [
     icon: "cil-people",
     permissions: [
       PERMISSIONS.EDUCATION_STAFF,
-      PERMISSIONS.TEACHER,
-      PERMISSIONS.EDUCATION_STAFF,
+      PERMISSIONS.HEAD_SUBJECT_DEPARTMENT,
     ],
   },
   {
@@ -92,23 +97,18 @@ const _nav = [
     permissions: [PERMISSIONS.EDUCATION_STAFF],
   },
   {
-    _tag: "CSidebarNavDropdown",
-    name: "Cài đặt",
-    to: "/settings",
+    _tag: "CSidebarNavItem",
+    name: "Cài đặt thành viên hội đồng",
+    to: "/setting-council",
+    icon: "cil-people",
+    permissions: [PERMISSIONS.ADMIN],
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Cài đặt cấu trúc",
+    to: "/setting-common",
     icon: "cil-settings",
     permissions: [PERMISSIONS.ADMIN],
-    _children: [
-      {
-        _tag: "CSidebarNavItem",
-        name: "Cài đặt chung",
-        to: "/settings/common",
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Thành viên hội đồng",
-        to: "/settings/council",
-      },
-    ],
   },
 
   // -----------------------------------------------------------------------------------------------------------------------------------------
