@@ -39,7 +39,7 @@ const MainComponent = () => {
 
   return (
     <CCard className="mx-5">
-      <CCardHeader className="mx-5">
+      <CCardHeader className="mx-3">
         <h5>{topic.name?.vi}</h5>
         <h5>{topic.name?.en}</h5>
       </CCardHeader>
@@ -63,12 +63,14 @@ const TopicDetailBody = ({
   setRegisterTopicModal,
   canRegister = false,
 }) => {
-  const sliceGuideTeacher = 12 / topic.guideTeachers?.length;
+  const sliceGuideTeacher =
+    12 / (topic.guideTeachers?.length < 1 ? 1 : topic.guideTeachers?.length);
   let mdGuideTeacher = sliceGuideTeacher > 4 ? 4 : sliceGuideTeacher;
   mdGuideTeacher = mdGuideTeacher < 2 ? 2 : mdGuideTeacher;
   const mdGuideTeacherToo = (mdGuideTeacher * 12) / (12 - mdGuideTeacher);
 
-  const sliceStudent = 12 / topic.students?.length;
+  const sliceStudent =
+    12 / (topic.students?.length < 1 ? 1 : topic.students?.length);
   const mdStudent = sliceStudent > 4 ? 4 : sliceStudent;
 
   return (
@@ -129,20 +131,22 @@ const TopicDetailBody = ({
           </CCol>
         ))}
         {_.range(topic.students?.length, topic.maxStudentTake).map((e) => (
-          <CCol key={e} md={mdStudent} className="border mx-3 py-3">
-            {canRegister ? (
-              <CButton
-                type="button"
-                color="info"
-                onClick={() => {
-                  setRegisterTopicModal(true);
-                }}
-              >
-                Đăng ký
-              </CButton>
-            ) : (
-              <div>SV</div>
-            )}
+          <CCol key={e} md={mdStudent} className="px-3">
+            <div className="border p-3">
+              {canRegister ? (
+                <CButton
+                  type="button"
+                  color="info"
+                  onClick={() => {
+                    setRegisterTopicModal(true);
+                  }}
+                >
+                  Đăng ký
+                </CButton>
+              ) : (
+                <div>SV</div>
+              )}
+            </div>
           </CCol>
         ))}
       </CRow>

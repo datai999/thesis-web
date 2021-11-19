@@ -22,13 +22,6 @@ const fields = [
   { key: "subjectDepartmentName", label: "Bộ môn" },
   { key: "guideTeachers", label: "Giáo viên hướng dẫn" },
   { key: "studentCount", label: "Số SV đăng ký", _style: { width: 100 } },
-  {
-    key: "actions",
-    label: "",
-    _style: { width: "1%" },
-    sorter: false,
-    filter: false,
-  },
 ];
 
 const MainComponent = ({ thesis }) => {

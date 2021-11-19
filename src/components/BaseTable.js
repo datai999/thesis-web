@@ -59,6 +59,7 @@ const MainComponent = ({
             position: "absolute",
             marginLeft: 300,
             zIndex: 1,
+            paddingTop: props.semesterTop ?? 0,
           }}
         >
           <tr style={{ position: "absolute", width: 300 }}>

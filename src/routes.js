@@ -62,18 +62,16 @@ const Widgets = React.lazy(() => import("./views/widgets/Widgets"));
 const Dashboard = React.lazy(() => import("./pages/dashboard/Dashboard"));
 const Topics = React.lazy(() => import("./pages/topic/Topics"));
 const TopicDetail = React.lazy(() => import("./pages/topic/TopicDetail"));
-const TopicExecutes = React.lazy(() => import("./pages/execute/TopicExecutes"));
-const My = React.lazy(() => import("./pages/my/My"));
-const CreateTopic = React.lazy(() => import("./pages/my/topic/CreateTopic"));
-const Mark = React.lazy(() => import("./pages/my/mark/Mark"));
 
-const Teachers = React.lazy(() => import("./views/pages/teacher/Teachers"));
-const TeacherCreate = React.lazy(() =>
-  import("./views/pages/teacher/TeacherCreate")
+const TopicExecutes = React.lazy(() => import("./pages/execute/TopicExecutes"));
+const GuideList = React.lazy(() => import("./pages/guide/GuideList"));
+const GuideTopicDetail = React.lazy(() =>
+  import("./pages/guide/GuideTopicDetail")
 );
 
-const Students = React.lazy(() => import("./views/pages/student/Students"));
-
+const My = React.lazy(() => import("./pages/my/My"));
+const CreateTopic = React.lazy(() => import("./pages/guide/CreateTopic"));
+const Mark = React.lazy(() => import("./pages/my/mark/Mark"));
 const AssignReview = React.lazy(() =>
   import("./pages/assign/review/AssignReview")
 );
@@ -112,12 +110,44 @@ let routes = [
     name: "Thông tin đề tài",
     component: TopicDetail,
   },
+
   {
     path: "/execute",
     exact: false,
     name: "Đề tài thực hiện",
     component: TopicExecutes,
   },
+  {
+    path: "/guide",
+    exact: true,
+    name: "Đề tài hướng dẫn",
+    component: GuideList,
+  },
+  {
+    path: "/guide/:id",
+    exact: true,
+    name: "Học kỳ",
+    component: GuideList,
+  },
+  {
+    path: "/guide/:id/create",
+    exact: false,
+    name: "Tạo đề tài",
+    component: CreateTopic,
+  },
+  {
+    path: "/guide/:id/:id",
+    exact: true,
+    name: "Thông tin đề tài",
+    component: GuideTopicDetail,
+  },
+  {
+    path: "/guide/:id/:id/edit",
+    exact: false,
+    name: "Chỉnh sửa đề tài",
+    component: CreateTopic,
+  },
+
   {
     path: "/my",
     exact: true,
@@ -172,22 +202,11 @@ let routes = [
     name: "Hội đồng",
     component: My,
   },
-  {
-    path: "/my/topics/create",
-    exact: false,
-    name: "Tạo đề tài",
-    component: CreateTopic,
-  },
-  { path: "/my/topics/edit", name: "Chỉnh sửa đề tài", component: CreateTopic },
+
   {
     path: "/my/topics/:id/mark",
     name: "Chấm điểm",
     component: Mark,
-  },
-  {
-    path: "/teachers/create",
-    name: "Thêm giáo viên",
-    component: TeacherCreate,
   },
   {
     path: "/assign-review",

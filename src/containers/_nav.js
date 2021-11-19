@@ -9,7 +9,7 @@ const _nav = [
   },
   {
     _tag: "CSidebarNavDropdown",
-    name: "Đề tài",
+    name: "Danh sách đề tài",
     to: "/topics",
     icon: "cil-notes",
     _children: [
@@ -33,50 +33,26 @@ const _nav = [
     permissions: [PERMISSIONS.STUDENT],
   },
   {
-    _tag: "CSidebarNavDropdown",
-    name: "Đề tài có tôi",
-    to: "/my/topics",
-    icon: "cil-home",
-    permissions: [PERMISSIONS.TEACHER, PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
-    _children: [
-      {
-        _tag: "CSidebarNavItem",
-        name: "Hướng dẫn",
-        to: "/my/topics/guide",
-        permissions: [PERMISSIONS.TEACHER, PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Phản biện",
-        to: "/my/topics/review",
-        permissions: [PERMISSIONS.TEACHER, PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Hội đồng",
-        to: "/my/topics/council",
-        permissions: [PERMISSIONS.TEACHER, PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
-      },
-    ],
+    _tag: "CSidebarNavItem",
+    name: "Đề tài hướng dẫn",
+    to: "/guide",
+    icon: "cil-file",
+    permissions: [PERMISSIONS.HEAD_SUBJECT_DEPARTMENT, PERMISSIONS.TEACHER],
   },
-  // {
-  //   _tag: "CSidebarNavDropdown",
-  //   name: "Giáo viên",
-  //   to: "/teachers",
-  //   icon: "cil-user",
-  //   _children: [
-  //     {
-  //       _tag: "CSidebarNavItem",
-  //       name: "Giáo viên",
-  //       to: "/teachers",
-  //     },
-  //     {
-  //       _tag: "CSidebarNavItem",
-  //       name: "Thêm giáo viên",
-  //       to: "/teachers/create",
-  //     },
-  //   ],
-  // },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Đề tài phản biện",
+    to: "/execute",
+    icon: "cil-file",
+    permissions: [PERMISSIONS.HEAD_SUBJECT_DEPARTMENT, PERMISSIONS.TEACHER],
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Hội đồng",
+    to: "/execute",
+    icon: "cil-file",
+    permissions: [PERMISSIONS.HEAD_SUBJECT_DEPARTMENT, PERMISSIONS.TEACHER],
+  },
   {
     _tag: "CSidebarNavItem",
     name: "Phân công phản biện",
@@ -86,7 +62,7 @@ const _nav = [
   },
   {
     _tag: "CSidebarNavItem",
-    name: "Hội đồng",
+    name: "Phân công hội đồng",
     to: "/councils",
     icon: "cil-people",
     permissions: [
@@ -113,14 +89,14 @@ const _nav = [
     name: "Mẫu tiêu chí",
     to: "/templates",
     icon: "cil-file",
-    permissions: [PERMISSIONS.TEACHER, PERMISSIONS.EDUCATION_STAFF],
+    permissions: [PERMISSIONS.EDUCATION_STAFF],
   },
   {
     _tag: "CSidebarNavDropdown",
     name: "Cài đặt",
     to: "/settings",
     icon: "cil-settings",
-    permissions: [PERMISSIONS.EDUCATION_STAFF],
+    permissions: [PERMISSIONS.ADMIN],
     _children: [
       {
         _tag: "CSidebarNavItem",

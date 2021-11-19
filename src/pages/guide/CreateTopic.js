@@ -22,6 +22,7 @@ import UserCard from "src/components/UserCard";
 import TeacherSearchModal from "src/pages/teacher/TeacherSearchModal";
 import api from "src/service/api";
 import contextHolder from "src/service/contextService";
+import toastHolder from "src/service/toastService";
 
 const TopicCreate = ({ location }) => {
   const history = useHistory();
@@ -31,7 +32,6 @@ const TopicCreate = ({ location }) => {
     majors: [],
     minStudentTake: 1,
     maxStudentTake: 3,
-    documentReference: "Liên hệ GVHD",
   });
   const [thesis, setThesis] = useState(false);
   const [guideTeachers, setGuideTeachers] = useState([]);
@@ -72,13 +72,17 @@ const TopicCreate = ({ location }) => {
     form.semester = contextHolder.semester;
     form.guideTeachers = guideTeachers;
     if (form.id) {
-      api
-        .patch("/topics", form)
-        .then((response) => response && history.push(`/my/topics/guide`));
+      api.patch("/topics", form).then((response) => {
+        response &&
+          history.push(`/guide/${contextHolder.semester.name}/${response.id}`);
+        toastHolder.success("Cập nhật thông tin đề tài thành công");
+      });
     } else {
-      api
-        .post("/topics", form)
-        .then((response) => response && history.push(`/my/topics/guide`));
+      api.post("/topics", form).then((response) => {
+        response &&
+          history.push(`/guide/${contextHolder.semester.name}/${response.id}`);
+        toastHolder.success("Tạo đề tài thành công");
+      });
     }
   };
 

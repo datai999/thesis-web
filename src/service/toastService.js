@@ -31,6 +31,6 @@ const toastHolder = {
   error: toastError,
 };
 
-export { toastError };
+export { toastError, toastHolder };
 
 export default toastHolder;
