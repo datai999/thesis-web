@@ -208,7 +208,7 @@ const TopicCreate = ({ location }) => {
               </CFormGroup>
               <CFormGroup row>
                 <CCol xs="12" md="5">
-                  <CLabel>Ngành</CLabel>
+                  <CLabel>Chuyên ngành</CLabel>
                   {contextHolder.majors.map((major) => (
                     <CFormGroup key={major.id} variant="custom-checkbox">
                       <CInputCheckbox

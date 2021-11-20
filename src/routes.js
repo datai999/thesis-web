@@ -85,7 +85,7 @@ const UserDetail = React.lazy(() => import("./pages/user/UserDetail"));
 const EditUser = React.lazy(() => import("./pages/user/EditUser"));
 const TopicScore = React.lazy(() => import("./pages/score/TopicScore"));
 const Semesters = React.lazy(() => import("./pages/semester/Semesters"));
-const Templates = React.lazy(() => import("./pages/template/Templates"));
+const TemplateList = React.lazy(() => import("./pages/template/TemplateList"));
 const TemplateDetail = React.lazy(() =>
   import("./pages/template/TemplateDetail")
 );
@@ -292,17 +292,7 @@ let routes = [
     path: "/templates",
     exact: true,
     name: "Mẫu tiêu chí",
-    component: Templates,
-  },
-  {
-    path: "/templates/list",
-    name: "Danh sách mẫu tiêu chí",
-    component: Templates,
-  },
-  {
-    path: "/templates/setting",
-    name: "Cài đặt mẫu tiêu chí",
-    component: Templates,
+    component: TemplateList,
   },
   {
     path: "/templates/create",
