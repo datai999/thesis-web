@@ -31,16 +31,26 @@ const MainComponent = () => {
   );
   const [data, setData] = useState({});
   const [edit, setEdit] = useState(templateIdPath ? false : true);
-  const [toggle, setToggle] = useState(false);
+  const [review, setReview] = useState(false);
+
+  const reviewing = () => {
+    setReview(true);
+    setEdit(false);
+  };
+
+  const editing = () => {
+    setReview(false);
+    setEdit(true);
+  };
 
   const submit = () => {
+    setReview(false);
     if (templateIdPath)
       api.patch(`/templates`, data).then((response) => {
         toastHolder.success(
           `Cập nhật mẫu tiêu chí số ${response.id} thành công`
         );
         setData(response);
-        setEdit(false);
       });
     else
       api.post(`/templates`, data).then((response) => {
@@ -68,7 +78,7 @@ const MainComponent = () => {
         setData(res);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [toggle]);
+  }, []);
 
   return (
     <CCard>
@@ -87,37 +97,35 @@ const MainComponent = () => {
               </h5>
             </CCol>
             <CCol md="0">
-              {edit ? (
-                <>
-                  {templateIdPath && (
-                    <CButton
-                      color="primary"
-                      variant="outline"
-                      onClick={() => {
-                        setEdit(false);
-                        setToggle(!toggle);
-                      }}
-                    >
-                      <CIcon name="cil-x" /> Hủy
-                    </CButton>
-                  )}
-
-                  <CButton color="primary" variant="outline" onClick={submit}>
-                    <CIcon name="cil-save" /> Lưu
+              {canEdit && templateIdPath && !edit && !review && (
+                <CTooltip content={"Chỉnh sửa mẫu tiêu chí"}>
+                  <CButton color="primary" onClick={editing}>
+                    <CIcon name="cil-pencil" /> Chỉnh sửa
                   </CButton>
-                </>
-              ) : (
-                canEdit && (
+                </CTooltip>
+              )}
+
+              {review && (
+                <>
                   <CTooltip content={"Chỉnh sửa mẫu tiêu chí"}>
                     <CButton
                       color="primary"
                       variant="outline"
-                      onClick={() => setEdit(true)}
+                      onClick={editing}
                     >
-                      <CIcon name="cil-pencil" />
+                      <CIcon name="cil-pencil" /> Soạn thảo
                     </CButton>
                   </CTooltip>
-                )
+                  <CButton color="primary" variant="outline" onClick={submit}>
+                    <CIcon name="cil-save" /> Lưu
+                  </CButton>
+                </>
+              )}
+
+              {edit && (
+                <CButton color="primary" variant="outline" onClick={reviewing}>
+                  <CIcon name="cil-save" /> Xem trước
+                </CButton>
               )}
             </CCol>
           </CRow>
@@ -148,7 +156,12 @@ const MainComponent = () => {
               <CTextarea rows="3" {...setGetForm("description")} />
             </CFormGroup>
           ) : (
-            <div>{data.description}</div>
+            <CRow>
+              <CCol md="0">
+                <strong>Mô tả</strong>
+              </CCol>
+              <CCol>{data.description}</CCol>
+            </CRow>
           )}
         </CForm>
       </CCardHeader>
