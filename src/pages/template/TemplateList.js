@@ -15,7 +15,7 @@ const fields = [
   { key: "id", label: "Mã", _style: { width: 1 } },
   { key: "name", label: "Tên mẫu" },
   { key: "type", label: "Loại đề tài" },
-  { key: "markType", label: "Loại điểm" },
+  // { key: "markType", label: "Loại điểm" },
   { key: "numberMark", label: "Thang điểm số" },
   { key: "majorNames", label: "Chuyên ngành" },
   { key: "teacherRoles", label: "Người chấm điểm" },

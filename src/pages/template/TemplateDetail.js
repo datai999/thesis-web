@@ -213,7 +213,8 @@ const MainComponent = () => {
                     </CFormGroup>
                   </CCol>
                 </CFormGroup>
-                <CFormGroup row>
+
+                {/* <CFormGroup row>
                   <CCol md="0">
                     <strong>Loại điểm</strong>
                   </CCol>
@@ -250,7 +251,7 @@ const MainComponent = () => {
                       </CLabel>
                     </CFormGroup>
                   </CCol>
-                </CFormGroup>
+                </CFormGroup> */}
 
                 <CFormGroup row>
                   <strong>Sử dụng thang điểm số</strong>
@@ -366,17 +367,23 @@ const MainComponent = () => {
             <div className="ml-4">
               <CRow>
                 <CCol md="2">
-                  <CRow>
+                  {/* <CRow>
                     <CCol md="0">
                       <strong>Loại đề tài: </strong>
                     </CCol>
                     <CCol>{data.thesis ? "Luận văn" : "Đề cương"}</CCol>
-                  </CRow>
+                  </CRow> */}
                   <CRow>
                     <CCol md="0">
                       <strong>Loại điểm: </strong>
                     </CCol>
                     <CCol>{data.midSemester ? "Giữa kỳ" : "Cuối kỳ"}</CCol>
+                  </CRow>
+                  <CRow>
+                    <CCol md="0">
+                      <strong>Thang điểm số: </strong>
+                    </CCol>
+                    <CCol>{data.numberMark ? "Có" : "Không"}</CCol>
                   </CRow>
                 </CCol>
                 <CCol>
@@ -400,13 +407,6 @@ const MainComponent = () => {
                     <CCol>{renderTeachers()}</CCol>
                   </CRow>
                 </CCol>
-              </CRow>
-
-              <CRow>
-                <CCol md="0">
-                  <strong>Thang điểm số: </strong>
-                </CCol>
-                <CCol>{data.numberMark ? "Có" : "Không"}</CCol>
               </CRow>
             </div>
           )}

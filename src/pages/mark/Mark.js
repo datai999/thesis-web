@@ -12,19 +12,13 @@ import api from "src/service/api";
 import contextHolder from "src/service/contextService";
 import toastHolder from "src/service/toastService";
 
-const MainComponent = ({
-  templateId,
-  topicId,
-  studentId,
-  disableMark = false,
-}) => {
+const MainComponent = ({ location }) => {
   const scoreExample = {
-    topic: { id: topicId },
-    teacher: contextHolder.user.id,
-    student: studentId,
+    topic: { id: location?.state?.topicId },
+    teacher: { id: contextHolder.user.id },
+    student: { id: location?.state.studentId },
   };
 
-  const [template, setTemplate] = useState({});
   const [scores, setScores] = useState([]);
 
   const updateScore = (score) => {
@@ -42,7 +36,6 @@ const MainComponent = ({
   };
 
   const submit = () => {
-    api.get(`/templates/detail/${templateId}`).then(setTemplate);
     api.post(`/scores/all`, { entities: scores }).then(() => {
       toastHolder.success("Chấm điểm thành công");
     });
@@ -55,23 +48,29 @@ const MainComponent = ({
 
   return (
     <CCard>
-      <CCardHeader>{template?.name}</CCardHeader>
-      <CCardBody className="pl-0 mr-3">
+      <CCardHeader>
+        <h5>{location.state.template?.name}</h5>
+      </CCardHeader>
+      <CCardBody className="ml-3 mr-3">
+        <div
+          dangerouslySetInnerHTML={{
+            __html: location.state.template?.description,
+          }}
+        />
         <Criterion
-          criterion={template?.rootCriterion}
+          criterion={location.state.template?.rootCriterion}
           deep={0}
           scores={scores}
           updateScore={updateScore}
-          disableMark={disableMark}
+          disableMark={false}
         />
       </CCardBody>
-      {!disableMark && (
-        <CCardFooter>
-          <CButton size="sm" color="primary" onClick={submit}>
-            <CIcon name="cil-save" /> Lưu
-          </CButton>
-        </CCardFooter>
-      )}
+
+      <CCardFooter>
+        <CButton size="sm" color="primary" onClick={submit}>
+          <CIcon name="cil-save" /> Lưu
+        </CButton>
+      </CCardFooter>
     </CCard>
   );
 };

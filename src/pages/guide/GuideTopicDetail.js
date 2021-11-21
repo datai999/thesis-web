@@ -10,29 +10,34 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { TopicDetailBody } from "src/pages/topic/TopicDetail";
 import api from "src/service/api";
+import context from "src/service/contextService";
+import MidMark from "./MidMark";
 
 const MainComponent = () => {
   const history = useHistory();
   const topicId = window.location.pathname.split("/")[3];
   const [topic, setTopic] = useState({ guideTeachers: [] });
+  const [endRegisterTopic, setEndRegisterTopic] = useState(false);
 
   useEffect(() => {
     api.get(`/topics/detail/${topicId}`).then((res) => {
       setTopic(res);
     });
+    api
+      .get(`/semesters/allow-student-register-cancel`)
+      .then((res) => setEndRegisterTopic(!res));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <CCard className="mx-5">
-      <CCardHeader className="mx-3">
+    <CCard>
+      <CCardHeader>
         <h5>{topic.name?.vi}</h5>
         <h5>{topic.name?.en}</h5>
       </CCardHeader>
 
-      <div className="mx-2">
+      <CCardHeader>
         <TopicDetailBody topic={topic} />
-
         <CButtonGroup
           vertical
           size="sm"
@@ -50,7 +55,12 @@ const MainComponent = () => {
             </CButton>
           </CTooltip>
         </CButtonGroup>
-      </div>
+      </CCardHeader>
+
+      {topic.students?.length > 0 &&
+        (topic.semester?.id !== context.semester.id || endRegisterTopic) && (
+          <MidMark topic={topic} />
+        )}
     </CCard>
   );
 };
