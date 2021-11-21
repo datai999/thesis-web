@@ -1,4 +1,14 @@
-import { CButton, CCardHeader, CDataTable, CSwitch } from "@coreui/react";
+import {
+  CButton,
+  CCardHeader,
+  CDataTable,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CSwitch,
+} from "@coreui/react";
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import api from "src/service/api";
@@ -15,6 +25,8 @@ const MainComponent = ({ topic = {} }) => {
   const [templates, setTemplates] = React.useState([]);
   const [midResult, setMidResult] = React.useState([]);
   const [toggle, setToggle] = React.useState(false);
+  const [confirm, setConfirm] = React.useState(false);
+  const [confirmProps, setConfirmProps] = React.useState({});
 
   const templateToField = (template) => {
     return { key: "template" + template.id, label: template.name };
@@ -22,15 +34,8 @@ const MainComponent = ({ topic = {} }) => {
 
   const midMark = (student, value) => {
     const topicStudent = midResult.find((e) => e.studentId === student.id);
-    const nextTopicStudent = {
-      id: topicStudent.id,
-      topic: { id: topicStudent.topic.id },
-      student: { id: topicStudent.studentId },
-      midPass: value,
-    };
-    api
-      .patch(`/topic-student`, nextTopicStudent)
-      .then(() => setToggle(!toggle));
+    setConfirmProps({ topicStudent, value, student });
+    setConfirm(true);
   };
 
   useEffect(() => {
@@ -74,6 +79,12 @@ const MainComponent = ({ topic = {} }) => {
 
   return (
     <CCardHeader>
+      <ConfirmMidMark
+        view={confirm}
+        disableView={() => setConfirm(false)}
+        confirm={() => setToggle(!toggle)}
+        {...confirmProps}
+      />
       <h5>Đánh giá giữa kỳ</h5>
       <div className="ml-4" style={{ width: 400 }}>
         <CDataTable
@@ -118,6 +129,52 @@ const MainComponent = ({ topic = {} }) => {
         />
       </div>
     </CCardHeader>
+  );
+};
+
+const ConfirmMidMark = ({
+  view,
+  disableView,
+  confirm,
+  topicStudent,
+  student = {},
+  value,
+}) => {
+  const midMark = () => {
+    const nextTopicStudent = {
+      id: topicStudent.id,
+      topic: { id: topicStudent.topic.id },
+      student: { id: topicStudent.studentId },
+      midPass: value,
+    };
+    api.patch(`/topic-student`, nextTopicStudent).then(() => {
+      disableView();
+      confirm();
+    });
+  };
+
+  return (
+    <CModal color="warning" size="md" show={view} onClose={disableView}>
+      <CModalHeader closeButton>
+        <CModalTitle>Xác nhận</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        <center>
+          <h5>
+            Sinh viên {student.code} {student.fullName}{" "}
+            <strong>{value ? "qua giữa kỳ" : "trượt giữa kỳ"}</strong>
+          </h5>
+        </center>
+      </CModalBody>
+      <CModalFooter>
+        <CButton color="info" onClick={midMark}>
+          Xác nhận
+        </CButton>
+        <CButton color="secondary" onClick={disableView}>
+          Quay về
+        </CButton>
+      </CModalFooter>
+    </CModal>
   );
 };
 
