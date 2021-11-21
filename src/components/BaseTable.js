@@ -46,7 +46,7 @@ const MainComponent = ({
     selectSemester &&
       currentPath.split("/").pop() !== querySemester.name &&
       history.push(
-        `${currentPath.match(/(\/[a-z]+)+/)[0]}/${querySemester.name}`
+        `${currentPath.match(/(\/[a-z-]+)+/)[0]}/${querySemester.name}`
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [querySemester]);

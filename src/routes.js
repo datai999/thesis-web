@@ -70,11 +70,12 @@ const GuideTopicDetail = React.lazy(() =>
 );
 const Mark = React.lazy(() => import("./pages/mark/Mark"));
 
+const AssignReviewList = React.lazy(() =>
+  import("./pages/assign/review/AssignReviewList")
+);
+
 const My = React.lazy(() => import("./pages/my/My"));
 const CreateTopic = React.lazy(() => import("./pages/guide/CreateTopic"));
-const AssignReview = React.lazy(() =>
-  import("./pages/assign/review/AssignReview")
-);
 const CouncilTable = React.lazy(() => import("./pages/council/CouncilTable"));
 const Council = React.lazy(() => import("./pages/council/Council"));
 const CouncilDetail = React.lazy(() => import("./pages/council/CouncilDetail"));
@@ -155,6 +156,19 @@ let routes = [
   },
 
   {
+    path: "/assign-review",
+    exact: true,
+    name: "Phân công phản biện",
+    component: AssignReviewList,
+  },
+  {
+    path: "/assign-review/:id",
+    exact: true,
+    name: "Học kỳ",
+    component: AssignReviewList,
+  },
+
+  {
     path: "/my",
     exact: true,
     name: "Có tôi",
@@ -197,13 +211,6 @@ let routes = [
     component: My,
   },
 
-  {
-    path: "/assign-review",
-    exact: true,
-    name: "Phân công phản biện",
-    component: AssignReview,
-  },
-  { path: "/assign-review/:id", component: AssignReview },
   { path: "/councils", exact: true, name: "Hội đồng", component: CouncilTable },
   {
     path: "/councils/:id",
