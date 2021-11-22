@@ -96,6 +96,10 @@ const TopicDetailBody = ({
             {topic.educationMethodNames?.join(", ")}
           </div>
           <div>
+            <strong>Bộ môn: </strong>
+            {topic.subjectDepartmentName}
+          </div>
+          <div>
             <strong>Chuyên ngành: </strong>
             {topic.majorNames?.join(", ")}
           </div>
@@ -109,7 +113,7 @@ const TopicDetailBody = ({
           <strong>Giáo viên hướng dẫn</strong>
           {topic.guideTeachers && <UserCard user={topic.guideTeachers[0]} />}
         </CCol>
-        {topic.guideTeachers.length > 1 && (
+        {topic.guideTeachers?.length > 1 && (
           <CCol>
             <strong>Giáo viên đồng hướng dẫn</strong>
             <CRow>

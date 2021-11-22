@@ -13,12 +13,7 @@ const fields = [
   { key: "email", label: "Email:@hcmut.edu.vn" },
 ];
 
-const Component = ({
-  view,
-  disableView,
-  selected,
-  removeLoginUser = false,
-}) => {
+const Component = ({ view, disableView, selected, userNotShow = [] }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -31,18 +26,22 @@ const Component = ({
         },
         { params: { direction: "DESC" } }
       )
-      .then((res) =>
-        setData(
-          removeLoginUser ? res.filter((e) => e.id !== context.user.id) : res
-        )
-      );
+      .then((res) => {
+        const dataFilter = res.filter(
+          (e) => !userNotShow.some((user) => user.id === e.id)
+        );
+        console.log(dataFilter);
+        setData(dataFilter);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [view]);
 
   return (
     <CModal color="info" size="lg" show={view} onClose={disableView}>
       <CModalHeader closeButton>
-        <CModalTitle>Tìm kiếm giáo viên</CModalTitle>
+        <CModalTitle>
+          Tìm kiếm giáo viên {context.user.subjectDepartment?.name}
+        </CModalTitle>
       </CModalHeader>
       <CModalBody>
         <BaseTable

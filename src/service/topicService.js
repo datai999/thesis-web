@@ -24,22 +24,25 @@ const multiLine = (array) => (
   </td>
 );
 
+const renderUserInTable = (users) => (
+  <td>
+    {users?.map((user) => (
+      <tr>
+        {user.code} {user.fullName}{" "}
+        <CTooltip content={user.email}>
+          <CIcon name="cil-envelope-closed" className="mb-1" />
+        </CTooltip>
+      </tr>
+    ))}
+  </td>
+);
+
 const scopedSlots = {
   names: (item) => multiLine(item.names),
   educationMethodNames: (item) => multiLine(item.educationMethodNames),
   majorNames: (item) => multiLine(item.majorNames),
-  guideTeachers: (item) => (
-    <td>
-      {item.guideTeachers?.map((guideTeacher) => (
-        <tr>
-          {guideTeacher.code} {guideTeacher.firstName} {guideTeacher.lastName}{" "}
-          <CTooltip content={guideTeacher.email}>
-            <CIcon name="cil-envelope-closed" className="mb-1" />
-          </CTooltip>
-        </tr>
-      ))}
-    </td>
-  ),
+  guideTeachers: (item) => renderUserInTable(item.guideTeachers),
+  reviewTeachers: (item) => renderUserInTable(item.reviewTeachers),
   studentCount: (item) => (
     <td className="py-2">
       {item.students?.length === item.maxStudentTake ? (

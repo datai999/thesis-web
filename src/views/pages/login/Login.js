@@ -21,7 +21,7 @@ const Login = () => {
   };
 
   const tryAsAdmin = async () => {
-    window.localStorage.setItem("token", "tai.nguyen.cse.datai@hcmut.edu.vn");
+    window.localStorage.setItem("token", "admin@hcmut.edu.vn");
     window.localStorage.setItem("userId", 1);
     history.push(`/dashboard`);
   };

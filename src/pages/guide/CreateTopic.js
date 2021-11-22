@@ -53,7 +53,7 @@ const TopicCreate = ({ location }) => {
 
   const editorProps = (path) => {
     return {
-      data: _.get(form, path),
+      data: _.get(form, path) ?? "",
       onChange: (event, editor) => setValueForm(path, editor.getData()),
     };
   };
@@ -119,7 +119,7 @@ const TopicCreate = ({ location }) => {
           setSearchTeachers(false);
           setGuideTeachers([...guideTeachers, teacher]);
         }}
-        removeLoginUser={true}
+        userNotShow={[contextHolder.user]}
       />
       <CCardHeader>
         <h5>{form.id ? `Chỉnh sửa đề tài` : "Tạo đề tài"}</h5>
