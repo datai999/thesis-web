@@ -12,7 +12,6 @@ import FinalMark from "src/components/topic/FinalMark";
 import { TopicDetailBody } from "src/pages/topic/TopicDetail";
 import api from "src/service/api";
 import context from "src/service/contextService";
-import MidMark from "./MidMark";
 
 const MainComponent = () => {
   const history = useHistory();
@@ -60,12 +59,7 @@ const MainComponent = () => {
 
       {topic.students?.length > 0 &&
         (topic.semester?.id !== context.semester.id || endRegisterTopic) && (
-          <>
-            <MidMark topic={topic} />
-            {topic.students?.some((e) => e.midPass) && (
-              <FinalMark guide={true} topic={topic} />
-            )}
-          </>
+          <FinalMark guide={false} topic={topic} />
         )}
     </CCard>
   );

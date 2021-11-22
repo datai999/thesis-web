@@ -12,6 +12,7 @@ import {
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import api from "src/service/api";
+import toastHolder from "src/service/toastService";
 
 const fields = [
   { key: "code", label: "MSSV" },
@@ -71,7 +72,11 @@ const MainComponent = ({ topic = {} }) => {
           labelOn={"\u2713"}
           labelOff={"\u2715"}
           checked={checked}
-          onChange={(e) => midMark(student, e.currentTarget.checked)}
+          onChange={(e) =>
+            topic.reviewTeachers?.length > 0
+              ? toastHolder.error("Đề tài đã được phân công phản biện")
+              : midMark(student, e.currentTarget.checked)
+          }
         />
       </center>
     );
@@ -82,7 +87,7 @@ const MainComponent = ({ topic = {} }) => {
       <ConfirmMidMark
         view={confirm}
         disableView={() => setConfirm(false)}
-        confirm={() => setToggle(!toggle)}
+        confirm={() => history.go(0)}
         {...confirmProps}
       />
       <h5>Đánh giá giữa kỳ</h5>

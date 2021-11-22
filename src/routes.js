@@ -70,6 +70,7 @@ const GuideTopicDetail = React.lazy(() =>
 );
 const Mark = React.lazy(() => import("./pages/mark/Mark"));
 const ReviewList = React.lazy(() => import("./pages/review/ReviewList"));
+const ReviewDetail = React.lazy(() => import("./pages/review/ReviewDetail"));
 
 const AssignReviewList = React.lazy(() =>
   import("./pages/assign/review/AssignReviewList")
@@ -165,6 +166,18 @@ let routes = [
     exact: true,
     name: "Học kỳ",
     component: ReviewList,
+  },
+  {
+    path: "/review/:id/:id",
+    exact: true,
+    name: "Thông tin đề tài",
+    component: ReviewDetail,
+  },
+  {
+    path: "/review/:id/:id/mark",
+    exact: false,
+    name: "Đánh giá sinh viên",
+    component: Mark,
   },
 
   {
