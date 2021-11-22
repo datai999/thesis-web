@@ -16,20 +16,8 @@ import { useHistory, useLocation } from "react-router-dom";
 import context from "src/service/contextService";
 import { loginUserIsTeacher } from "src/service/permissionService";
 import MyCouncil from "./MyCouncil";
-import TopicGuides from "./TopicGuides";
-import TopicReviews from "./TopicReviews";
 
 const tabs = [
-  {
-    url: "guide",
-    tabName: "Hướng dẫn",
-    component: TopicGuides,
-  },
-  {
-    url: "review",
-    tabName: "Phản biện",
-    component: TopicReviews,
-  },
   {
     url: "council",
     tabName: "Hội đồng",

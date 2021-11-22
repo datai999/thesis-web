@@ -48,8 +48,8 @@ const _nav = [
   {
     _tag: "CSidebarNavItem",
     name: "Đề tài phản biện",
-    to: "/execute",
-    icon: "cil-file",
+    to: "/review",
+    icon: "cil-speech",
     permissions: [PERMISSIONS.HEAD_SUBJECT_DEPARTMENT, PERMISSIONS.TEACHER],
   },
   {

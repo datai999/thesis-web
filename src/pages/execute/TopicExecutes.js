@@ -13,7 +13,7 @@ import { TopicDetailBody } from "src/pages/topic/TopicDetail";
 import api from "src/service/api";
 import { context } from "src/service/contextService";
 import toastHolder from "src/service/toastService";
-import CancelTopicModal from "../my/topic/CancelTopicModal";
+import CancelTopicModal from "./CancelTopicModal";
 
 const TopicExecutes = () => {
   const history = useHistory();

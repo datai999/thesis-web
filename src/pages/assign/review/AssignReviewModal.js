@@ -87,7 +87,7 @@ const MainComponent = ({ view, disableView, confirm, topic = {} }) => {
                   color="primary"
                   onClick={() => setSearchTeachers(true)}
                 >
-                  Thêm giáo viên phản biện
+                  Phân công giáo viên phản biện
                 </CButton>
               </CCol>
             )}
