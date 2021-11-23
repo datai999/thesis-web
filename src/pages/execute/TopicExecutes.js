@@ -9,6 +9,8 @@ import {
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import TeacherStudentScore from "src/components/score/TeacherStudentScore";
+import MidMark from "src/pages/guide/MidMark";
 import { TopicDetailBody } from "src/pages/topic/TopicDetail";
 import api from "src/service/api";
 import { context } from "src/service/contextService";
@@ -93,20 +95,6 @@ const TopicExecutes = () => {
                 </CTooltip>
               )}
 
-              {!canCancel && (
-                <CTooltip content={"Bảng điểm"}>
-                  <CButton
-                    color="primary"
-                    variant="outline"
-                    onClick={() => {
-                      history.push(`/score/topic/${topic.id}`);
-                    }}
-                  >
-                    <CIcon name="cil-calculator" />
-                  </CButton>
-                </CTooltip>
-              )}
-
               {topic.semester.id === context.semester.id && canCancel && (
                 <CTooltip content={"Hủy đăng ký đề tài"}>
                   <CButton
@@ -122,6 +110,39 @@ const TopicExecutes = () => {
                 </CTooltip>
               )}
             </CButtonGroup>
+
+            {topic.students?.length > 0 &&
+              (topic.semester?.id !== context.semester.id ||
+                !cancelTopicModal) && (
+                <>
+                  <MidMark topic={topic} />
+                  {topic.students?.some((e) => e.midPass) && (
+                    <CCardHeader>
+                      <div style={{ width: "90%" }}>
+                        <h5>Kết quả đánh giá cuối kỳ</h5>
+                        <div className="ml-4">
+                          <strong>Giáo viên hướng dẫn</strong>
+                          <TeacherStudentScore
+                            topic={{
+                              id: topic.id,
+                              guideTeachers: topic.guideTeachers,
+                            }}
+                            student={context.user}
+                          />
+                          <strong>Giáo viên phản biện</strong>
+                          <TeacherStudentScore
+                            topic={{
+                              id: topic.id,
+                              reviewTeachers: topic.reviewTeachers,
+                            }}
+                            student={context.user}
+                          />
+                        </div>
+                      </div>
+                    </CCardHeader>
+                  )}
+                </>
+              )}
           </CCollapse>
         </CCard>
       ))}

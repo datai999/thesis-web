@@ -22,16 +22,25 @@ const MainComponent = ({ location }) => {
     topic: { id: location?.state?.topic?.id },
     teacher: { id: contextHolder.user.id },
     student: { id: location?.state.student?.id },
+    template: { id: location?.state.template?.id },
   };
 
   const [scores, setScores] = useState([]);
+
+  const toInt = (input) => (parseInt(input) ? parseInt(input) : 0);
 
   const updateScore = (score) => {
     score = {
       ...score,
       ...scoreExample,
-      template: { id: location.state.template?.id },
     };
+    if (score.score === "") {
+      score.score = null;
+    } else {
+      score.score = location.state.template?.numberMark
+        ? toInt(score.score)
+        : score.score?.toUpperCase();
+    }
     const index = scores.findIndex(
       (e) => e.criterion.id === score.criterion.id
     );
@@ -74,7 +83,7 @@ const MainComponent = ({ location }) => {
             </td>
           </CTooltip>
           <CTooltip content={criterionScore?.comment ?? ""}>
-            <td className="pl-1">{criterionScore?.score.toUpperCase()}</td>
+            <td className="pl-1">{criterionScore?.score}</td>
           </CTooltip>
         </tr>
       );
@@ -98,6 +107,12 @@ const MainComponent = ({ location }) => {
             <strong>Điểm</strong>
           </center>
           {renderScore(location.state.template?.rootCriterion)}
+          {location.state.template?.numberMark && (
+            <>
+              Tổng:
+              {scores.map((e) => toInt(e.score)).reduce((a, b) => a + b, 0)}
+            </>
+          )}
         </CCard>
       </StickyBox>
       <CCard>
@@ -121,7 +136,7 @@ const MainComponent = ({ location }) => {
 
         {location?.state?.topic?.semester?.id === contextHolder.semester.id && (
           <CCardFooter>
-            <CButton size="sm" color="primary" onClick={submit}>
+            <CButton color="primary" onClick={submit}>
               <CIcon name="cil-save" /> Lưu
             </CButton>
           </CCardFooter>

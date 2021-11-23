@@ -30,7 +30,6 @@ const Component = ({ view, disableView, selected, userNotShow = [] }) => {
         const dataFilter = res.filter(
           (e) => !userNotShow.some((user) => user.id === e.id)
         );
-        console.log(dataFilter);
         setData(dataFilter);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps

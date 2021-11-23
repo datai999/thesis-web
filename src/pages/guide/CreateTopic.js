@@ -78,7 +78,11 @@ const TopicCreate = ({ location }) => {
   const create = () => {
     form.thesis = thesis;
     form.semester = contextHolder.semester;
-    form.guideTeachers = guideTeachers;
+    form.guideTeachers = guideTeachers.map((e) => {
+      return {
+        guideTeacher: e,
+      };
+    });
     if (form.id) {
       api.patch("/topics", form).then((response) => {
         response &&
@@ -106,7 +110,9 @@ const TopicCreate = ({ location }) => {
       setForm(exitTopic);
       setThesis(exitTopic.thesis);
       setGuideTeachers(location.state.guideTeachers);
-    } else api.get("/users/token").then((user) => setGuideTeachers([user]));
+    } else {
+      setGuideTeachers([contextHolder.user]);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

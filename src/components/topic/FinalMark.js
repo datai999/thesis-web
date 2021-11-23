@@ -53,13 +53,6 @@ const MainComponent = ({ guide = true, topic = {} }) => {
       (e) => e.id === template.id
     );
 
-    if (template.numberMark && studentHasTemplateScore)
-      console.log(
-        studentHasTemplateScore?.scores
-          ?.map(parseInt)
-          .reduce((a, b) => a + b, 0)
-      );
-
     return (
       <td>
         <CButton
@@ -90,8 +83,9 @@ const MainComponent = ({ guide = true, topic = {} }) => {
     <CCardHeader>
       <h5>{guide ? "Đánh giá cuối kỳ" : "Đánh giá phản biện"}</h5>
       <div className="ml-4" style={{ width: "90%" }}>
+        {console.log(templates)}
         <CDataTable
-          fields={[...fields, ...templates.map(templateToField)]}
+          fields={[...fields, ...templates?.map(templateToField)]}
           items={topic.students}
           striped
           size="sm"

@@ -12,6 +12,7 @@ import {
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import api from "src/service/api";
+import { context } from "src/service/contextService";
 import toastHolder from "src/service/toastService";
 
 const fields = [
@@ -22,16 +23,12 @@ const fields = [
 const MainComponent = ({ topic = {} }) => {
   const history = useHistory();
   const topicId = window.location.pathname.split("/")[3];
+  const canEdit = topic.guideTeachers?.some((e) => e.id === context.user.id);
 
   const [templates, setTemplates] = React.useState([]);
   const [midResult, setMidResult] = React.useState([]);
-  const [toggle, setToggle] = React.useState(false);
   const [confirm, setConfirm] = React.useState(false);
   const [confirmProps, setConfirmProps] = React.useState({});
-
-  const templateToField = (template) => {
-    return { key: "template" + template.id, label: template.name };
-  };
 
   const midMark = (student, value) => {
     const topicStudent = midResult.find((e) => e.studentId === student.id);
@@ -59,7 +56,7 @@ const MainComponent = ({ topic = {} }) => {
         setMidResult(res);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [toggle]);
+  }, []);
 
   const renderSwitchResult = (student) => {
     const checked = midResult.some(
@@ -71,6 +68,7 @@ const MainComponent = ({ topic = {} }) => {
           color="primary"
           labelOn={"\u2713"}
           labelOff={"\u2715"}
+          disabled={!canEdit}
           checked={checked}
           onChange={(e) =>
             topic.reviewTeachers?.length > 0
@@ -90,7 +88,7 @@ const MainComponent = ({ topic = {} }) => {
         confirm={() => history.go(0)}
         {...confirmProps}
       />
-      <h5>Đánh giá giữa kỳ</h5>
+      <h5>Kết quả đánh giá giữa kỳ</h5>
       <div className="ml-4" style={{ width: 400 }}>
         <CDataTable
           fields={[

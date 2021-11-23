@@ -175,7 +175,7 @@ const MainComponent = ({
                 props.updateScore({
                   ...score,
                   criterion: { id: criterion.id },
-                  score: e.target.value?.toUpperCase(),
+                  score: e.target.value,
                 })
               }
             />
