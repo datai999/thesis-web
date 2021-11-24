@@ -83,10 +83,12 @@ const AssignCouncilList = React.lazy(() =>
 const CreateCouncil = React.lazy(() =>
   import("./pages/assign/council/CreateCouncil")
 );
+const AssignCouncil = React.lazy(() =>
+  import("./pages/assign/council/AssignCouncil")
+);
 
 const My = React.lazy(() => import("./pages/my/My"));
 const CouncilDetail = React.lazy(() => import("./pages/council/CouncilDetail"));
-const AssignCouncil = React.lazy(() => import("./pages/council/AssignCouncil"));
 const Users = React.lazy(() => import("./pages/user/Users"));
 const UserDetail = React.lazy(() => import("./pages/user/UserDetail"));
 const EditUser = React.lazy(() => import("./pages/user/EditUser"));
@@ -220,6 +222,11 @@ let routes = [
     name: "Tạo hội đồng",
     component: CreateCouncil,
   },
+  {
+    path: "/assign-council/:id/:id/edit/:id",
+    name: "Chỉnh sửa hội đồng",
+    component: AssignCouncil,
+  },
 
   {
     path: "/my",
@@ -245,11 +252,6 @@ let routes = [
     exact: false,
     name: "Thông tin hội đồng",
     component: CouncilDetail,
-  },
-  {
-    path: "/councils/:id/edit/:id",
-    name: "Chỉnh sửa hội đồng",
-    component: AssignCouncil,
   },
   {
     path: "/users",

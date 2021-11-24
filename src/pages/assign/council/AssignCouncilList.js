@@ -21,6 +21,8 @@ const fields = [
   { key: "time", label: "Thời gian", _style: { width: 140 } },
   { key: "location", label: "Địa điểm", _style: { width: "15%" } },
   { key: "members", label: "Thành viên", sorter: false },
+  { key: "totalTopic", label: "Số đề tài", sorter: false },
+  { key: "totalStudent", label: "Số sinh viên", sorter: false },
   { key: "note", label: "Ghi chú" },
 ];
 
@@ -92,7 +94,7 @@ const CouncilList = ({ subjectDepartmentId }) => {
           clickableRows: true,
           onRowClick: (item) => {
             history.push(
-              `/councils/${subjectDepartmentId}/edit/${item.id}`,
+              `/assign-council/${subjectDepartmentId}/${context.semester?.name}/edit/${item.id}`,
               item
             );
           },

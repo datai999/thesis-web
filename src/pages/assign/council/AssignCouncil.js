@@ -10,20 +10,19 @@ import {
 import React, { useEffect, useState } from "react";
 import api from "src/service/api";
 import toastHolder from "src/service/toastService";
-import CreateCouncil from "../assign/council/CreateCouncil";
-import AssignCouncilTable from "./AssignCouncilTable";
+import AssignCouncilModal from "./AssignCouncilModal";
+import CreateCouncil from "./CreateCouncil";
+import TopicAssignList from "./TopicAssignList";
 
 const MainComponent = ({ location }) => {
-  const paths = location.pathname.match(
-    /(?:\/councils\/)(\d+)(?:\/edit\/)(\d+)/,
-    ""
-  );
-  const subjectDepartmentId = paths[1];
-  const councilId = paths[2];
+  const paths = location.pathname.split("/");
+  const councilId = paths[5];
 
   const [assignedTopics, setAssignedTopics] = useState([]);
   const [unassignTopics, setUnassignTopics] = useState([]);
   const [toggle, setToggle] = useState(false);
+  const [assignTopicModal, setAssignTopicModal] = useState(false);
+  const [modalProps, setModalProps] = useState({ topic: {} });
 
   const submit = () => {
     api
@@ -48,16 +47,28 @@ const MainComponent = ({ location }) => {
     setUnassignTopics([...unassignTopics, topic]);
   };
 
+  const confirmAssign = (topic, isAssign) => {
+    setModalProps({
+      topic,
+      assign: isAssign,
+      confirm: isAssign ? assign : unassign,
+    });
+    setAssignTopicModal(true);
+  };
+
   const getAssignedTopics = () => {
     api
-      .get(`/councils/detail/${councilId}`)
-      .then((response) => setAssignedTopics(response.topics));
+      .post(`/topics/example`, {
+        // thesis: true,
+        council: { id: councilId },
+      })
+      .then(setAssignedTopics);
   };
 
   const getUnassignTopics = () => {
     api
       .get(`/topics/need-council`, {
-        params: { subjectDepartmentId },
+        params: { subjectDepartmentId: location.state?.subjectDepartment?.id },
       })
       .then((response) => {
         response.forEach((e) => {
@@ -73,30 +84,40 @@ const MainComponent = ({ location }) => {
     getAssignedTopics();
     getUnassignTopics();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [toggle]);
 
   return (
     <>
+      <AssignCouncilModal
+        view={assignTopicModal}
+        disableView={() => setAssignTopicModal(false)}
+        {...modalProps}
+      />
+
       <CreateCouncil location={location} />
+
       <CCard>
         <CCardBody>
           <CRow>
             <CCol>
               <h5 className="card-title mb-0">Đề tài thuộc hội đồng</h5>
-              <AssignCouncilTable
-                onRowClick={unassign}
+              <TopicAssignList
+                onRowClick={(topic) => confirmAssign(topic, false)}
                 topics={assignedTopics}
               />
             </CCol>
             <CCol>
               <h5 className="card-title mb-0">Đề tài cần gán hội đồng</h5>
-              <AssignCouncilTable onRowClick={assign} topics={unassignTopics} />
+              <TopicAssignList
+                onRowClick={(topic) => confirmAssign(topic, true)}
+                topics={unassignTopics}
+              />
             </CCol>
           </CRow>
         </CCardBody>
         <CCardFooter>
           <CButton color="primary" onClick={submit}>
-            <CIcon name="cil-save" /> Lưu
+            <CIcon name="cil-save" /> Lưu kết quả phân công
           </CButton>
         </CCardFooter>
       </CCard>

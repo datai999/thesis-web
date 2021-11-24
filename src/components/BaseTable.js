@@ -95,10 +95,10 @@ const MainComponent = ({
         tableFilter
         itemsPerPageSelect
         itemsPerPage={5}
+        activePage={page}
         {...props.tableProps}
         fields={fields}
         items={items}
-        activePage={page}
         scopedSlots={{
           actions: (item, index) => (
             <CButtonGroup vertical size="sm">

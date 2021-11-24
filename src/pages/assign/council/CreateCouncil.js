@@ -21,6 +21,7 @@ import UserCard from "src/components/UserCard";
 import TeacherSearchModal from "src/pages/teacher/TeacherSearchModal";
 import api from "src/service/api";
 import contextHolder from "src/service/contextService";
+import { loginUserIsHead } from "src/service/permissionService";
 import toastHolder from "src/service/toastService";
 
 const MainComponent = ({ location }) => {
@@ -132,7 +133,7 @@ const MainComponent = ({ location }) => {
       />
       <CCardHeader>
         <h5 className="card-title mb-0">
-          {form.id ? `Chỉnh sửa` : "Tạo"} {" hội đồng "} {form.id}
+          {form.id ? `Chỉnh sửa hội đồng mã số ${form.id}` : "Tạo hội đồng"}
         </h5>
       </CCardHeader>
       <CCardBody>
@@ -156,26 +157,31 @@ const MainComponent = ({ location }) => {
                           <CCol key={e} md={role.max > 1 ? 6 : 12}>
                             <UserCard
                               user={e}
-                              remove={() => remove(index, e.id)}
+                              remove={
+                                loginUserIsHead()
+                                  ? () => remove(index, e.id)
+                                  : null
+                              }
                             />
                           </CCol>
                         ))}
-                        {_.range(role.teachers.length, role.max).map((e) => (
-                          <CCol key={e}>
-                            <CButton
-                              key={e}
-                              size="sm"
-                              type="button"
-                              color="primary"
-                              onClick={() => {
-                                setCurrentRole(index);
-                                setSearchTeachers(true);
-                              }}
-                            >
-                              Phân công giáo viên
-                            </CButton>
-                          </CCol>
-                        ))}
+                        {loginUserIsHead() &&
+                          _.range(role.teachers.length, role.max).map((e) => (
+                            <CCol key={e}>
+                              <CButton
+                                key={e}
+                                size="sm"
+                                type="button"
+                                color="primary"
+                                onClick={() => {
+                                  setCurrentRole(index);
+                                  setSearchTeachers(true);
+                                }}
+                              >
+                                Phân công giáo viên
+                              </CButton>
+                            </CCol>
+                          ))}
                       </CRow>
                     </CFormGroup>
                   </CCol>
@@ -238,7 +244,8 @@ const MainComponent = ({ location }) => {
       </CCardBody>
       <CCardFooter>
         <CButton type="submit" color="primary" onClick={submit}>
-          <CIcon name="cil-save" /> Lưu
+          <CIcon name="cil-save" /> {form.id ? "Cập nhật" : "Lưu"} thông tin hội
+          đồng
         </CButton>
       </CCardFooter>
     </CCard>
