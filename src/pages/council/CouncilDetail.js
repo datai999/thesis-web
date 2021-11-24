@@ -31,8 +31,6 @@ const MainComponent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(Object.entries(_.groupBy(council.members, (e) => e.role.name)));
-
   return (
     <CCard>
       <CCardHeader>

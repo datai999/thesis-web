@@ -69,7 +69,7 @@ const _nav = [
   {
     _tag: "CSidebarNavItem",
     name: "Phân công hội đồng",
-    to: "/councils",
+    to: "/assign-council",
     icon: "cil-people",
     permissions: [
       PERMISSIONS.EDUCATION_STAFF,

@@ -1,37 +1,27 @@
 import CIcon from "@coreui/icons-react";
 import {
   CButton,
-  CButtonGroup,
-  CCard,
   CCardHeader,
   CCol,
   CDataTable,
-  CPagination,
   CRow,
   CTooltip,
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
-import SubjectDepartmentTab from "src/components/SubjectDepartmentTab";
+import { useHistory } from "react-router-dom";
+import BaseTable from "src/components/BaseTable";
 import api from "src/service/api";
-import contextHolder from "src/service/contextService";
-import { loginUserHasAny, PERMISSIONS } from "src/service/permissionService";
+import context from "src/service/contextService";
+import { loginUserIsHead } from "src/service/permissionService";
+import SubjectDepartmentTab from "./SubjectDepartmentTab";
 
 const fields = [
   { key: "id", label: "Mã", _style: { width: 1 } },
-  { key: "semesterName", label: "Học kỳ", _style: { width: 90 } },
   { key: "time", label: "Thời gian", _style: { width: 140 } },
   { key: "location", label: "Địa điểm", _style: { width: "15%" } },
   { key: "members", label: "Thành viên", sorter: false },
   { key: "note", label: "Ghi chú" },
-  {
-    key: "actions",
-    label: "",
-    _style: { width: 1 },
-    sorter: false,
-    filter: false,
-  },
 ];
 
 const councilRoleFields = [
@@ -41,36 +31,20 @@ const councilRoleFields = [
   { key: "name", label: "Họ tên và email" },
 ];
 
-const CouncilTable = ({ subjectDepartmentId }) => {
+const CouncilList = ({ subjectDepartmentId }) => {
   const history = useHistory();
-  const queryPage = useLocation().search.match(/page=([0-9]+)/, "");
-  const currentPage = Number(queryPage && queryPage[1] ? queryPage[1] : 1);
-  const [page, setPage] = useState(currentPage);
+  const headSubjectDepartment = loginUserIsHead();
+
   const [data, setData] = useState([]);
-  const size = 5;
-
-  const currentUserInSubjectDepartment =
-    loginUserHasAny([PERMISSIONS.HEAD_SUBJECT_DEPARTMENT]) &&
-    contextHolder.user.subjectDepartment?.id === subjectDepartmentId;
-
-  const canCreate =
-    currentUserInSubjectDepartment || loginUserHasAny([PERMISSIONS.ADMIN]);
-
-  const canEdit =
-    currentUserInSubjectDepartment ||
-    loginUserHasAny([PERMISSIONS.EDUCATION_STAFF, PERMISSIONS.ADMIN]);
-
-  const pageChange = (newPage) => {
-    currentPage !== newPage &&
-      history.push(`/councils/${subjectDepartmentId}?page=${newPage}`);
-    setPage(newPage);
-  };
 
   const getData = () => {
     api
       .post(
         `/councils/example`,
-        { subjectDepartment: subjectDepartmentId },
+        {
+          subjectDepartment: subjectDepartmentId,
+          semester: { id: context.semester?.id },
+        },
         {
           params: {
             direction: "DESC",
@@ -86,19 +60,21 @@ const CouncilTable = ({ subjectDepartmentId }) => {
   }, []);
 
   return (
-    <CCard>
+    <>
       <CCardHeader>
         <CRow>
           <CCol sm="5">
             <h5 className="card-title mb-0">Danh sách hội đồng</h5>
           </CCol>
-          {canCreate && (
+          {headSubjectDepartment && (
             <CCol sm="7" className="d-none d-md-block">
               <CButton
                 color="primary"
                 className="float-right"
                 onClick={() => {
-                  history.push(`/councils/${subjectDepartmentId}/create`);
+                  history.push(
+                    `/assign-council/${subjectDepartmentId}/${context.semester?.name}/create`
+                  );
                 }}
               >
                 Tạo hội đồng mới
@@ -107,17 +83,20 @@ const CouncilTable = ({ subjectDepartmentId }) => {
           )}
         </CRow>
       </CCardHeader>
-      <CDataTable
+      <BaseTable
         items={data}
         fields={fields}
-        size="sm"
-        hover
-        sorter
-        columnFilter
-        tableFilter
-        itemsPerPageSelect
-        itemsPerPage={size}
-        activePage={page}
+        selectSemester
+        semesterTop={8}
+        tableProps={{
+          clickableRows: true,
+          onRowClick: (item) => {
+            history.push(
+              `/councils/${subjectDepartmentId}/edit/${item.id}`,
+              item
+            );
+          },
+        }}
         scopedSlots={{
           time: (item) => (
             <td>
@@ -180,37 +159,9 @@ const CouncilTable = ({ subjectDepartmentId }) => {
               }
             </td>
           ),
-          actions: (item) => (
-            <td className="py-2">
-              {canEdit && (
-                <CButtonGroup vertical size="sm">
-                  <CTooltip content={"Chỉnh sửa"}>
-                    <CButton
-                      color="primary"
-                      variant="outline"
-                      onClick={() => {
-                        history.push(
-                          `/councils/${subjectDepartmentId}/edit/${item.id}`,
-                          item
-                        );
-                      }}
-                    >
-                      <CIcon name="cil-pencil" />
-                    </CButton>
-                  </CTooltip>
-                </CButtonGroup>
-              )}
-            </td>
-          ),
         }}
       />
-      <CPagination
-        size="sm"
-        activePage={page}
-        onActivePageChange={pageChange}
-        align="center"
-      />
-    </CCard>
+    </>
   );
 };
 
@@ -219,7 +170,7 @@ const multiLine = (array = []) => (
 );
 
 const MainComponent = () => (
-  <SubjectDepartmentTab URL="/councils" InnerComponent={CouncilTable} />
+  <SubjectDepartmentTab URL="/assign-council" InnerComponent={CouncilList} />
 );
 
 export default MainComponent;

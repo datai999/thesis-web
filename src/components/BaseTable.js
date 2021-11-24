@@ -43,11 +43,17 @@ const MainComponent = ({
 
   React.useEffect(() => {
     const currentPath = window.location.pathname;
-    selectSemester &&
-      currentPath.split("/").pop() !== querySemester.name &&
-      history.push(
-        `${currentPath.match(/(\/[a-z-]+)+/)[0]}/${querySemester.name}`
-      );
+    if (selectSemester && currentPath.split("/").pop() !== querySemester.name) {
+      if (currentPath.match(/\/assign-council\/\d+/)) {
+        history.push(
+          `${currentPath.match(/(\/[a-z-]+)+\/\d+/)[0]}/${querySemester.name}`
+        );
+      } else {
+        history.push(
+          `${currentPath.match(/(\/[a-z-]+)+/)[0]}/${querySemester.name}`
+        );
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [querySemester]);
 

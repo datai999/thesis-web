@@ -10,8 +10,8 @@ import {
 import React, { useEffect, useState } from "react";
 import api from "src/service/api";
 import toastHolder from "src/service/toastService";
+import CreateCouncil from "../assign/council/CreateCouncil";
 import AssignCouncilTable from "./AssignCouncilTable";
-import Council from "./Council";
 
 const MainComponent = ({ location }) => {
   const paths = location.pathname.match(
@@ -77,7 +77,7 @@ const MainComponent = ({ location }) => {
 
   return (
     <>
-      <Council location={location} />
+      <CreateCouncil location={location} />
       <CCard>
         <CCardBody>
           <CRow>

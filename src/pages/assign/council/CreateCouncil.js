@@ -1,3 +1,5 @@
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 import CIcon from "@coreui/icons-react";
 import {
   CButton,
@@ -10,25 +12,19 @@ import {
   CFormGroup,
   CInput,
   CLabel,
-  CLink,
   CRow,
-  CTextarea,
-  CTooltip,
-  CWidgetIcon,
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import UserCard from "src/components/UserCard";
 import TeacherSearchModal from "src/pages/teacher/TeacherSearchModal";
 import api from "src/service/api";
 import contextHolder from "src/service/contextService";
 import toastHolder from "src/service/toastService";
 
 const MainComponent = ({ location }) => {
-  const subjectDepartmentId = useLocation().pathname.match(
-    /(?:\/councils\/)(\d+)/,
-    ""
-  )[1];
+  const subjectDepartmentId = window.location.pathname.split("/")[2];
 
   const history = useHistory();
   const [form, setForm] = useState({});
@@ -73,6 +69,10 @@ const MainComponent = ({ location }) => {
         })
       )
       .flat();
+    if (form.members?.length < 1) {
+      toastHolder.error("Hội đồng không có thành viên");
+      return;
+    }
     if (form.id) {
       api.patch("/councils", form).then(() => {
         toastHolder.success("Cập nhật hội đồng thành công");
@@ -81,31 +81,20 @@ const MainComponent = ({ location }) => {
     } else {
       api.post("/councils", form).then(() => {
         toastHolder.success("Tạo hội đồng thành công");
-        history.push(`/councils/${subjectDepartmentId}`);
+        const currentPath = window.location.pathname;
+        history.push(
+          `${currentPath.substring(0, currentPath.lastIndexOf("/"))}`
+        );
       });
     }
   };
 
   const onFormSelected = (teacher) => {
     setSearchTeachers(false);
-    let existed = false;
-    councilRoles.forEach((councilRole) =>
-      councilRole.teachers.forEach((teacher) => {
-        if (teacher.id == teacher.id) {
-          existed = true;
-        }
-      })
-    );
-    if (existed) {
-      toastHolder.error(
-        `Giáo viên ${teacher.firstName} ${teacher.lastName} đã là thành viên của hội đồng`
-      );
-    } else {
-      const nextRoles = _.cloneDeep(councilRoles);
-      const nextTeachers = [...councilRoles[currentRole].teachers, teacher];
-      nextRoles[currentRole].teachers = nextTeachers;
-      setCouncilRoles(nextRoles);
-    }
+    const nextRoles = _.cloneDeep(councilRoles);
+    const nextTeachers = [...councilRoles[currentRole].teachers, teacher];
+    nextRoles[currentRole].teachers = nextTeachers;
+    setCouncilRoles(nextRoles);
   };
 
   useEffect(() => {
@@ -137,8 +126,9 @@ const MainComponent = ({ location }) => {
     <CCard>
       <TeacherSearchModal
         view={searchTeachers}
-        setView={() => setSearchTeachers(false)}
+        disableView={() => setSearchTeachers(false)}
         selected={onFormSelected}
+        userNotShow={councilRoles.map((role) => role.teachers).flat()}
       />
       <CCardHeader>
         <h5 className="card-title mb-0">
@@ -147,7 +137,7 @@ const MainComponent = ({ location }) => {
       </CCardHeader>
       <CCardBody>
         <CForm>
-          <CRow>
+          <CRow style={{ width: `${form.id ? "100%" : "50%"}` }}>
             <CCol className="mb-4">
               <CRow>
                 {councilRoles.map((role, index) => (
@@ -157,7 +147,9 @@ const MainComponent = ({ location }) => {
                     className="border py-2"
                   >
                     <CFormGroup className="mb-0">
-                      <CLabel>{role.name}</CLabel>
+                      <CLabel>
+                        <strong>{role.name}</strong>
+                      </CLabel>
                       <br />
                       <CRow>
                         {role.teachers.map((e) => (
@@ -180,7 +172,7 @@ const MainComponent = ({ location }) => {
                                 setSearchTeachers(true);
                               }}
                             >
-                              Thêm giáo viên
+                              Phân công giáo viên
                             </CButton>
                           </CCol>
                         ))}
@@ -190,39 +182,57 @@ const MainComponent = ({ location }) => {
                 ))}
               </CRow>
             </CCol>
-            <CCol>
-              <CFormGroup>
-                <CLabel>Địa điểm</CLabel>
-                <CInput
-                  placeholder="Cơ sở, tòa nhà, phòng hoặc link meet..."
-                  {...setGetForm("location")}
-                />
-              </CFormGroup>
 
-              <CFormGroup row>
-                <CCol>
-                  <CLabel>Ngày</CLabel>
-                  <CInput type="date" {...setGetForm("reserveDate")} />
-                </CCol>
-                <CCol>
-                  <CLabel>Thời gian bắt đầu</CLabel>
-                  <CInput type="time" {...setGetForm("startTime")} />
-                </CCol>
-                <CCol>
+            {form.id && (
+              <CCol>
+                <CFormGroup>
+                  <CLabel>
+                    <strong>Địa điểm</strong>
+                  </CLabel>
+                  <CInput
+                    placeholder="Cơ sở, tòa nhà, phòng hoặc link meet..."
+                    {...setGetForm("location")}
+                  />
+                </CFormGroup>
+
+                <CFormGroup row>
+                  <CCol>
+                    <CLabel>
+                      <strong>Ngày</strong>
+                    </CLabel>
+                    <CInput type="date" {...setGetForm("reserveDate")} />
+                  </CCol>
+                  <CCol>
+                    <CLabel>
+                      <strong>Thời gian bắt đầu</strong>
+                    </CLabel>
+                    <CInput type="time" {...setGetForm("startTime")} />
+                  </CCol>
+                  {/* <CCol>
                   <CLabel>Thời gian kết thúc</CLabel>
                   <CInput type="time" {...setGetForm("endTime")} />
-                </CCol>
-              </CFormGroup>
+                </CCol> */}
+                </CFormGroup>
 
-              <CFormGroup>
-                <CLabel>Ghi chú</CLabel>
-                <CTextarea
+                <CFormGroup>
+                  <CLabel>
+                    <strong>Ghi chú</strong>
+                  </CLabel>
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={_.get(form, "note") ?? ""}
+                    onChange={(event, editor) =>
+                      setValueForm("note", editor.getData())
+                    }
+                  />
+                  {/* <CTextarea
                   rows="7"
                   placeholder="Ghi chú..."
                   {...setGetForm("note")}
-                />
-              </CFormGroup>
-            </CCol>
+                /> */}
+                </CFormGroup>
+              </CCol>
+            )}
           </CRow>
         </CForm>
       </CCardBody>
@@ -234,35 +244,5 @@ const MainComponent = ({ location }) => {
     </CCard>
   );
 };
-
-const UserCard = ({ user, remove }) => (
-  <CWidgetIcon
-    color="info"
-    iconPadding={false}
-    className="mb-2 mx-0 px-0"
-    header={
-      <>
-        <tr class="d-flex justify-content-between">
-          <td>{`${user.degreeName} mã số ${user.code}`}</td>
-          <td>
-            <CTooltip content={"Xóa giáo viên"}>
-              <CLink
-                className="card-header-action"
-                style={{ right: 5, position: "absolute" }}
-                onClick={remove}
-              >
-                <CIcon name="cil-x-circle" />
-              </CLink>
-            </CTooltip>
-          </td>
-        </tr>
-        {`${user.firstName} ${user.lastName}`}
-      </>
-    }
-    text={<small>{`${user.email}`}</small>}
-  >
-    <CIcon width={24} name="cil-user" />
-  </CWidgetIcon>
-);
 
 export default MainComponent;
