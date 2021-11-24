@@ -83,10 +83,9 @@ const MainComponent = ({ guide = true, topic = {} }) => {
     <CCardHeader>
       <h5>{guide ? "Đánh giá cuối kỳ" : "Đánh giá phản biện"}</h5>
       <div className="ml-4" style={{ width: "90%" }}>
-        {console.log(templates)}
         <CDataTable
           fields={[...fields, ...templates?.map(templateToField)]}
-          items={topic.students}
+          items={topic.students.filter((e) => e.midPass)}
           striped
           size="sm"
           scopedSlots={{

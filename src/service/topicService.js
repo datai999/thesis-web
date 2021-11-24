@@ -5,6 +5,7 @@ import React from "react";
 const fields = [
   { key: "id", label: "Mã", _style: { width: "1%" } },
   { key: "names", label: "Tên đề tài" },
+  { key: "type", label: "Loại đề tài" },
   {
     key: "educationMethodNames",
     label: "Đào tạo",

@@ -88,7 +88,7 @@ const MainComponent = ({
         columnFilter
         tableFilter
         itemsPerPageSelect
-        itemsPerPage={props.size ?? 5}
+        itemsPerPage={5}
         {...props.tableProps}
         fields={fields}
         items={items}

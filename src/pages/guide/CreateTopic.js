@@ -125,7 +125,7 @@ const TopicCreate = ({ location }) => {
           setSearchTeachers(false);
           setGuideTeachers([...guideTeachers, teacher]);
         }}
-        userNotShow={[contextHolder.user]}
+        userNotShow={[contextHolder.user, ...guideTeachers]}
       />
       <CCardHeader>
         <h5>{form.id ? `Chỉnh sửa đề tài` : "Tạo đề tài"}</h5>

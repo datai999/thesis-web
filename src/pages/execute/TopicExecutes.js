@@ -116,7 +116,9 @@ const TopicExecutes = () => {
                 !cancelTopicModal) && (
                 <>
                   <MidMark topic={topic} />
-                  {topic.students?.some((e) => e.midPass) && (
+                  {topic.students?.some(
+                    (e) => e.midPass && e.id === context.user.id
+                  ) && (
                     <CCardHeader>
                       <div style={{ width: "90%" }}>
                         <h5>Kết quả đánh giá cuối kỳ</h5>

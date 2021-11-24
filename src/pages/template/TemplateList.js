@@ -26,7 +26,7 @@ const MainComponent = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    api.get(`/templates`, { params: { direction: "DESC" } }).then(setData);
+    api.get(`/templates`, { params: { direction: "ASC" } }).then(setData);
   }, []);
 
   return (
@@ -58,6 +58,7 @@ const MainComponent = () => {
           tableProps={{
             striped: true,
             clickableRows: true,
+            itemsPerPage: 10,
             onRowClick: (item) => history.push(`/templates/${item.id}`, item),
           }}
         />
