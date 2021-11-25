@@ -4,11 +4,16 @@ import {
   CCard,
   CCardBody,
   CCardFooter,
+  CCardHeader,
   CCol,
   CRow,
+  CTooltip,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
+import CouncilInfo from "src/pages/council/CouncilInfo";
+import TopicInCouncil from "src/pages/council/TopicInCouncil";
 import api from "src/service/api";
+import { loginUserIsHead } from "src/service/permissionService";
 import toastHolder from "src/service/toastService";
 import AssignCouncilModal from "./AssignCouncilModal";
 import CreateCouncil from "./CreateCouncil";
@@ -17,12 +22,14 @@ import TopicAssignList from "./TopicAssignList";
 const MainComponent = ({ location }) => {
   const paths = location.pathname.split("/");
   const councilId = paths[5];
+  const head = loginUserIsHead();
 
   const [assignedTopics, setAssignedTopics] = useState([]);
   const [unassignTopics, setUnassignTopics] = useState([]);
-  const [toggle, setToggle] = useState(false);
   const [assignTopicModal, setAssignTopicModal] = useState(false);
   const [modalProps, setModalProps] = useState({ topic: {} });
+  const [assigning, setAssigning] = useState(false);
+  const [editing, setEditing] = useState(false);
 
   const submit = () => {
     api
@@ -33,7 +40,7 @@ const MainComponent = ({ location }) => {
       )
       .then(() => {
         toastHolder.success("Phân công hội đồng thành công");
-        setToggle(!toggle);
+        setAssigning(false);
       });
   };
 
@@ -59,7 +66,6 @@ const MainComponent = ({ location }) => {
   const getAssignedTopics = () => {
     api
       .post(`/topics/example`, {
-        // thesis: true,
         council: { id: councilId },
       })
       .then(setAssignedTopics);
@@ -84,7 +90,7 @@ const MainComponent = ({ location }) => {
     getAssignedTopics();
     getUnassignTopics();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [toggle]);
+  }, [assigning]);
 
   return (
     <>
@@ -94,33 +100,92 @@ const MainComponent = ({ location }) => {
         {...modalProps}
       />
 
-      <CreateCouncil location={location} />
+      {editing ? (
+        <CreateCouncil location={location} />
+      ) : (
+        <CCard>
+          <CCardHeader>
+            <CRow>
+              <CCol>
+                <h5>
+                  Hội đồng {location.state.subjectDepartmentName} mã số{" "}
+                  {location.state.id}
+                </h5>
+              </CCol>
+              <CCol>
+                <CTooltip content={"Chỉnh sửa thông tin hội đồng"}>
+                  <CButton
+                    color="primary"
+                    className="float-right"
+                    onClick={() => {
+                      setEditing(true);
+                    }}
+                  >
+                    <CIcon name="cil-pencil" />
+                  </CButton>
+                </CTooltip>
+              </CCol>
+            </CRow>
+          </CCardHeader>
+          <CCardBody>
+            <CouncilInfo council={location.state} />
+          </CCardBody>
+        </CCard>
+      )}
 
-      <CCard>
-        <CCardBody>
-          <CRow>
-            <CCol>
-              <h5 className="card-title mb-0">Đề tài thuộc hội đồng</h5>
-              <TopicAssignList
-                onRowClick={(topic) => confirmAssign(topic, false)}
-                topics={assignedTopics}
-              />
-            </CCol>
-            <CCol>
-              <h5 className="card-title mb-0">Đề tài cần gán hội đồng</h5>
-              <TopicAssignList
-                onRowClick={(topic) => confirmAssign(topic, true)}
-                topics={unassignTopics}
-              />
-            </CCol>
-          </CRow>
-        </CCardBody>
-        <CCardFooter>
-          <CButton color="primary" onClick={submit}>
-            <CIcon name="cil-save" /> Lưu kết quả phân công
-          </CButton>
-        </CCardFooter>
-      </CCard>
+      {assigning ? (
+        <CCard>
+          <CCardBody>
+            <CRow>
+              <CCol>
+                <h5 className="card-title mb-0">Đề tài thuộc hội đồng</h5>
+                <TopicAssignList
+                  onRowClick={(topic) => confirmAssign(topic, false)}
+                  topics={assignedTopics}
+                />
+              </CCol>
+              <CCol>
+                <h5 className="card-title mb-0">Đề tài cần gán hội đồng</h5>
+                <TopicAssignList
+                  onRowClick={(topic) => confirmAssign(topic, true)}
+                  topics={unassignTopics}
+                />
+              </CCol>
+            </CRow>
+          </CCardBody>
+          <CCardFooter>
+            <CButton color="primary" onClick={submit}>
+              <CIcon name="cil-save" /> Lưu kết quả phân công
+            </CButton>
+          </CCardFooter>
+        </CCard>
+      ) : (
+        <CCard>
+          <CCardBody>
+            <CRow>
+              <CCol>
+                <h5 className="card-title mb-0">Đề tài thuộc hội đồng</h5>
+              </CCol>
+              {head && (
+                <CCol>
+                  <CTooltip content={"Phân công đề tải thuộc hội đồng"}>
+                    <CButton
+                      color="primary"
+                      className="float-right"
+                      onClick={() => {
+                        setAssigning(true);
+                      }}
+                    >
+                      <CIcon name="cil-pencil" />
+                    </CButton>
+                  </CTooltip>
+                </CCol>
+              )}
+            </CRow>
+            <TopicInCouncil councilId={location.state?.id} />
+          </CCardBody>
+        </CCard>
+      )}
     </>
   );
 };

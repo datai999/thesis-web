@@ -1,4 +1,3 @@
-import CIcon from "@coreui/icons-react";
 import {
   CCard,
   CCardBody,
@@ -10,24 +9,25 @@ import {
   CLabel,
   CRow,
   CTextarea,
-  CWidgetIcon,
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import UserCard from "src/components/UserCard";
 import api from "src/service/api";
 
-const MainComponent = () => {
-  const councilId = useLocation().pathname.match(
-    /(?:\/councils\/detail\/)(\d+)/,
-    ""
-  )[1];
-
-  const history = useHistory();
-  const [council, setCouncil] = useState({});
+const MainComponent = ({ council }) => {
+  const [data, setData] = useState({});
 
   useEffect(() => {
-    api.get(`/councils/detail/${councilId}`).then(setCouncil);
+    if (council) {
+      setData(council);
+    } else {
+      const councilId = window.location.pathname.match(
+        /(?:\/councils\/detail\/)(\d+)/,
+        ""
+      )[1];
+      api.get(`/councils/detail/${councilId}`).then(setData);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -35,14 +35,14 @@ const MainComponent = () => {
     <CCard>
       <CCardHeader>
         <h5 className="card-title mb-0">
-          Hội đồng {council.subjectDepartmentName} mã số {council.id}
+          Hội đồng {data.subjectDepartmentName} mã số {data.id}
         </h5>
       </CCardHeader>
       <CCardBody>
         <CRow>
           <CCol className="mb-4">
             <CRow>
-              {Object.entries(_.groupBy(council.members, (e) => e.role.name))
+              {Object.entries(_.groupBy(data.members, (e) => e.role.name))
                 .sort(
                   (a, b) =>
                     a[1][0].role.displayOrder - b[1][0].role.displayOrder
@@ -96,22 +96,22 @@ const MainComponent = () => {
                   <CLabel>Địa điểm</CLabel>
                   <CInput
                     placeholder="Cơ sở, tòa nhà, phòng hoặc link meet..."
-                    value={council.location}
+                    value={data.location}
                   />
                 </CFormGroup>
 
                 <CFormGroup row>
                   <CCol>
                     <CLabel>Ngày</CLabel>
-                    <CInput type="date" value={council.reserveDate} />
+                    <CInput type="date" value={data.reserveDate} />
                   </CCol>
                   <CCol>
                     <CLabel>Thời gian bắt đầu</CLabel>
-                    <CInput type="time" value={council.startTime} />
+                    <CInput type="time" value={data.startTime} />
                   </CCol>
                   <CCol>
                     <CLabel>Thời gian kết thúc</CLabel>
-                    <CInput type="time" value={council.endTime} />
+                    <CInput type="time" value={data.endTime} />
                   </CCol>
                 </CFormGroup>
 
@@ -120,7 +120,7 @@ const MainComponent = () => {
                   <CTextarea
                     rows="7"
                     placeholder="Ghi chú..."
-                    value={council.note}
+                    value={data.note}
                   />
                 </CFormGroup>
               </CForm>
@@ -131,24 +131,5 @@ const MainComponent = () => {
     </CCard>
   );
 };
-
-const UserCard = ({ user }) => (
-  <CWidgetIcon
-    color="info"
-    iconPadding={false}
-    className="mb-2 mx-0 px-0"
-    header={
-      <>
-        <tr class="d-flex justify-content-between">
-          <td>{`${user.degreeName} mã số ${user.code}`}</td>
-        </tr>
-        {`${user.firstName} ${user.lastName}`}
-      </>
-    }
-    text={<small>{`${user.email}`}</small>}
-  >
-    <CIcon width={24} name="cil-user" />
-  </CWidgetIcon>
-);
 
 export default MainComponent;

@@ -86,7 +86,7 @@ const TopicCreate = ({ location }) => {
     if (form.id) {
       api.patch("/topics", form).then((response) => {
         response &&
-          history.push(`/guide/${contextHolder.semester.name}/${response.id}`);
+          history.go(`/guide/${contextHolder.semester.name}/${response.id}`);
         toastHolder.success("Cập nhật thông tin đề tài thành công");
       });
     } else {

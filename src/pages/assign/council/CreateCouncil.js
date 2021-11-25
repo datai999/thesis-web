@@ -76,8 +76,8 @@ const MainComponent = ({ location }) => {
     }
     if (form.id) {
       api.patch("/councils", form).then(() => {
-        toastHolder.success("Cập nhật hội đồng thành công");
-        history.push(`/councils/${subjectDepartmentId}`);
+        history.go(0);
+        toastHolder.success("Cập nhật thông tin hội đồng thành công");
       });
     } else {
       api.post("/councils", form).then(() => {

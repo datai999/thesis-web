@@ -6,13 +6,8 @@ import { scopedSlots } from "src/service/topicService";
 const fields = [
   { key: "id", label: "Mã", _style: { width: "1%" } },
   { key: "names", label: "Tên đề tài" },
-  {
-    key: "educationMethodNames",
-    label: "Đào tạo",
-    _style: { width: "12%" },
-  },
-  { key: "majorNames", label: "Chuyên ngành" },
-  { key: "guideTeachers", label: "Giáo viên hướng dẫn" },
+  { key: "guideTeachers", label: "GVHD" },
+  { key: "reviewTeachers", label: "GVPB" },
 ];
 
 const MainComponent = ({ onRowClick, topics = [] }) => {
