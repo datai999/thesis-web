@@ -17,7 +17,7 @@ const Login = () => {
     const loginResponse = await api.post("/users/login");
     console.log(loginResponse);
     window.localStorage.setItem("userId", loginResponse.id);
-    history.push(`/my/topics`);
+    history.push(`/dashboard`);
   };
 
   const tryAsAdmin = async () => {

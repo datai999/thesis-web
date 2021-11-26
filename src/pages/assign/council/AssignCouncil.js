@@ -13,15 +13,15 @@ import React, { useEffect, useState } from "react";
 import CouncilInfo from "src/pages/council/CouncilInfo";
 import TopicInCouncil from "src/pages/council/TopicInCouncil";
 import api from "src/service/api";
+import context from "src/service/contextService";
 import { loginUserIsHead } from "src/service/permissionService";
 import toastHolder from "src/service/toastService";
 import AssignCouncilModal from "./AssignCouncilModal";
 import CreateCouncil from "./CreateCouncil";
 import TopicAssignList from "./TopicAssignList";
 
-const MainComponent = ({ location }) => {
-  const paths = location.pathname.split("/");
-  const councilId = paths[5];
+const MainComponent = () => {
+  const councilId = window.location.pathname.split("/").pop();
   const head = loginUserIsHead();
 
   const [assignedTopics, setAssignedTopics] = useState([]);
@@ -30,6 +30,7 @@ const MainComponent = ({ location }) => {
   const [modalProps, setModalProps] = useState({ topic: {} });
   const [assigning, setAssigning] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [council, setCouncil] = useState({});
 
   const submit = () => {
     api
@@ -74,7 +75,7 @@ const MainComponent = ({ location }) => {
   const getUnassignTopics = () => {
     api
       .get(`/topics/need-council`, {
-        params: { subjectDepartmentId: location.state?.subjectDepartment?.id },
+        params: { subjectDepartmentId: context.user?.subjectDepartment?.id },
       })
       .then((response) => {
         response.forEach((e) => {
@@ -85,6 +86,13 @@ const MainComponent = ({ location }) => {
         setUnassignTopics(response);
       });
   };
+
+  useEffect(() => {
+    api.get(`/councils/detail/${councilId}`).then((res) => {
+      setCouncil(res);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     getAssignedTopics();
@@ -101,15 +109,14 @@ const MainComponent = ({ location }) => {
       />
 
       {editing ? (
-        <CreateCouncil location={location} />
+        <CreateCouncil location={{ state: council }} />
       ) : (
         <CCard>
           <CCardHeader>
             <CRow>
               <CCol>
                 <h5>
-                  Hội đồng {location.state.subjectDepartmentName} mã số{" "}
-                  {location.state.id}
+                  Hội đồng {council.subjectDepartmentName} mã số {council.id}
                 </h5>
               </CCol>
               <CCol>
@@ -128,7 +135,7 @@ const MainComponent = ({ location }) => {
             </CRow>
           </CCardHeader>
           <CCardBody>
-            <CouncilInfo council={location.state} />
+            <CouncilInfo council={council} />
           </CCardBody>
         </CCard>
       )}
@@ -182,7 +189,7 @@ const MainComponent = ({ location }) => {
                 </CCol>
               )}
             </CRow>
-            <TopicInCouncil councilId={location.state?.id} />
+            <TopicInCouncil councilId={council.id} />
           </CCardBody>
         </CCard>
       )}

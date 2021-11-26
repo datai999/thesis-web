@@ -70,13 +70,15 @@ const GuideTopicDetail = React.lazy(() =>
 );
 const CreateTopic = React.lazy(() => import("./pages/guide/CreateTopic"));
 const Mark = React.lazy(() => import("./pages/mark/Mark"));
+
 const ReviewList = React.lazy(() => import("./pages/review/ReviewList"));
 const ReviewDetail = React.lazy(() => import("./pages/review/ReviewDetail"));
-
 const AssignReviewList = React.lazy(() =>
   import("./pages/assign/review/AssignReviewList")
 );
 
+const CouncilList = React.lazy(() => import("./pages/council/CouncilList"));
+const CouncilDetail = React.lazy(() => import("./pages/council/CouncilDetail"));
 const AssignCouncilList = React.lazy(() =>
   import("./pages/assign/council/AssignCouncilList")
 );
@@ -87,12 +89,9 @@ const AssignCouncil = React.lazy(() =>
   import("./pages/assign/council/AssignCouncil")
 );
 
-const My = React.lazy(() => import("./pages/my/My"));
-const CouncilDetail = React.lazy(() => import("./pages/council/CouncilDetail"));
 const Users = React.lazy(() => import("./pages/user/Users"));
 const UserDetail = React.lazy(() => import("./pages/user/UserDetail"));
 const EditUser = React.lazy(() => import("./pages/user/EditUser"));
-const TopicScore = React.lazy(() => import("./pages/score/TopicScore"));
 const Semesters = React.lazy(() => import("./pages/semester/Semesters"));
 const TemplateList = React.lazy(() => import("./pages/template/TemplateList"));
 const TemplateDetail = React.lazy(() =>
@@ -199,6 +198,24 @@ let routes = [
     component: AssignReviewList,
   },
   {
+    path: "/council",
+    exact: true,
+    name: "Hội đồng",
+    component: CouncilList,
+  },
+  {
+    path: "/council/:id",
+    exact: true,
+    // name: "Học kỳ",
+    component: CouncilList,
+  },
+  {
+    path: "/council/:id/:id",
+    exact: true,
+    name: "Thông tin hội đồng",
+    component: CouncilDetail,
+  },
+  {
     path: "/assign-council",
     exact: true,
     name: "Phân công hội đồng",
@@ -226,32 +243,6 @@ let routes = [
     path: "/assign-council/:id/:id/edit/:id",
     name: "Chỉnh sửa hội đồng",
     component: AssignCouncil,
-  },
-
-  {
-    path: "/my",
-    exact: true,
-    name: "Có tôi",
-    component: My,
-  },
-  {
-    path: "/my/topics/council",
-    exact: true,
-    name: "Hội đồng",
-    component: My,
-  },
-  {
-    path: "/my/topics/council/:id",
-    exact: false,
-    name: "Hội đồng",
-    component: My,
-  },
-
-  {
-    path: "/councils/detail/:id",
-    exact: false,
-    name: "Thông tin hội đồng",
-    component: CouncilDetail,
   },
   {
     path: "/users",
@@ -300,12 +291,6 @@ let routes = [
     exact: false,
     name: "Chỉnh sửa thông tin người dùng",
     component: EditUser,
-  },
-  {
-    path: "/score/topic/:id",
-    exact: false,
-    name: "Bảng điểm đề tài",
-    component: TopicScore,
   },
   { path: "/semesters", exact: false, name: "Học kỳ", component: Semesters },
   {

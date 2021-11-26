@@ -82,7 +82,7 @@ const MainComponent = () => {
                 <CButton
                   color="primary"
                   className="float-right"
-                  onClick={() => history.push(`/my/topics/create`)}
+                  // TODO create user
                 >
                   Thêm {tabs[tabIndex].tabName}
                 </CButton>

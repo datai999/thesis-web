@@ -33,42 +33,20 @@ const councilRoleFields = [
   { key: "name", label: "Họ tên và email" },
 ];
 
-const CouncilList = ({ subjectDepartmentId }) => {
+const CouncilList = ({ subjectDepartmentId, data, assign = true }) => {
   const history = useHistory();
   const headSubjectDepartment = loginUserIsHead();
-
-  const [data, setData] = useState([]);
-
-  const getData = () => {
-    api
-      .post(
-        `/councils/example`,
-        {
-          subjectDepartment: subjectDepartmentId,
-          semester: { id: context.semester?.id },
-        },
-        {
-          params: {
-            direction: "DESC",
-          },
-        }
-      )
-      .then(setData);
-  };
-
-  useEffect(() => {
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <>
       <CCardHeader>
         <CRow>
           <CCol sm="5">
-            <h5 className="card-title mb-0">Danh sách hội đồng</h5>
+            <h5 className="card-title mb-0">
+              Danh sách hội đồng {assign ? "" : "của tôi"}
+            </h5>
           </CCol>
-          {headSubjectDepartment && (
+          {headSubjectDepartment && assign && (
             <CCol sm="7" className="d-none d-md-block">
               <CButton
                 color="primary"
@@ -93,26 +71,26 @@ const CouncilList = ({ subjectDepartmentId }) => {
         tableProps={{
           clickableRows: true,
           onRowClick: (item) => {
-            history.push(
-              `/assign-council/${subjectDepartmentId}/${context.semester?.name}/edit/${item.id}`,
-              item
-            );
+            if (assign)
+              history.push(
+                `/assign-council/${subjectDepartmentId}/${context.semester?.name}/edit/${item.id}`,
+                item
+              );
+            else {
+              history.push(`/council/${context.semester?.name}/${item.id}`);
+            }
           },
         }}
         scopedSlots={{
           time: (item) => (
             <td>
               <div>
-                {"Ngày"}
+                Ngày
                 <div className="float-right">{item.reserveDate}</div>
               </div>
               <div>
-                {"Bắt đầu"}
+                Thời gian
                 <div className="float-right">{item.startTime}</div>
-              </div>
-              <div>
-                {"Kết thúc"}
-                <div className="float-right">{item.endTime}</div>
               </div>
             </td>
           ),
@@ -161,6 +139,11 @@ const CouncilList = ({ subjectDepartmentId }) => {
               }
             </td>
           ),
+          note: (item) => (
+            <td>
+              <div dangerouslySetInnerHTML={{ __html: item.note }} />
+            </td>
+          ),
         }}
       />
     </>
@@ -171,8 +154,40 @@ const multiLine = (array = []) => (
   <td>{array && array.map((e) => <div>{e}</div>)}</td>
 );
 
+const InnerComponent = ({ subjectDepartmentId }) => {
+  const semesterName = window.location.pathname.split("/").pop();
+
+  const [data, setData] = useState([]);
+
+  const getData = () => {
+    api
+      .post(
+        `/councils/example`,
+        {
+          subjectDepartment: subjectDepartmentId,
+          semester: { name: semesterName },
+        },
+        {
+          params: {
+            direction: "DESC",
+          },
+        }
+      )
+      .then(setData);
+  };
+
+  useEffect(() => {
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [semesterName]);
+
+  return <CouncilList subjectDepartmentId={subjectDepartmentId} data={data} />;
+};
+
 const MainComponent = () => (
-  <SubjectDepartmentTab URL="/assign-council" InnerComponent={CouncilList} />
+  <SubjectDepartmentTab URL="/assign-council" InnerComponent={InnerComponent} />
 );
+
+export { CouncilList };
 
 export default MainComponent;

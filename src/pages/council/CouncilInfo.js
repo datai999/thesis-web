@@ -1,4 +1,4 @@
-import { CCol, CInput, CLabel, CRow } from "@coreui/react";
+import { CCol, CLabel, CRow } from "@coreui/react";
 import _ from "lodash";
 import React from "react";
 import UserCard from "src/components/UserCard";
@@ -66,14 +66,14 @@ const MainComponent = ({ council }) => {
           <br />
 
           <CRow>
-            <CCol>
-              <strong>Ngày</strong>
-              <CInput type="date" value={council.reserveDate} disabled />
+            <CCol md="4">
+              <strong>Ngày: </strong>
+              {council.reserveDate}
             </CCol>
 
             <CCol>
-              <strong>Thời gian bắt đầu</strong>
-              <CInput type="time" value={council.startTime} disabled />
+              <strong>Thời gian bắt đầu: </strong>
+              {council.startTime}
             </CCol>
           </CRow>
 
@@ -82,7 +82,7 @@ const MainComponent = ({ council }) => {
           <div>
             <strong>Ghi chú</strong>
             <div
-              className="border p-2 py-5"
+              className="border p-2"
               dangerouslySetInnerHTML={{ __html: council.note }}
             />
           </div>
