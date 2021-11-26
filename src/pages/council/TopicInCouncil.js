@@ -1,11 +1,14 @@
 import { CPagination } from "@coreui/react";
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import BaseTable from "src/components/BaseTable";
 import TopicModal from "src/pages/topic/TopicModal";
 import api from "src/service/api";
 import { fields, scopedSlots } from "src/service/topicService";
 
-const MainComponent = ({ councilId }) => {
+const MainComponent = ({ councilId, mark }) => {
+  const history = useHistory();
+
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
@@ -48,8 +51,12 @@ const MainComponent = ({ councilId }) => {
           activePage: page,
           clickableRows: true,
           onRowClick: (item) => {
-            setModalProps({ topic: item });
-            setTopicModal(true);
+            if (mark) {
+              history.push(`${window.location.pathname}/${item.id}`);
+            } else {
+              setModalProps({ topic: item });
+              setTopicModal(true);
+            }
           },
         }}
       />

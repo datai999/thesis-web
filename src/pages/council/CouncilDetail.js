@@ -9,7 +9,6 @@ const MainComponent = () => {
 
   React.useEffect(() => {
     const councilId = window.location.pathname.split("/").pop();
-    console.log(councilId);
     api.get(`/councils/detail/${councilId}`).then(setData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -23,7 +22,8 @@ const MainComponent = () => {
       </CCardHeader>
       <CCardBody>
         <CouncilInfo council={data} />
-        <TopicInCouncil councilId={data.id} />
+        <strong>Đề tài thuộc hội đồng</strong>
+        <TopicInCouncil councilId={data.id} mark={true} />
       </CCardBody>
     </CCard>
   );

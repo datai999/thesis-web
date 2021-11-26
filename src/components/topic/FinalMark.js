@@ -26,6 +26,7 @@ const MainComponent = ({ guide = true, topic = {} }) => {
         midSemester: false,
         guideTeacher: guide ? true : null,
         reviewTeacher: guide ? null : true,
+        majors: topic.majors,
       })
       .then(setTemplates);
 

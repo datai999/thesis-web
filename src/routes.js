@@ -79,6 +79,7 @@ const AssignReviewList = React.lazy(() =>
 
 const CouncilList = React.lazy(() => import("./pages/council/CouncilList"));
 const CouncilDetail = React.lazy(() => import("./pages/council/CouncilDetail"));
+const CouncilMark = React.lazy(() => import("./pages/council/CouncilMark"));
 const AssignCouncilList = React.lazy(() =>
   import("./pages/assign/council/AssignCouncilList")
 );
@@ -214,6 +215,18 @@ let routes = [
     exact: true,
     name: "Thông tin hội đồng",
     component: CouncilDetail,
+  },
+  {
+    path: "/council/:id/:id/:id",
+    exact: true,
+    name: "Thông tin đề tài",
+    component: CouncilMark,
+  },
+  {
+    path: "/council/:id/:id/:id/mark",
+    exact: false,
+    name: "Đánh giá sinh viên",
+    component: Mark,
   },
   {
     path: "/assign-council",

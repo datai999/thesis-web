@@ -16,7 +16,7 @@ const MainComponent = ({ view, disableView, topic = {} }) => {
   return !topic ? null : (
     <CModal color="info" size="lg" show={view} onClose={disableView}>
       <CModalHeader closeButton>
-        <CModalTitle>Thông tin hội đồng</CModalTitle>
+        <CModalTitle>Thông tin đề tài</CModalTitle>
       </CModalHeader>
 
       <CModalBody>

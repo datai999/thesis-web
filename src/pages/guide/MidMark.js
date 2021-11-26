@@ -42,6 +42,7 @@ const MainComponent = ({ topic = {} }) => {
         thesis: topic.thesis,
         midSemester: true,
         guideTeacher: true,
+        majors: topic.majors,
       })
       .then(setTemplates);
     // eslint-disable-next-line react-hooks/exhaustive-deps
