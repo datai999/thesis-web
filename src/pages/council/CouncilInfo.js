@@ -1,7 +1,15 @@
-import { CCol, CLabel, CRow } from "@coreui/react";
+import {
+  CCardBody,
+  CCardHeader,
+  CCol,
+  CLabel,
+  CModal,
+  CRow,
+} from "@coreui/react";
 import _ from "lodash";
 import React from "react";
 import UserCard from "src/components/UserCard";
+import CouncilInfo from "./CouncilInfo";
 
 const MainComponent = ({ council }) => {
   return (
@@ -91,5 +99,30 @@ const MainComponent = ({ council }) => {
     </div>
   );
 };
+
+const CouncilInfoModal = ({ view, disableView, council = {} }) => {
+  const minWidth = 1000;
+
+  return !council ? null : (
+    <CModal
+      color="info"
+      size="lg"
+      show={view}
+      onClose={disableView}
+      style={{ minWidth: minWidth }}
+    >
+      <CCardHeader>
+        <h5 className="card-title mb-0">
+          Hội đồng {council.subjectDepartmentName} mã số {council.id}
+        </h5>
+      </CCardHeader>
+      <CCardBody style={{ minWidth: minWidth }}>
+        <CouncilInfo council={council} />
+      </CCardBody>
+    </CModal>
+  );
+};
+
+export { CouncilInfoModal };
 
 export default MainComponent;

@@ -5,25 +5,29 @@ import {
   CCard,
   CCardHeader,
   CCollapse,
+  CLink,
   CTooltip,
 } from "@coreui/react";
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import TeacherStudentScore from "src/components/score/TeacherStudentScore";
+import { CouncilInfoModal } from "src/pages/council/CouncilInfo";
 import MidMark from "src/pages/guide/MidMark";
 import { TopicDetailBody } from "src/pages/topic/TopicDetail";
 import api from "src/service/api";
 import { context } from "src/service/contextService";
-import toastHolder from "src/service/toastService";
 import CancelTopicModal from "./CancelTopicModal";
 
 const TopicExecutes = () => {
   const history = useHistory();
+
   const [data, setData] = useState([]);
   const [details, setDetails] = useState([0, 1]);
   const [cancelTopicModal, setCancelTopicModal] = useState(false);
   const [topicCancel, setTopicCancel] = useState();
   const [canCancel, setCanCancel] = useState(false);
+  const [councilView, setCouncilView] = useState(false);
 
   const toggleDetails = (index) => {
     const position = details.indexOf(index);
@@ -36,13 +40,9 @@ const TopicExecutes = () => {
     setDetails(newDetails);
   };
 
-  const viewCouncilDetail = (council) => {
-    if (council?.id) {
-      history.push(`/councils/detail/${council?.id}`);
-    } else {
-      toastHolder.warning("Đề tài không có hội đồng");
-    }
-  };
+  const viewFinal = (topic) =>
+    topic.students?.length > 0 &&
+    (topic.semester?.id !== context.semester.id || !cancelTopicModal);
 
   useEffect(() => {
     api.get(`/students/${context.user.id}/topics`).then((res) => {
@@ -76,75 +76,106 @@ const TopicExecutes = () => {
             </CButton>
           </CCardHeader>
           <CCollapse show={details.includes(index)}>
-            <TopicDetailBody topic={topic} />
+            <CCardHeader>
+              <TopicDetailBody topic={topic} />
 
-            <CButtonGroup
-              vertical
-              size="sm"
-              style={{ position: "absolute", top: 50, right: 5 }}
-            >
-              {topic.thesis && (
-                <CTooltip content={"Hội đồng"}>
-                  <CButton
-                    color="primary"
-                    variant="outline"
-                    onClick={() => viewCouncilDetail(topic.council)}
-                  >
-                    <CIcon name="cil-people" />
-                  </CButton>
-                </CTooltip>
-              )}
+              <CButtonGroup
+                vertical
+                size="sm"
+                style={{ position: "absolute", top: 50, right: 5 }}
+              >
+                {topic.semester.id === context.semester.id && canCancel && (
+                  <CTooltip content={"Hủy đăng ký đề tài"}>
+                    <CButton
+                      color="primary"
+                      variant="outline"
+                      onClick={() => {
+                        setTopicCancel(topic);
+                        setCancelTopicModal(true);
+                      }}
+                    >
+                      <CIcon name="cil-x-circle" />
+                    </CButton>
+                  </CTooltip>
+                )}
+              </CButtonGroup>
+            </CCardHeader>
 
-              {topic.semester.id === context.semester.id && canCancel && (
-                <CTooltip content={"Hủy đăng ký đề tài"}>
-                  <CButton
-                    color="primary"
-                    variant="outline"
-                    onClick={() => {
-                      setTopicCancel(topic);
-                      setCancelTopicModal(true);
-                    }}
-                  >
-                    <CIcon name="cil-x-circle" />
-                  </CButton>
-                </CTooltip>
-              )}
-            </CButtonGroup>
-
-            {topic.students?.length > 0 &&
-              (topic.semester?.id !== context.semester.id ||
-                !cancelTopicModal) && (
-                <>
-                  <MidMark topic={topic} />
-                  {topic.students?.some(
-                    (e) => e.midPass && e.id === context.user.id
-                  ) && (
-                    <CCardHeader>
-                      <div style={{ width: "90%" }}>
-                        <h5>Kết quả đánh giá cuối kỳ</h5>
-                        <div className="ml-4">
-                          <strong>Giáo viên hướng dẫn</strong>
-                          <TeacherStudentScore
-                            topic={{
-                              id: topic.id,
-                              guideTeachers: topic.guideTeachers,
-                            }}
-                            student={context.user}
-                          />
-                          <strong>Giáo viên phản biện</strong>
-                          <TeacherStudentScore
-                            topic={{
-                              id: topic.id,
-                              reviewTeachers: topic.reviewTeachers,
-                            }}
-                            student={context.user}
-                          />
-                        </div>
+            {viewFinal(topic) && (
+              <>
+                <MidMark topic={topic} />
+                {topic.students?.some(
+                  (e) => e.midPass && e.id === context.user.id
+                ) && (
+                  <CCardHeader>
+                    <div style={{ width: "90%" }}>
+                      <h5>Kết quả đánh giá cuối kỳ</h5>
+                      <div className="ml-4">
+                        <strong>Giáo viên hướng dẫn</strong>
+                        <TeacherStudentScore
+                          topic={{ id: topic.id }}
+                          student={context.user}
+                          template={{ guideTeacher: true }}
+                          teacherIds={topic.guideTeachers?.map((e) => e.id)}
+                        />
+                        <strong>Giáo viên phản biện</strong>
+                        <TeacherStudentScore
+                          topic={{ id: topic.id }}
+                          student={context.user}
+                          template={{ reviewTeacher: true }}
+                          teacherIds={topic.reviewTeachers?.map((e) => e.id)}
+                        />
                       </div>
-                    </CCardHeader>
-                  )}
-                </>
-              )}
+                    </div>
+                  </CCardHeader>
+                )}
+              </>
+            )}
+
+            {viewFinal(topic) && topic.thesis && (
+              <CCardHeader>
+                <CouncilInfoModal
+                  view={councilView}
+                  disableView={() => setCouncilView(false)}
+                  council={topic.council}
+                />
+
+                <div style={{ width: "90%" }}>
+                  <h5>
+                    Kết quả đánh giá của{" "}
+                    <CLink onClick={() => setCouncilView(true)}>
+                      hội đồng
+                      {topic.council ? ` mã số ${topic.council?.id}` : ""}
+                    </CLink>
+                  </h5>
+
+                  <div className="ml-4">
+                    {Object.entries(
+                      _.groupBy(topic.council?.members, (e) => e.role.name)
+                    )
+                      .sort(
+                        (a, b) =>
+                          a[1][0].role.displayOrder - b[1][0].role.displayOrder
+                      )
+                      .map((e) => (
+                        <>
+                          <strong>{e[0]}</strong>
+                          <TeacherStudentScore
+                            topic={{ id: topic.id }}
+                            student={context.user}
+                            template={{
+                              councilRoles: [{ id: e[1][0].role?.id }],
+                            }}
+                            teacherIds={e[1].map(
+                              (councilRole) => councilRole.member?.id
+                            )}
+                          />
+                        </>
+                      ))}
+                  </div>
+                </div>
+              </CCardHeader>
+            )}
           </CCollapse>
         </CCard>
       ))}

@@ -7,7 +7,12 @@ const fields = [
   { key: "fullName", label: "Giáo viên" },
 ];
 
-const MainComponent = ({ topic = {}, student = {} }) => {
+const MainComponent = ({
+  topic = {},
+  student = {},
+  template = {},
+  teacherIds = [],
+}) => {
   const [data, setData] = React.useState([]);
 
   const dataToField = () =>
@@ -19,12 +24,13 @@ const MainComponent = ({ topic = {}, student = {} }) => {
 
   useEffect(() => {
     api
-      .post(`/scores/teacher`, {
+      .post(`/scores/teacher?teacherIds=${teacherIds}`, {
         topic: topic,
         student: { id: student.id },
         template: {
           thesis: topic.thesis,
           midSemester: false,
+          ...template,
         },
       })
       .then((res) => {
@@ -51,6 +57,8 @@ const MainComponent = ({ topic = {}, student = {} }) => {
       </td>
     );
   };
+
+  if (data?.length < 1) return <div></div>;
 
   return (
     <CDataTable
