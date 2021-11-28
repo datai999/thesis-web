@@ -3,29 +3,37 @@ import React, { useEffect } from "react";
 import api from "src/service/api";
 
 const fields = [
-  { key: "code", label: "MSCB" },
-  { key: "fullName", label: "Giáo viên" },
+  { key: "code", label: "MSCB", _style: { width: 1 } },
+  { key: "fullName", label: "Giáo viên", _style: { width: 150 } },
+  { key: "email", label: "Email", _style: { width: 200 } },
 ];
 
 const MainComponent = ({
   topic = {},
   student = {},
   template = {},
-  teacherIds = [],
+  teachers = [],
 }) => {
+  const [templates, setTemplates] = React.useState([]);
   const [data, setData] = React.useState([]);
 
   const dataToField = () =>
-    data?.length < 1
-      ? []
-      : data[0].templates.map((e) => {
-          return { key: "template" + e.id, label: e.name };
-        });
+    templates?.map((e) => {
+      return { key: "template" + e.id, label: e.name };
+    });
 
   useEffect(() => {
     api
-      .post(`/scores/teacher?teacherIds=${teacherIds}`, {
-        topic: topic,
+      .post(`/templates/example`, {
+        thesis: topic.thesis,
+        midSemester: false,
+        majors: topic.majors,
+        ...template,
+      })
+      .then(setTemplates);
+    api
+      .post(`/scores/teacher?teacherIds=${teachers.map((e) => e.id)}`, {
+        topic: { id: topic.id },
         student: { id: student.id },
         template: {
           thesis: topic.thesis,
@@ -48,7 +56,7 @@ const MainComponent = ({
 
     return (
       <td>
-        {studentHasTemplateScore?.scores?.join(", ")}
+        {studentHasTemplateScore?.scores.join(", ")}
         {template.numberMark && studentHasTemplateScore && (
           <div className="float-right">
             Tổng:{studentHasTemplateScore.totalScore}
@@ -64,10 +72,9 @@ const MainComponent = ({
     <CDataTable
       fields={[...fields, ...dataToField()]}
       items={data}
-      striped
       size="sm"
       scopedSlots={{
-        ...data[0]?.templates.reduce(
+        ...templates?.reduce(
           (a, v) => ({
             ...a,
             ["template" + v.id]: (item) => renderScore(v, item),

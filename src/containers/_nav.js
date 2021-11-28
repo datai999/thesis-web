@@ -8,27 +8,15 @@ const _nav = [
     icon: "cil-speedometer",
   },
   {
-    _tag: "CSidebarNavDropdown",
+    _tag: "CSidebarNavItem",
     name: "Danh sách đề tài",
-    to: "/topics",
+    to: "/topics/outline",
     icon: "cil-notes",
     permissions: [
       PERMISSIONS.EDUCATION_STAFF,
       PERMISSIONS.HEAD_SUBJECT_DEPARTMENT,
       PERMISSIONS.TEACHER,
       PERMISSIONS.STUDENT,
-    ],
-    _children: [
-      {
-        _tag: "CSidebarNavItem",
-        name: "Đề cương",
-        to: "/topics/outline",
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Luận văn",
-        to: "/topics/thesis",
-      },
     ],
   },
   {

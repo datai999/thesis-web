@@ -102,7 +102,6 @@ const MainComponent = ({ topic = {} }) => {
             },
           ]}
           items={topic.students}
-          striped
           size="sm"
           scopedSlots={{
             ...templates.reduce(

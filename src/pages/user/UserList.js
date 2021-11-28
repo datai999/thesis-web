@@ -66,7 +66,7 @@ const Component = () => {
         {
           permission: getPermission(userType),
         },
-        { params: { direction: "DESC" } }
+        { params: { direction: userType === "student" ? "ASC" : "DESC" } }
       )
       .then(setData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,6 +79,7 @@ const Component = () => {
       tableProps={{
         striped: true,
         clickableRows: true,
+        itemsPerPage: 10,
         onRowClick: (item) => history.push(`/users/${item.id}`),
       }}
     />

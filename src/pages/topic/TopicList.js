@@ -46,7 +46,7 @@ const MainComponent = ({ thesis }) => {
             : null,
           majors: loginUserIsStudent() ? [context.user.major?.id] : null,
         },
-        { params: { direction: "DESC" } }
+        { params: { direction: "ASC" } }
       )
       .then((response) => {
         response.forEach((e) => {

@@ -113,17 +113,17 @@ const TopicExecutes = () => {
                       <div className="ml-4">
                         <strong>Giáo viên hướng dẫn</strong>
                         <TeacherStudentScore
-                          topic={{ id: topic.id }}
+                          topic={topic}
                           student={context.user}
                           template={{ guideTeacher: true }}
-                          teacherIds={topic.guideTeachers?.map((e) => e.id)}
+                          teachers={topic.guideTeachers}
                         />
                         <strong>Giáo viên phản biện</strong>
                         <TeacherStudentScore
-                          topic={{ id: topic.id }}
+                          topic={topic}
                           student={context.user}
                           template={{ reviewTeacher: true }}
-                          teacherIds={topic.reviewTeachers?.map((e) => e.id)}
+                          teachers={topic.reviewTeachers}
                         />
                       </div>
                     </div>
@@ -132,7 +132,7 @@ const TopicExecutes = () => {
               </>
             )}
 
-            {viewFinal(topic) && topic.thesis && (
+            {viewFinal(topic) && topic.thesis && topic.council && (
               <CCardHeader>
                 <CouncilInfoModal
                   view={councilView}
@@ -161,13 +161,13 @@ const TopicExecutes = () => {
                         <>
                           <strong>{e[0]}</strong>
                           <TeacherStudentScore
-                            topic={{ id: topic.id }}
+                            topic={topic}
                             student={context.user}
                             template={{
                               councilRoles: [{ id: e[1][0].role?.id }],
                             }}
-                            teacherIds={e[1].map(
-                              (councilRole) => councilRole.member?.id
+                            teachers={e[1].map(
+                              (councilRole) => councilRole.member
                             )}
                           />
                         </>

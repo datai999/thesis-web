@@ -17,15 +17,22 @@ import toastHolder from "src/service/toastService";
 
 const MainComponent = ({ location }) => {
   const history = useHistory();
+  const paths = window.location.pathname.split("/");
 
   const scoreExample = {
     topic: { id: location?.state?.topic?.id },
     teacher: { id: contextHolder.user.id },
     student: { id: location?.state.student?.id },
     template: { id: location?.state.template?.id },
+    councilRole: location?.state?.councilRole
+      ? { id: location?.state?.councilRole.id }
+      : null,
+    guideTeacher: paths[1] === "guide",
+    reviewTeacher: paths[1] === "review",
   };
 
   const [scores, setScores] = useState([]);
+  const [invalidScore, setInvalidScore] = useState(false);
 
   const toInt = (input) => (parseInt(input) ? parseInt(input) : 0);
 
@@ -53,7 +60,27 @@ const MainComponent = ({ location }) => {
     }
   };
 
+  const findUnScores = (criterion) => {
+    if (
+      criterion.mark &&
+      !scores.some(
+        (e) =>
+          e.criterion?.id === criterion.id && e.score && e.score.length !== 0
+      )
+    ) {
+      return [criterion];
+    }
+    return criterion.children?.map(findUnScores).flat();
+  };
+
   const submit = () => {
+    const unScore = findUnScores(location.state.template?.rootCriterion);
+    if (unScore.length !== 0) {
+      console.log(unScore);
+      setInvalidScore(true);
+      toastHolder.error("Chưa chấm điểm");
+      return;
+    }
     api.post(`/scores/all`, { entities: scores }).then(() => {
       toastHolder.success("Chấm điểm thành công");
       location.state.successPath &&
@@ -131,6 +158,7 @@ const MainComponent = ({ location }) => {
             scores={scores}
             updateScore={updateScore}
             disableMark={false}
+            invalidScore={invalidScore}
           />
         </CCardBody>
 

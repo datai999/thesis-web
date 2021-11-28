@@ -17,6 +17,9 @@ import TopicList from "./TopicList";
 
 const MainComponent = () => {
   const history = useHistory();
+  if (window.location.pathname === "/topics") {
+    history.push(`/topics/outline/${context.semester.name}`);
+  }
   const isThesisTab = window.location.pathname.match("/topics/thesis")
     ? true
     : false;

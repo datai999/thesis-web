@@ -43,7 +43,7 @@ const CouncilList = ({ subjectDepartmentId, data, assign = true }) => {
         <CRow>
           <CCol sm="5">
             <h5 className="card-title mb-0">
-              Danh sách hội đồng {assign ? "" : "của tôi"}
+              Danh sách hội đồng {assign ? "" : ""}
             </h5>
           </CCol>
           {headSubjectDepartment && assign && (

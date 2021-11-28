@@ -82,6 +82,7 @@ const MainComponent = () => {
               topic: topic,
               student: student,
               successPath: window.location.pathname,
+              councilRole: templates[0]?.councilRoles[0],
             })
           }
         >

@@ -6,6 +6,8 @@ import TopicModal from "src/pages/topic/TopicModal";
 import api from "src/service/api";
 import { fields, scopedSlots } from "src/service/topicService";
 
+const customFields = fields.filter((e) => e.key !== "studentCount");
+
 const MainComponent = ({ councilId, mark }) => {
   const history = useHistory();
 
@@ -42,7 +44,7 @@ const MainComponent = ({ councilId, mark }) => {
       />
       <BaseTable
         items={data}
-        fields={fields}
+        fields={customFields}
         scopedSlots={scopedSlots}
         pagination={false}
         tableProps={{

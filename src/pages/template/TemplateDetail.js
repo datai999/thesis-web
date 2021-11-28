@@ -54,6 +54,28 @@ const MainComponent = () => {
     setEdit(true);
   };
 
+  const [scores, setScores] = useState([]);
+  const toInt = (input) => (parseInt(input) ? parseInt(input) : 0);
+  const updateScore = (score) => {
+    if (score.score === "") {
+      score.score = null;
+    } else {
+      score.score = data?.numberMark
+        ? toInt(score.score)
+        : score.score?.toUpperCase();
+    }
+    const index = scores.findIndex(
+      (e) => e.criterion.id === score.criterion.id
+    );
+    if (index < 0) {
+      setScores([...scores, score]);
+    } else {
+      let nextScores = scores.slice();
+      nextScores[index] = score;
+      setScores(nextScores);
+    }
+  };
+
   const submit = () => {
     setReview(false);
     if (templateIdPath)
@@ -448,6 +470,8 @@ const MainComponent = () => {
               const nextData = { ...data, rootCriterion: nextCriterion };
               setData(nextData);
             }}
+            scores={scores}
+            updateScore={updateScore}
           />
         </CCardBody>
       </CForm>

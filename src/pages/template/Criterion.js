@@ -139,6 +139,25 @@ const MainComponent = ({
                   <CIcon name="cil-calculator" />
                 </CButton>
               </CTooltip>
+              <CTooltip
+                content={criterion.comment ? "Tắt bình luận" : "Bình luận"}
+              >
+                <CButton
+                  color="primary"
+                  variant="outline"
+                  onClick={() =>
+                    updateCriterion({
+                      ...criterion,
+                      comment: !criterion.comment,
+                    })
+                  }
+                >
+                  <CIcon name="cil-speech" />
+                </CButton>
+              </CTooltip>
+            </CButtonGroup>
+            <br />
+            <CButtonGroup size="sm">
               <CTooltip content={"Xóa mục này"}>
                 <CButton
                   color="primary"
@@ -163,56 +182,46 @@ const MainComponent = ({
           criterion?.children?.map(renderChildren)
         ))}
 
-      {criterion.mark && (
-        <CFormGroup row className="m-0 ml-2">
-          <CCol className="p-0" style={{ maxWidth: 60 }}>
-            <CInput
-              size="sm"
-              placeholder={"Điểm"}
-              value={score?.score}
-              disabled={props.disableMark}
-              onChange={(e) =>
-                props.updateScore({
-                  ...score,
-                  criterion: { id: criterion.id },
-                  score: e.target.value,
-                })
-              }
-            />
-          </CCol>
-          <CCol className="p-0">
-            <CTextarea
-              size="sm"
-              rows={1}
-              placeholder={`Bình luận...`}
-              value={score?.comment}
-              disabled={props.disableMark}
-              onChange={(e) =>
-                props.updateScore({
-                  ...score,
-                  criterion: { id: criterion.id },
-                  comment: e.target.value,
-                })
-              }
-            />
-          </CCol>
-          {edit && (
-            <CCol md="0">
-              <CTooltip content={`Bỏ chấm điểm tiêu chí`}>
-                <CButton
-                  size="sm"
-                  color="primary"
-                  variant={"ghost"}
-                  onClick={() => {
-                    updateCriterion({
-                      ...criterion,
-                      mark: false,
-                    });
-                  }}
-                >
-                  <CIcon name="cil-trash" />
-                </CButton>
-              </CTooltip>
+      {(criterion.mark || criterion.comment) && (
+        <CFormGroup row className="m-0 ml-2" style={{ width: "90%" }}>
+          {criterion.mark && (
+            <CCol className="p-0" style={{ maxWidth: 70 }}>
+              <CInput
+                size="sm"
+                placeholder={"Điểm"}
+                value={score?.score}
+                disabled={props.disableMark}
+                required={props.invalidScore}
+                invalid={props.invalidScore && !score?.score}
+                valid={score?.score && score?.score.length > 0}
+                onChange={(e) =>
+                  props.updateScore &&
+                  props.updateScore({
+                    ...score,
+                    criterion: { id: criterion.id },
+                    score: e.target.value,
+                  })
+                }
+              />
+            </CCol>
+          )}
+          {criterion.comment && (
+            <CCol className="p-0">
+              <CTextarea
+                size="sm"
+                rows={1}
+                placeholder={`Bình luận...`}
+                value={score?.comment}
+                disabled={props.disableMark}
+                onChange={(e) =>
+                  props.updateScore &&
+                  props.updateScore({
+                    ...score,
+                    criterion: { id: criterion.id },
+                    comment: e.target.value,
+                  })
+                }
+              />
             </CCol>
           )}
         </CFormGroup>
