@@ -118,13 +118,17 @@ const TopicExecutes = () => {
                           template={{ guideTeacher: true }}
                           teachers={topic.guideTeachers}
                         />
-                        <strong>Giáo viên phản biện</strong>
-                        <TeacherStudentScore
-                          topic={topic}
-                          student={context.user}
-                          template={{ reviewTeacher: true }}
-                          teachers={topic.reviewTeachers}
-                        />
+                        {topic.reviewTeachers?.length > 0 && (
+                          <>
+                            <strong>Giáo viên phản biện</strong>
+                            <TeacherStudentScore
+                              topic={topic}
+                              student={context.user}
+                              template={{ reviewTeacher: true }}
+                              teachers={topic.reviewTeachers}
+                            />
+                          </>
+                        )}
                       </div>
                     </div>
                   </CCardHeader>

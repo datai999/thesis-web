@@ -18,9 +18,15 @@ import api from "src/service/api";
 import { context } from "src/service/contextService";
 import toastHolder from "src/service/toastService";
 
-const MainComponent = ({ view, disableView, confirm, topic = {} }) => {
+const MainComponent = ({
+  view,
+  disableView,
+  confirm,
+  topic = { guideTeachers: [] },
+}) => {
   const [searchTeachers, setSearchTeachers] = React.useState(false);
   const [teachers, setTeachers] = React.useState([]);
+  const [userNotShow, setUserNotShow] = React.useState([]);
 
   const submit = () => {
     api
@@ -47,7 +53,7 @@ const MainComponent = ({ view, disableView, confirm, topic = {} }) => {
           setSearchTeachers(false);
           setTeachers([...teachers, teacher]);
         }}
-        userNotShow={teachers}
+        userNotShow={userNotShow}
       />
 
       <CModalHeader closeButton>
@@ -65,7 +71,7 @@ const MainComponent = ({ view, disableView, confirm, topic = {} }) => {
 
         <CCardFooter>
           <div>
-            <strong>Gíao viên phản biện</strong>
+            <strong>Giáo viên phản biện</strong>
           </div>
 
           <CRow>
@@ -81,16 +87,23 @@ const MainComponent = ({ view, disableView, confirm, topic = {} }) => {
                 />
               </CCol>
             ))}
-            {topic?.semester?.id === context.semester.id && (
-              <CCol md="4">
-                <CButton
-                  color="primary"
-                  onClick={() => setSearchTeachers(true)}
-                >
-                  Phân công giáo viên phản biện
-                </CButton>
-              </CCol>
-            )}
+            {topic?.semester?.id === context.semester.id &&
+              teachers.length < 3 && (
+                <CCol md="4">
+                  <CButton
+                    color="primary"
+                    onClick={() => {
+                      setUserNotShow([
+                        ...teachers,
+                        ...(topic?.guideTeachers ?? []),
+                      ]);
+                      setSearchTeachers(true);
+                    }}
+                  >
+                    Phân công giáo viên phản biện
+                  </CButton>
+                </CCol>
+              )}
           </CRow>
         </CCardFooter>
       </CModalBody>

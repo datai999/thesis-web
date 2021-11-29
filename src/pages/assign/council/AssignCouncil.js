@@ -96,7 +96,7 @@ const MainComponent = () => {
 
   useEffect(() => {
     getAssignedTopics();
-    getUnassignTopics();
+    context.user?.subjectDepartment && getUnassignTopics();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assigning]);
 

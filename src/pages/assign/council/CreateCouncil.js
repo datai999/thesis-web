@@ -23,6 +23,7 @@ import api from "src/service/api";
 import contextHolder from "src/service/contextService";
 import { loginUserIsHead } from "src/service/permissionService";
 import toastHolder from "src/service/toastService";
+import ConflictTimeModal from "./ConflictTimeModal";
 
 const MainComponent = ({ location }) => {
   const subjectDepartmentId = window.location.pathname.split("/")[2];
@@ -32,6 +33,8 @@ const MainComponent = ({ location }) => {
   const [councilRoles, setCouncilRoles] = useState([]);
   const [searchTeachers, setSearchTeachers] = useState(false);
   const [currentRole, setCurrentRole] = useState(-1);
+  const [conflictTimeView, setConflictTimeView] = useState(false);
+  const [conflictTimeProps, setConflictTimeProps] = useState({});
 
   const remove = (roleIndex, teacherId) => {
     const nextRoles = _.cloneDeep(councilRoles);
@@ -53,6 +56,21 @@ const MainComponent = ({ location }) => {
       value: _.get(form, getPath),
       onChange: (e) => setValueForm(getPath ?? setPath, e.target.value),
     };
+  };
+
+  const checkConflictTimeline = (e) => {
+    api
+      .get(`/council-members/${form.id}/conflict-timeline`, {
+        params: { date: e.target.value },
+      })
+      .then((res) => {
+        setConflictTimeProps({
+          reserveDate: e.target.value,
+          councilMember: res,
+        });
+        if (res.length > 0) setConflictTimeView(true);
+      });
+    setValueForm("reserveDate", e.target.value);
   };
 
   const submit = () => {
@@ -131,6 +149,11 @@ const MainComponent = ({ location }) => {
         selected={onFormSelected}
         userNotShow={councilRoles.map((role) => role.teachers).flat()}
       />
+      <ConflictTimeModal
+        view={conflictTimeView}
+        disableView={() => setConflictTimeView(false)}
+        {...conflictTimeProps}
+      />
       <CCardHeader>
         <h5 className="card-title mb-0">
           {form.id ? `Chỉnh sửa hội đồng mã số ${form.id}` : "Tạo hội đồng"}
@@ -206,12 +229,17 @@ const MainComponent = ({ location }) => {
                     <CLabel>
                       <strong>Ngày</strong>
                     </CLabel>
-                    <CInput type="date" {...setGetForm("reserveDate")} />
+                    <CInput
+                      type="date"
+                      {...setGetForm("reserveDate")}
+                      onChange={checkConflictTimeline}
+                    />
                   </CCol>
                   <CCol>
                     <CLabel>
                       <strong>Thời gian bắt đầu</strong>
                     </CLabel>
+                    setGetForm
                     <CInput type="time" {...setGetForm("startTime")} />
                   </CCol>
                   {/* <CCol>
