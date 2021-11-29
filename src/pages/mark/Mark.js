@@ -65,7 +65,9 @@ const MainComponent = ({ location }) => {
       criterion.mark &&
       !scores.some(
         (e) =>
-          e.criterion?.id === criterion.id && e.score && e.score.length !== 0
+          e.criterion?.id === criterion.id &&
+          (e.score || e.score === 0) &&
+          e.score.length !== 0
       )
     ) {
       return [criterion];
@@ -76,7 +78,6 @@ const MainComponent = ({ location }) => {
   const submit = () => {
     const unScore = findUnScores(location.state.template?.rootCriterion);
     if (unScore.length !== 0) {
-      console.log(unScore);
       setInvalidScore(true);
       toastHolder.error("Chưa chấm điểm");
       return;

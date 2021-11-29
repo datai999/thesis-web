@@ -28,6 +28,10 @@ export const loginUserIsTeacher = () => {
   );
 };
 
+export const loginUserIsEduStaff = () => {
+  return [PERMISSIONS.EDUCATION_STAFF].includes(contextHolder.user?.permission);
+};
+
 export const permissionFilter = (e) => {
   return !e?.permissions || loginUserHasAny(e.permissions);
 };

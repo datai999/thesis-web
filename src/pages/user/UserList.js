@@ -5,33 +5,33 @@ import api from "src/service/api";
 import { PERMISSIONS } from "src/service/permissionService";
 
 const fields = [
-  { key: "code", label: "Mã số", _style: { width: 1 } },
+  { key: "code", label: "Mã số" },
   { key: "firstName", label: "Họ" },
   { key: "lastName", label: "Tên" },
-  { key: "gender", label: "Giới tính", _style: { width: 100 } },
+  // { key: "gender", label: "Giới tính", _style: { width: 100 } },
   {
     key: "degreeName",
     userType: ["teacher", "head"],
     label: "Học vị",
-    _style: { width: 80 },
+    // _style: { width: 80 },
   },
   {
     key: "subjectDepartmentName",
     userType: ["teacher", "head"],
     label: "Bộ môn",
-    _style: { minWidth: 130 },
+    // _style: { minWidth: 130 },
   },
   {
     key: "educationMethodName",
     userType: ["student"],
     label: "Đào tạo",
-    _style: { width: 120 },
+    // _style: { width: 120 },
   },
   {
     key: "majorName",
     userType: ["student"],
     label: "Chuyên ngành",
-    _style: { width: 150 },
+    // _style: { width: 150 },
   },
   { key: "email", label: "Email" },
 ];

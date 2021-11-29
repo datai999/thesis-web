@@ -13,7 +13,12 @@ import UserCard from "src/components/UserCard";
 import RegisterTopicModal from "src/pages/topic/RegisterTopicModal";
 import api from "src/service/api";
 import context from "src/service/contextService";
-import { loginUserHasAny, PERMISSIONS } from "src/service/permissionService";
+import {
+  loginUserHasAny,
+  loginUserIsEduStaff,
+  PERMISSIONS,
+} from "src/service/permissionService";
+import TopicResult from "./TopicResult";
 
 const MainComponent = () => {
   const history = useHistory();
@@ -54,6 +59,8 @@ const MainComponent = () => {
         setRegisterTopicModal={setRegisterTopicModal}
         canRegister={canRegister}
       />
+
+      {loginUserIsEduStaff() && <TopicResult topic={topic} />}
     </CCard>
   );
 };
