@@ -1,5 +1,6 @@
-import { CCardHeader, CCol, CRow } from "@coreui/react";
+import { CCardHeader, CCol, CLink, CRow } from "@coreui/react";
 import React from "react";
+import viewUserModal from "src/components/user/UserModal";
 import api from "src/service/api";
 
 const commonProps = { md: 0, className: "border" };
@@ -61,7 +62,11 @@ const MainComponent = ({ topic = {} }) => {
             <CCol>
               {role.teachers.map((teacher) => (
                 <CRow>
-                  <CCol {...PROPS.TEACHER}>{teacher.fullName}</CCol>
+                  <CCol {...PROPS.TEACHER}>
+                    <CLink onClick={() => viewUserModal(teacher)}>
+                      {teacher.fullName}
+                    </CLink>
+                  </CCol>
                   {teacher.students.map((student) => (
                     <CCol {...PROPS.STUDENT}>
                       {student.templates.map((template) => (
