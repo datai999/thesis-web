@@ -22,13 +22,14 @@ const MainComponent = () => {
   const [unseenOnly, setUnseenOnly] = useState(false);
   const [toggle, refreshToggle] = useState(false);
 
-  const getMessage = () =>
+  const getMessage = () => {
     api
       .get(`/notifications/my`, { params: { limit: limitMessage } })
       .then((response) => {
         setAllMessages(response.all);
         setUnseenMessages(response.unseen);
       });
+  };
 
   const seen = (message) =>
     api

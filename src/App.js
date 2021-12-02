@@ -29,11 +29,6 @@ const App = () => {
 
   const init = async () => {
     setWaitingInit(true);
-    const token = await window.localStorage.getItem("token");
-    if (!token) {
-      await window.localStorage.setItem("token", "admin@hcmut.edu.vn");
-      await window.localStorage.setItem("userId", 1);
-    }
     const initResponse = await initContext();
     setWaitingInit(!initResponse);
   };

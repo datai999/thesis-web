@@ -10,6 +10,8 @@ const context = {
 
   refreshSemester: () =>
     api.get("/semesters/current").then((res) => (context.semester = res)),
+  saveCurrentUser: () =>
+    api.get("/users/current").then((res) => (context.user = res)),
 };
 
 const initContext = async () => {
@@ -20,8 +22,6 @@ const initContext = async () => {
     .get("/subject-departments")
     .then((res) => (context.subjectDepartments = res));
   api.get("/degrees").then((res) => (context.degrees = res));
-  const userId = await window.localStorage.getItem("userId");
-  await api.get(`/users/detail/${userId}`).then((res) => (context.user = res));
   return true;
 };
 

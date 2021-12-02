@@ -1,5 +1,4 @@
 import axios from "axios";
-import contextService from "./contextService";
 import toastHolder from "./toastService";
 const config = {
   baseURL: "http://localhost:8080/api",
@@ -34,14 +33,12 @@ AxiosClient.interceptors.response.use(
   }
 );
 
-export const setLocalUser = async (user) => {
-  contextService.user = user;
-  await window.localStorage.setItem("token", user.email);
-  await window.localStorage.setItem("userId", user.id);
-};
-
 AxiosClient.interceptors.request.use(async (config) => {
-  config.headers.common["X-auth"] = await window.localStorage.getItem("token");
+  const token = await window.localStorage.getItem("token");
+  if (token) {
+    config.headers.common["X-auth"] = "Bearer " + token;
+  }
+
   return config;
 });
 

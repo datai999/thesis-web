@@ -13,6 +13,12 @@ import contextHolder from "src/service/contextService";
 const MainComponent = () => {
   const history = useHistory();
 
+  const [loading, setLoading] = React.useState(false);
+
+  const logout = () => {
+    history.push("/login");
+  };
+
   return (
     <CDropdown inNav className="c-header-nav-items mx-2" direction="down">
       <CDropdownToggle className="c-header-nav-link" caret={false} size="sm">
@@ -29,7 +35,7 @@ const MainComponent = () => {
           <CIcon name="cil-user" className="mfe-2" />
           Trang cá nhân
         </CDropdownItem>
-        <CDropdownItem onClick={() => history.push("/login")}>
+        <CDropdownItem onClick={logout}>
           <CIcon name="cil-lock-locked" className="mfe-2" />
           Đăng xuất
         </CDropdownItem>

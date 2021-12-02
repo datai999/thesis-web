@@ -12,7 +12,7 @@ import {
 } from "@coreui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
-import api, { setLocalUser } from "src/service/api";
+import api from "src/service/api";
 
 const MainComponent = ({ view, disableView }) => {
   const history = useHistory();
@@ -21,7 +21,7 @@ const MainComponent = ({ view, disableView }) => {
   const [user, setUser] = React.useState({});
 
   const confirm = async () => {
-    await setLocalUser(user);
+    // await setLocalUser(user);
     history.go(0);
   };
 

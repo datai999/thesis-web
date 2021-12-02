@@ -1,11 +1,8 @@
-import CIcon from "@coreui/icons-react";
 import {
   CBreadcrumbRouter,
   CHeader,
   CHeaderNav,
-  CLink,
   CToggler,
-  CTooltip,
 } from "@coreui/react";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -59,11 +56,11 @@ const TheHeader = () => {
             setActionUserModal(false);
           }}
         />
-        <CTooltip content={"Backdoor for dev only"}>
+        {/* <CTooltip content={"Backdoor for dev only"}>
           <CLink onClick={() => setActionUserModal(true)}>
             <CIcon name="cil-user" className="mfe-2" />
           </CLink>
-        </CTooltip>
+        </CTooltip> */}
         {/* <TheHeaderDropdownNotif />
         <TheHeaderDropdownTasks />
         <TheHeaderDropdownMssg /> */}
