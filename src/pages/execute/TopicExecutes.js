@@ -10,7 +10,6 @@ import {
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import TeacherStudentScore from "src/components/score/TeacherStudentScore";
 import { CouncilInfoModal } from "src/pages/council/CouncilInfo";
 import MidMark from "src/pages/guide/MidMark";
@@ -20,14 +19,13 @@ import { context } from "src/service/contextService";
 import CancelTopicModal from "./CancelTopicModal";
 
 const TopicExecutes = () => {
-  const history = useHistory();
-
   const [data, setData] = useState([]);
   const [details, setDetails] = useState([0, 1]);
   const [cancelTopicModal, setCancelTopicModal] = useState(false);
   const [topicCancel, setTopicCancel] = useState();
   const [canCancel, setCanCancel] = useState(false);
   const [councilView, setCouncilView] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   const toggleDetails = (index) => {
     const position = details.indexOf(index);
@@ -50,14 +48,14 @@ const TopicExecutes = () => {
     });
     api.get(`/semesters/allow-student-register-cancel`).then(setCanCancel);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [refresh]);
 
   return (
     <>
       <CancelTopicModal
         view={cancelTopicModal}
         disableView={() => setCancelTopicModal(false)}
-        confirm={() => history.go("/execute")}
+        confirm={() => setRefresh(!refresh)}
         topic={topicCancel}
       />
 
@@ -67,7 +65,7 @@ const TopicExecutes = () => {
             <CButton
               block
               color="dark"
-              className="text-left m-0 p-0 pl-3"
+              className="text-left m-0 p-0 pl-3 py-2"
               onClick={() => toggleDetails(index)}
             >
               {topic.names && topic.names[0]}

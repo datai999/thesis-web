@@ -1,6 +1,6 @@
 import { CSpinner, CToaster } from "@coreui/react";
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom";
 import "./scss/style.scss";
 import { initContext } from "./service/contextService";
 import toastHolder from "./service/toastService";
@@ -24,17 +24,22 @@ const Page404 = React.lazy(() => import("./views/pages/page404/Page404"));
 const Page500 = React.lazy(() => import("./views/pages/page500/Page500"));
 
 const App = () => {
+  const history = useHistory();
+
   const [toasts, addToasts] = useState([]);
   const [waitingInit, setWaitingInit] = useState(false);
 
   const init = async () => {
     setWaitingInit(true);
-    const initResponse = await initContext();
-    setWaitingInit(!initResponse);
+    const token = await initContext();
+    setWaitingInit(false);
+    if (!token) {
+      history.go(`/login`);
+    }
   };
 
   useEffect(() => {
-    init();
+    // init();
   }, []);
 
   useEffect(() => {

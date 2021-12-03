@@ -22,7 +22,7 @@ const Component = ({ view, disableView, selected, userNotShow = [] }) => {
         "/users/example",
         {
           permission: PERMISSIONS.TEACHER,
-          subjectDepartment: context.user.subjectDepartment?.id,
+          subjectDepartment: context.user?.subjectDepartment?.id,
         },
         { params: { direction: "DESC" } }
       )
@@ -39,7 +39,7 @@ const Component = ({ view, disableView, selected, userNotShow = [] }) => {
     <CModal color="info" size="lg" show={view} onClose={disableView}>
       <CModalHeader closeButton>
         <CModalTitle>
-          Tìm kiếm giáo viên {context.user.subjectDepartment?.name}
+          Tìm kiếm giáo viên {context.user?.subjectDepartment?.name}
         </CModalTitle>
       </CModalHeader>
       <CModalBody>

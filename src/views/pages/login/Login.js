@@ -30,7 +30,7 @@ const Login = () => {
     return api
       .post(`/users/login`, { username, password })
       .then(async (token) => {
-        console.log(token);
+        context.token = token;
         await window.localStorage.setItem("token", token);
         await context.saveCurrentUser();
         setLoading(false);

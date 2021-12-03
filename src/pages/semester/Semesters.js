@@ -17,6 +17,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import contextHolder from "src/service/contextService";
+import toastHolder from "src/service/toastService";
 import api from "../../service/api";
 import CreateSemesterModal from "./CreateSemesterModal";
 
@@ -110,7 +111,10 @@ const MainComponent = () => {
   };
 
   const deleteSemester = (semester) =>
-    api.delete(`/semesters/${semester.id}`).then(refresh);
+    api.delete(`/semesters/${semester.id}`).then(() => {
+      refresh();
+      toastHolder.success("Xoá học kỳ thành công");
+    });
 
   const setCurrentSemester = (semester) =>
     api.put(`/semesters/current?id=${semester.id}`).then(() => {

@@ -1,5 +1,7 @@
 import axios from "axios";
+import contextService from "./contextService";
 import toastHolder from "./toastService";
+
 const config = {
   baseURL: "http://localhost:8080/api",
   // baseURL: "https://datai-thesis.herokuapp.com/api",
@@ -34,11 +36,11 @@ AxiosClient.interceptors.response.use(
 );
 
 AxiosClient.interceptors.request.use(async (config) => {
-  const token = await window.localStorage.getItem("token");
+  const token =
+    contextService.token ?? (await window.localStorage.getItem("token"));
   if (token) {
     config.headers.common["X-auth"] = "Bearer " + token;
   }
-
   return config;
 });
 

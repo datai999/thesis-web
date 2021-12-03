@@ -15,10 +15,14 @@ const MainComponent = () => {
 
   const [loading, setLoading] = React.useState(false);
 
-  const logout = () => {
+  const logout = async () => {
+    setLoading(true);
+    await window.localStorage.clear();
+    setLoading(false);
     history.push("/login");
   };
 
+  if (loading) throw new Promise(() => {});
   return (
     <CDropdown inNav className="c-header-nav-items mx-2" direction="down">
       <CDropdownToggle className="c-header-nav-link" caret={false} size="sm">

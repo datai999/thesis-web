@@ -11,6 +11,7 @@ import {
 import React from "react";
 import api from "src/service/api";
 import { context } from "src/service/contextService";
+import toastHolder from "src/service/toastService";
 
 const MainComponent = ({ view, disableView, confirm, topic }) => {
   const registerTopic = () => {
@@ -19,6 +20,7 @@ const MainComponent = ({ view, disableView, confirm, topic }) => {
         params: { topicId: topic.id },
       })
       .then((response) => {
+        toastHolder.success("Huỷ đăng ký đề tài thành công");
         confirm(response.data);
       });
     disableView();

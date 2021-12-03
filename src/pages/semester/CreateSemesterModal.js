@@ -11,21 +11,31 @@ import {
   CModalFooter,
   CModalHeader,
   CModalTitle,
-  CRow
+  CRow,
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
+import toastHolder from "src/service/toastService";
 import api from "../../service/api";
 
 const MainComponent = ({ view, disableView, success, defaultForm = {} }) => {
   const [form, setForm] = useState({});
   const [update, setUpdate] = useState(false);
 
-  const register = () => {
-    api.post(`/semesters`, form).then((response) => {
-      disableView();
-      success(response);
-    });
+  const submit = () => {
+    if (form.id) {
+      api.patch("/semesters", form).then((response) => {
+        disableView();
+        success(response);
+        toastHolder.success("Cập nhật thông tin học kỳ thành công");
+      });
+    } else {
+      api.post(`/semesters`, form).then((response) => {
+        disableView();
+        success(response);
+        toastHolder.success("Tạo học kỳ thành công");
+      });
+    }
   };
 
   const setGetForm = (getPath, setPath) => {
@@ -126,7 +136,7 @@ const MainComponent = ({ view, disableView, success, defaultForm = {} }) => {
         </CForm>
       </CModalBody>
       <CModalFooter>
-        <CButton color="info" onClick={register}>
+        <CButton color="info" onClick={submit}>
           Xác nhận
         </CButton>
         <CButton color="secondary" onClick={disableView}>

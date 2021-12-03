@@ -11,10 +11,61 @@ import {
   CSwitch,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
+import viewUserModal from "src/components/user/UserModal";
 import api from "src/service/api";
 
 const limitMessage = 20;
 const scheduleMilliseconds = 100 * 5000;
+
+const idTagRegex = /\d+(?=>)/;
+const innerTagRegex = /(?<=>).*(?=<)/;
+const userTag = {
+  regex: /<user id=\d*>[^<]*<\/user>/g,
+  onClick: (tag) => viewUserModal({ id: tag.match(idTagRegex)[0] }),
+};
+const topicTag = {
+  regex: /<topic id=\d*>[^<]*<\/topic>/g,
+  onClick: (tag) =>
+    window
+      .open(
+        `${window.location.origin}/topics/${tag.match(idTagRegex)[0]}`,
+        "_blank"
+      )
+      .focus(),
+};
+
+const toComponent = (message, tagProps) => {
+  if (!message) return;
+
+  const tags = [...message.matchAll(tagProps.regex)].map((e) => e[0]);
+  const tagResult = tags.map((tag) => (
+    <CLink onClick={() => tagProps.onClick(tag)}>
+      {tag.match(innerTagRegex)[0]}
+    </CLink>
+  ));
+
+  let result = [];
+  let parts = message.split(tagProps.regex);
+  for (let i = 0; i < parts.length; i++) {
+    result.push(parts[i]);
+    result.push(tagResult[i]);
+  }
+  result.pop();
+
+  return result.filter((e) => e !== "");
+};
+
+const tagToComponent = (message) => {
+  let result = [message];
+  [userTag, topicTag].forEach((tag) => {
+    result = result
+      .map((e) =>
+        typeof e === "string" || e instanceof String ? toComponent(e, tag) : e
+      )
+      .flat();
+  });
+  return result;
+};
 
 const MainComponent = () => {
   const [allMessages, setAllMessages] = useState([]);
@@ -26,7 +77,11 @@ const MainComponent = () => {
     api
       .get(`/notifications/my`, { params: { limit: limitMessage } })
       .then((response) => {
-        setAllMessages(response.all);
+        setAllMessages(
+          response.all.map((e) => {
+            return { ...e, arrMessage: tagToComponent(e.message) };
+          })
+        );
         setUnseenMessages(response.unseen);
       });
   };
@@ -92,10 +147,17 @@ const MainComponent = () => {
                   </CLink>
                 )}
               </div>
-              <div
-                dangerouslySetInnerHTML={{ __html: message.message }}
-                style={{ whiteSpace: "pre-wrap" }}
-              />
+
+              {message.arrMessage.map((e) =>
+                typeof e === "string" || e instanceof String ? (
+                  <span
+                    dangerouslySetInnerHTML={{ __html: e }}
+                    style={{ whiteSpace: "pre-wrap" }}
+                  />
+                ) : (
+                  <>{e} </>
+                )
+              )}
             </CDropdownItem>
           ))}
         </div>
