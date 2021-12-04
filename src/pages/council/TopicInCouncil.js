@@ -30,9 +30,9 @@ const MainComponent = ({ councilId, mark }) => {
   };
 
   useEffect(() => {
-    getData();
+    councilId && getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [councilId]);
 
   if (loading) throw new Promise(() => {});
   return (
