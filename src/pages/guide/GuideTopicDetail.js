@@ -12,6 +12,7 @@ import FinalMark from "src/components/topic/FinalMark";
 import { TopicDetailBody } from "src/pages/topic/TopicDetail";
 import api from "src/service/api";
 import context from "src/service/contextService";
+import toastHolder from "src/service/toastService";
 import MidMark from "./MidMark";
 
 const MainComponent = () => {
@@ -19,6 +20,12 @@ const MainComponent = () => {
   const topicId = window.location.pathname.split("/")[3];
   const [topic, setTopic] = useState({ guideTeachers: [] });
   const [endRegisterTopic, setEndRegisterTopic] = useState(false);
+  const [refresh, setRefresh] = useState(true);
+
+  const markSuccess = () => {
+    toastHolder.success("Đánh giá giữa kỳ thành công");
+    setRefresh(!refresh);
+  };
 
   useEffect(() => {
     api.get(`/topics/detail/${topicId}`).then((res) => {
@@ -28,7 +35,7 @@ const MainComponent = () => {
       .get(`/semesters/allow-student-register-cancel`)
       .then((res) => setEndRegisterTopic(!res));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [refresh]);
 
   return (
     <CCard>
@@ -61,7 +68,7 @@ const MainComponent = () => {
       {topic.students?.length > 0 &&
         (topic.semester?.id !== context.semester.id || endRegisterTopic) && (
           <>
-            <MidMark topic={topic} />
+            <MidMark topic={topic} markSuccess={markSuccess} />
             {topic.students?.some((e) => e.midPass) && (
               <FinalMark guide={true} topic={topic} />
             )}

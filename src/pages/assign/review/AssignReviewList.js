@@ -2,6 +2,7 @@ import { CCard, CCardBody, CCardHeader } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import BaseTable from "src/components/BaseTable";
 import api from "src/service/api";
+import context from "src/service/contextService";
 import { fields, scopedSlots } from "src/service/topicService";
 import AssignReviewModal from "./AssignReviewModal";
 
@@ -15,7 +16,7 @@ const assignReviewFields = [
   },
 ];
 
-const MainComponent = ({ subjectDepartmentId = 1 }) => {
+const MainComponent = () => {
   const semesterName = window.location.pathname.split("/").pop();
 
   const [data, setData] = useState([]);
@@ -24,9 +25,12 @@ const MainComponent = ({ subjectDepartmentId = 1 }) => {
 
   const getData = () => {
     api
-      .get(`/review-teachers/${subjectDepartmentId}/topic-review`, {
-        params: { semesterName },
-      })
+      .get(
+        `/review-teachers/${context.user?.subjectDepartment?.id}/topic-review`,
+        {
+          params: { semesterName },
+        }
+      )
       .then((response) => {
         setData(response);
       });

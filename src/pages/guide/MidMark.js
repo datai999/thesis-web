@@ -23,7 +23,7 @@ const fields = [
   { key: "fullName", label: "Sinh viên" },
 ];
 
-const MainComponent = ({ topic = {} }) => {
+const MainComponent = ({ topic = {}, markSuccess = () => {} }) => {
   const history = useHistory();
   const topicId = window.location.pathname.split("/")[3];
   const canEdit = topic.guideTeachers?.some((e) => e.id === context.user.id);
@@ -32,6 +32,7 @@ const MainComponent = ({ topic = {} }) => {
   const [midResult, setMidResult] = React.useState([]);
   const [confirm, setConfirm] = React.useState(false);
   const [confirmProps, setConfirmProps] = React.useState({});
+  const [refresh, setRefresh] = React.useState(true);
 
   const midMark = (student, value) => {
     if (topic.reviewTeachers?.length) {
@@ -52,10 +53,7 @@ const MainComponent = ({ topic = {} }) => {
         majors: topic.majors,
       })
       .then(setTemplates);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
-  useEffect(() => {
     api
       .post(`/topic-student/example`, {
         topicId: topic.id,
@@ -64,7 +62,7 @@ const MainComponent = ({ topic = {} }) => {
         setMidResult(res);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [refresh]);
 
   const renderSwitchResult = (student) => {
     const studentMidResult =
@@ -119,7 +117,10 @@ const MainComponent = ({ topic = {} }) => {
       <ConfirmMidMark
         view={confirm}
         disableView={() => setConfirm(false)}
-        confirm={() => history.go(0)}
+        confirm={() => {
+          markSuccess();
+          setRefresh(!refresh);
+        }}
         {...confirmProps}
       />
       <h5>Kết quả đánh giá giữa kỳ</h5>

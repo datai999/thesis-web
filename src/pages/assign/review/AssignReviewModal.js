@@ -29,13 +29,21 @@ const MainComponent = ({
   const [userNotShow, setUserNotShow] = React.useState([]);
 
   const submit = () => {
-    api
-      .patch("/topics", { ...topic, reviewTeachers: teachers })
-      .then((response) => {
-        response &&
-          toastHolder.success("Phân công giáo viên phản biện thành công");
-        confirm(response);
-      });
+    const topicUpdate = {
+      ...topic,
+      reviewTeachers: teachers,
+      guideTeachers: topic.guideTeachers.map((e) => {
+        return {
+          guideTeacher: e,
+        };
+      }),
+    };
+
+    api.post("/review-teachers/assign", topicUpdate).then((response) => {
+      response &&
+        toastHolder.success("Phân công giáo viên phản biện thành công");
+      confirm(response);
+    });
     disableView();
   };
 
