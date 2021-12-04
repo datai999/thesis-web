@@ -20,14 +20,16 @@ const context = {
 };
 
 const initContext = async () => {
-  context.refreshSemester();
+  await context.refreshSemester();
   await context.saveCurrentUser();
-  api.get("/majors").then((res) => (context.majors = res));
-  api.get("/education-methods").then((res) => (context.educationMethods = res));
-  api
+  await api.get("/majors").then((res) => (context.majors = res));
+  await api
+    .get("/education-methods")
+    .then((res) => (context.educationMethods = res));
+  await api
     .get("/subject-departments")
     .then((res) => (context.subjectDepartments = res));
-  api.get("/degrees").then((res) => (context.degrees = res));
+  await api.get("/degrees").then((res) => (context.degrees = res));
   return context.token;
 };
 
