@@ -2,12 +2,15 @@ import {
   CButton,
   CCardHeader,
   CDataTable,
+  CForm,
+  CFormGroup,
+  CInputRadio,
+  CLabel,
   CModal,
   CModalBody,
   CModalFooter,
   CModalHeader,
   CModalTitle,
-  CSwitch,
 } from "@coreui/react";
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
@@ -31,6 +34,10 @@ const MainComponent = ({ topic = {} }) => {
   const [confirmProps, setConfirmProps] = React.useState({});
 
   const midMark = (student, value) => {
+    if (topic.reviewTeachers?.length) {
+      toastHolder.error("Đề tài đã được phân công phản biện");
+      return;
+    }
     const topicStudent = midResult.find((e) => e.studentId === student.id);
     setConfirmProps({ topicStudent, value, student });
     setConfirm(true);
@@ -60,24 +67,50 @@ const MainComponent = ({ topic = {} }) => {
   }, []);
 
   const renderSwitchResult = (student) => {
-    const checked = midResult.some(
-      (e) => e.studentId === student.id && e.midPass
-    );
+    const studentMidResult =
+      midResult.find((e) => e.studentId === student.id) ?? {};
     return (
-      <center>
-        <CSwitch
-          color="primary"
-          labelOn={"\u2713"}
-          labelOff={"\u2715"}
-          disabled={!canEdit}
-          checked={checked}
-          onChange={(e) =>
-            topic.reviewTeachers?.length > 0
-              ? toastHolder.error("Đề tài đã được phân công phản biện")
-              : midMark(student, e.currentTarget.checked)
-          }
-        />
-      </center>
+      <td>
+        {canEdit ? (
+          <CForm>
+            <CFormGroup variant="custom-radio" inline>
+              <CInputRadio
+                custom
+                id={`${student.id}pass`}
+                name={`${student.id}mid`}
+                checked={studentMidResult.midPass}
+                onChange={() => midMark(student, true)}
+              />
+              <CLabel variant="custom-checkbox" htmlFor={`${student.id}pass`}>
+                Đạt
+              </CLabel>
+            </CFormGroup>
+            <CFormGroup variant="custom-radio" inline>
+              <CInputRadio
+                custom
+                id={`${student.id}fail`}
+                name={`${student.id}mid`}
+                checked={
+                  ![null, undefined].includes(studentMidResult.midPass) &&
+                  !studentMidResult.midPass
+                }
+                onChange={() => midMark(student, false)}
+              />
+              <CLabel variant="custom-checkbox" htmlFor={`${student.id}fail`}>
+                Không đạt
+              </CLabel>
+            </CFormGroup>
+          </CForm>
+        ) : (
+          <>
+            {studentMidResult.midPass
+              ? "Đạt"
+              : [null, undefined].includes(studentMidResult.midPass)
+              ? "GVHD chưa đánh giá"
+              : "Không đạt"}
+          </>
+        )}
+      </td>
     );
   };
 
@@ -90,15 +123,15 @@ const MainComponent = ({ topic = {} }) => {
         {...confirmProps}
       />
       <h5>Kết quả đánh giá giữa kỳ</h5>
-      <div className="ml-4" style={{ width: 400 }}>
+      <div className="ml-4" style={{ width: 500 }}>
         <CDataTable
           fields={[
             ...fields,
             // ...templates.map(templateToField),
             {
               key: "result",
-              label: "Đạt/Không đạt",
-              _style: { width: 110 },
+              label: "Kết quả giữa kỳ",
+              _style: { width: 200 },
             },
           ]}
           items={topic.students}
@@ -164,8 +197,8 @@ const ConfirmMidMark = ({
       <CModalBody>
         <center>
           <h5>
-            Sinh viên {student.code} {student.fullName}{" "}
-            <strong>{value ? "qua giữa kỳ" : "trượt giữa kỳ"}</strong>
+            Đánh giá sinh viên {student.code} {student.fullName}{" "}
+            <strong>{value ? "đạt" : "không đạt"}</strong> giữa kỳ
           </h5>
         </center>
       </CModalBody>

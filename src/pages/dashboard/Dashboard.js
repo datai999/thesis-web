@@ -3,12 +3,15 @@ import React, { useEffect, useState } from "react";
 import { Chrono } from "react-chrono";
 import api from "src/service/api";
 import contextHolder from "src/service/contextService";
+import { loginUserIsStudent } from "src/service/permissionService";
 
 const MainComponent = () => {
+  const isStudent = loginUserIsStudent();
+
   const [date, setDate] = useState(new Date());
   const [data, setData] = useState([]);
 
-  const handleData = (currentSemester) => {
+  const handleData = (currentSemester, typeTopic) => {
     const baseItems = [
       {
         title: currentSemester.registerTopicStart,
@@ -22,21 +25,25 @@ const MainComponent = () => {
           "Kết thúc thời gian cho phép sinh viên đăng ký đề tài",
       },
       {
+        type: "outline",
         title: currentSemester.topicStart,
         cardTitle: "Bắt đầu hiện thực đề cương",
         cardDetailedText: "Sinh viên bắt đầu hiện thực đề cương",
       },
       {
+        type: "outline",
         title: currentSemester.topicEnd,
         cardTitle: "Kết thúc hiện thực đề cương",
         cardDetailedText: "Sinh viên kết thúc hiện thực đề cương",
       },
       {
+        type: "thesis",
         title: currentSemester.thesisStart,
         cardTitle: "Bắt đầu hiện thực luận văn",
         cardDetailedText: "Sinh viên bắt đầu hiện thực luận văn",
       },
       {
+        type: "thesis",
         title: currentSemester.thesisEnd,
         cardTitle: "Kết thúc hiện thực luận văn",
         cardDetailedText: "Sinh viên kết thúc hiện thực luận văn",
@@ -45,7 +52,15 @@ const MainComponent = () => {
         title: new Date().toLocaleString(),
         cardTitle: "Hiện tại",
       },
-    ];
+    ].filter((e) => {
+      if (!e.type) return true;
+      if (isStudent && ![null, undefined].includes(typeTopic)) {
+        if (e.type === "thesis" && typeTopic) return true;
+        if (e.type === "outline" && !typeTopic) return true;
+        return false;
+      }
+      return !isStudent;
+    });
 
     const items = baseItems
       .sort((a, b) => {
@@ -68,13 +83,15 @@ const MainComponent = () => {
   };
 
   useEffect(() => {
-    api.get(`/semesters/current`).then(handleData);
-  }, []);
+    api.get(`/students/${contextHolder.user.id}/topics/current`).then((res) => {
+      api
+        .get(`/semesters/current`)
+        .then((semester) => handleData(semester, res.thesis));
+    });
 
-  useEffect(() => {
     var timerID = setInterval(() => setDate(new Date()), 1000);
     return () => clearInterval(timerID);
-  });
+  }, []);
 
   return (
     <CCard>

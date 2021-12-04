@@ -38,6 +38,8 @@ const TopicCreate = ({ location }) => {
   const [guideTeachers, setGuideTeachers] = useState([]);
   const [searchTeachers, setSearchTeachers] = useState(false);
 
+  const creator = guideTeachers[0]?.id === contextHolder.user.id;
+
   const setValueForm = (path, value) => {
     let nextForm = _.cloneDeep(form);
     _.set(nextForm, path, value);
@@ -290,11 +292,13 @@ const TopicCreate = ({ location }) => {
                   <CCol key={index} md="6">
                     <UserCard
                       user={guideTeacher}
-                      remove={() => removeGuideTeacher(guideTeacher)}
+                      remove={
+                        creator ? () => removeGuideTeacher(guideTeacher) : null
+                      }
                     />
                   </CCol>
                 ))}
-                {guideTeachers.length < 3 && (
+                {guideTeachers.length < 3 && creator && (
                   <CCol md="4">
                     <CButton
                       type="button"

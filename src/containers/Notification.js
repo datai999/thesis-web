@@ -17,14 +17,15 @@ import api from "src/service/api";
 const limitMessage = 20;
 const scheduleMilliseconds = 100 * 5000;
 
-const idTagRegex = /\d+(?=>)/;
+const idTagRegex = /\d+(?=( >))/;
+const hrefTagRegex = /\/.+(?=(" >))/;
 const innerTagRegex = /(?<=>).*(?=<)/;
 const userTag = {
-  regex: /<user id=\d*>[^<]*<\/user>/g,
+  regex: /<user id=\d* >[^<]*<\/user>/g,
   onClick: (tag) => viewUserModal({ id: tag.match(idTagRegex)[0] }),
 };
 const topicTag = {
-  regex: /<topic id=\d*>[^<]*<\/topic>/g,
+  regex: /<topic id=\d* >[^<]*<\/topic>/g,
   onClick: (tag) =>
     window
       .open(
@@ -32,6 +33,15 @@ const topicTag = {
         "_blank"
       )
       .focus(),
+};
+const newTabTag = {
+  regex: /<newTab href=[^>]* >[^<]*<\/newTab>/g,
+  onClick: (tag) => {
+    console.log(tag);
+    window
+      .open(`${window.location.origin}${tag.match(hrefTagRegex)[0]}`, "_blank")
+      .focus();
+  },
 };
 
 const toComponent = (message, tagProps) => {
@@ -57,7 +67,7 @@ const toComponent = (message, tagProps) => {
 
 const tagToComponent = (message) => {
   let result = [message];
-  [userTag, topicTag].forEach((tag) => {
+  [userTag, topicTag, newTabTag].forEach((tag) => {
     result = result
       .map((e) =>
         typeof e === "string" || e instanceof String ? toComponent(e, tag) : e
