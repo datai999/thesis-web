@@ -16,7 +16,6 @@ import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import api from "src/service/api";
 import { context } from "src/service/contextService";
-import toastHolder from "src/service/toastService";
 
 const fields = [
   { key: "code", label: "MSSV" },
@@ -35,10 +34,6 @@ const MainComponent = ({ topic = {}, markSuccess = () => {} }) => {
   const [refresh, setRefresh] = React.useState(true);
 
   const midMark = (student, value) => {
-    if (topic.reviewTeachers?.length) {
-      toastHolder.error("Đề tài đã được phân công phản biện");
-      return;
-    }
     const topicStudent = midResult.find((e) => e.studentId === student.id);
     setConfirmProps({ topicStudent, value, student });
     setConfirm(true);
