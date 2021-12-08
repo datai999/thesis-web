@@ -1,17 +1,16 @@
-import CIcon from "@coreui/icons-react";
 import { CBadge, CTooltip } from "@coreui/react";
 import React from "react";
 
 const fields = [
   { key: "id", label: "Mã", _style: { width: "1%" } },
   { key: "names", label: "Tên đề tài" },
-  { key: "type", label: "Loại đề tài" },
+  { key: "type", label: "Loại đề tài", _style: { width: 100 } },
   {
     key: "educationMethodNames",
     label: "Đào tạo",
-    _style: { width: "12%" },
+    _style: { width: 110 },
   },
-  { key: "majorNames", label: "Chuyên ngành" },
+  { key: "majorNames", label: "Chuyên ngành", _style: { width: 130 } },
   { key: "subjectDepartmentName", label: "Bộ môn" },
   { key: "guideTeachers", label: "Giáo viên hướng dẫn" },
   { key: "studentCount", label: "Số SV đăng ký", _style: { width: 100 } },
@@ -29,9 +28,15 @@ const renderUserInTable = (users) => (
   <td>
     {users?.map((user) => (
       <tr>
-        {user.code} {user.fullName}{" "}
-        <CTooltip content={user.email}>
-          <CIcon name="cil-envelope-closed" className="mb-1" />
+        <CTooltip
+          content={
+            <>
+              <div>Mã số:{user.code}</div>
+              <div>{user.email}</div>
+            </>
+          }
+        >
+          <div>{user.fullName}</div>
         </CTooltip>
       </tr>
     ))}

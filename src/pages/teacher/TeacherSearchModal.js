@@ -10,7 +10,7 @@ const fields = [
   { key: "firstName", label: "Họ" },
   { key: "lastName", label: "Tên" },
   { key: "degreeName", label: "Học vị" },
-  { key: "email", label: "Email:@hcmut.edu.vn" },
+  { key: "email", label: "Email" },
 ];
 
 const Component = ({ view, disableView, selected, userNotShow = [] }) => {
@@ -39,7 +39,7 @@ const Component = ({ view, disableView, selected, userNotShow = [] }) => {
     <CModal color="info" size="lg" show={view} onClose={disableView}>
       <CModalHeader closeButton>
         <CModalTitle>
-          Tìm kiếm giáo viên {context.user?.subjectDepartment?.name}
+          Tìm kiếm giáo viên bộ môn {context.user?.subjectDepartment?.name}
         </CModalTitle>
       </CModalHeader>
       <CModalBody>

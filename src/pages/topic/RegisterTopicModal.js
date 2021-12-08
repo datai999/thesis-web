@@ -38,27 +38,27 @@ const MainComponent = ({ view, disableView, confirm, topic }) => {
           <h5>{topic.names && topic.names[1]}</h5>
         </center>
 
-        <br></br>
-
-        <CRow>
-          <CCol md="2">Đào tạo:</CCol>
-          <CCol>{multiLine(topic.educationMethodNames)}</CCol>
-          <CCol md="2">Chuyên ngành:</CCol>
-          <CCol>{multiLine(topic.majorNames)}</CCol>
-        </CRow>
-        <br></br>
-
-        <CRow>
-          <CCol md="4">Giáo viên hướng dẫn:</CCol>
-          <CCol>
-            {topic.guideTeachers?.map((guideTeacher) => (
-              <tr>
-                {guideTeacher.code} {guideTeacher.firstName}{" "}
-                {guideTeacher.lastName}
-              </tr>
-            ))}
-          </CCol>
-        </CRow>
+        <div className="ml-4 pl-4">
+          <CRow className="mb-1">
+            <CCol md="0">Mã số:</CCol>
+            <CCol>{topic.id}</CCol>
+          </CRow>
+          <CRow className="mb-1">
+            <CCol md="0">Bộ môn:</CCol>
+            <CCol>{topic.subjectDepartmentName}</CCol>
+          </CRow>
+          <CRow className="mb-1">
+            <CCol md="0">Giáo viên hướng dẫn:</CCol>
+            <CCol>
+              {topic.guideTeachers?.map((guideTeacher) => (
+                <tr>
+                  {guideTeacher.code} {guideTeacher.firstName}{" "}
+                  {guideTeacher.lastName}
+                </tr>
+              ))}
+            </CCol>
+          </CRow>
+        </div>
       </CModalBody>
       <CModalFooter>
         <CButton color="info" onClick={registerTopic}>

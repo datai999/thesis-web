@@ -92,7 +92,11 @@ const MainComponent = () => {
             return { ...e, arrMessage: tagToComponent(e.message) };
           })
         );
-        setUnseenMessages(response.unseen);
+        setUnseenMessages(
+          response.unseen.map((e) => {
+            return { ...e, arrMessage: tagToComponent(e.message) };
+          })
+        );
       });
   };
 

@@ -80,7 +80,7 @@ const TopicExecutes = () => {
               <CButtonGroup
                 vertical
                 size="sm"
-                style={{ position: "absolute", top: 50, right: 5 }}
+                style={{ position: "absolute", top: 65, right: 5 }}
               >
                 {topic.semester.id === context.semester.id && canCancel && (
                   <CTooltip content={"Hủy đăng ký đề tài"}>
