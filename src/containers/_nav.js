@@ -44,7 +44,7 @@ const _nav = [
     _tag: "CSidebarNavItem",
     name: "Phân công phản biện",
     to: "/assign-review",
-    icon: "cil-speech",
+    icon: "cil-spreadsheet",
     permissions: [PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
   },
   {
@@ -58,7 +58,7 @@ const _nav = [
     _tag: "CSidebarNavItem",
     name: "Phân công hội đồng",
     to: "/assign-council",
-    icon: "cil-people",
+    icon: "cil-user-follow",
     permissions: [
       PERMISSIONS.EDUCATION_STAFF,
       PERMISSIONS.HEAD_SUBJECT_DEPARTMENT,

@@ -26,15 +26,15 @@ const MainComponent = () => {
     <>
       <CRow>
         <CCol>
-          <ShareSettingTable props={settings.educationMethod} />
+          <ShareSettingTable props={settings.subjectDepartment} />
         </CCol>
         <CCol>
-          <ShareSettingTable props={settings.degree} />
+          <ShareSettingTable props={settings.educationMethod} />
         </CCol>
       </CRow>
       <CRow>
         <CCol>
-          <ShareSettingTable props={settings.subjectDepartment} />
+          <ShareSettingTable props={settings.degree} />
         </CCol>
         <CCol>
           <ShareSettingTable props={settings.major} />

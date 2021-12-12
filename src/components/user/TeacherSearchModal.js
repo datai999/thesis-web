@@ -11,15 +11,16 @@ const fields = [
   { key: "lastName", label: "Tên" },
   { key: "degreeName", label: "Học vị" },
   { key: "email", label: "Email" },
+  { key: "topicReviewSize", label: "Số đề tài phản biện" },
 ];
 
-const Component = ({ view, disableView, selected, userNotShow = [] }) => {
+const Component = ({ view, disableView, selected, mode, userNotShow = [] }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
     api
       .post(
-        "/users/example",
+        mode === "reviewTeacher" ? `/review-teachers/get` : "/users/example",
         {
           permission: PERMISSIONS.TEACHER,
           subjectDepartment: context.user?.subjectDepartment?.id,
@@ -44,7 +45,11 @@ const Component = ({ view, disableView, selected, userNotShow = [] }) => {
       </CModalHeader>
       <CModalBody>
         <BaseTable
-          fields={fields}
+          fields={
+            mode === "reviewTeacher"
+              ? fields
+              : fields.filter((e) => e.key !== "topicReviewSize")
+          }
           items={data}
           tableProps={{
             clickableRows: true,

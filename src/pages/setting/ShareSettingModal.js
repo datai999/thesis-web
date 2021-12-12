@@ -12,10 +12,11 @@ import {
   CModalHeader,
   CModalTitle,
   CRow,
-  CSwitch
+  CSwitch,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import api from "src/service/api";
+import toastHolder from "src/service/toastService";
 
 const MainComponent = ({
   view,
@@ -33,6 +34,7 @@ const MainComponent = ({
     setUpdate(false);
     disableView();
     success(response);
+    toastHolder.success(`Cập nhật ${props.headerTitle} thành công`);
   };
 
   const submit = () => {

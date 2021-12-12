@@ -17,8 +17,8 @@ import {
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import TeacherSearchModal from "src/components/user/TeacherSearchModal";
 import UserCard from "src/components/UserCard";
-import TeacherSearchModal from "src/pages/teacher/TeacherSearchModal";
 import api from "src/service/api";
 import contextHolder from "src/service/contextService";
 import { loginUserIsHead } from "src/service/permissionService";
@@ -239,7 +239,6 @@ const MainComponent = ({ location }) => {
                     <CLabel>
                       <strong>Thời gian bắt đầu</strong>
                     </CLabel>
-                    setGetForm
                     <CInput type="time" {...setGetForm("startTime")} />
                   </CCol>
                   {/* <CCol>

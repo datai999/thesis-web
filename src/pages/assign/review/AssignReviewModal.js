@@ -11,8 +11,8 @@ import {
   CRow,
 } from "@coreui/react";
 import React from "react";
+import TeacherSearchModal from "src/components/user/TeacherSearchModal";
 import UserCard from "src/components/UserCard";
-import TeacherSearchModal from "src/pages/teacher/TeacherSearchModal";
 import { TopicDetailBody } from "src/pages/topic/TopicDetail";
 import api from "src/service/api";
 import { context } from "src/service/contextService";
@@ -62,6 +62,7 @@ const MainComponent = ({
           setTeachers([...teachers, teacher]);
         }}
         userNotShow={userNotShow}
+        mode="reviewTeacher"
       />
 
       <CModalHeader closeButton>
