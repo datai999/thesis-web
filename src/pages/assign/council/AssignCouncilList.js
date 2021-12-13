@@ -18,11 +18,13 @@ import SubjectDepartmentTab from "./SubjectDepartmentTab";
 
 const fields = [
   { key: "id", label: "Mã", _style: { width: 1 } },
-  { key: "time", label: "Thời gian", _style: { width: 140 } },
-  { key: "location", label: "Địa điểm", _style: { width: "15%" } },
-  { key: "members", label: "Thành viên", sorter: false },
-  { key: "totalTopic", label: "Số đề tài", sorter: false },
-  { key: "totalStudent", label: "Số sinh viên", sorter: false },
+  // { key: "time", label: "Thời gian", _style: { width: 140 } },
+  { key: "reserveDate", label: "Ngày" },
+  { key: "startTime", label: "Thời gian bắt đầu" },
+  { key: "location", label: "Địa điểm" },
+  // { key: "members", label: "Thành viên", sorter: false },
+  { key: "totalTopic", label: "Số đề tài" },
+  { key: "totalStudent", label: "Số sinh viên" },
   { key: "note", label: "Ghi chú" },
 ];
 
@@ -42,9 +44,7 @@ const CouncilList = ({ subjectDepartmentId, data, assign = true }) => {
       <CCardHeader>
         <CRow>
           <CCol sm="5">
-            <h5 className="card-title mb-0">
-              Danh sách hội đồng {assign ? "" : ""}
-            </h5>
+            <h5 className="card-title mb-0">Danh sách hội đồng</h5>
           </CCol>
           {headSubjectDepartment && assign && (
             <CCol sm="7" className="d-none d-md-block">
@@ -170,6 +170,7 @@ const InnerComponent = ({ subjectDepartmentId }) => {
         {
           params: {
             direction: "DESC",
+            sort: "reserveDate",
           },
         }
       )

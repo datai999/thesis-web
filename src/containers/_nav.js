@@ -14,10 +14,15 @@ const _nav = [
     icon: "cil-notes",
     permissions: [
       PERMISSIONS.EDUCATION_STAFF,
-      PERMISSIONS.HEAD_SUBJECT_DEPARTMENT,
-      PERMISSIONS.TEACHER,
+      // PERMISSIONS.HEAD_SUBJECT_DEPARTMENT,
+      // PERMISSIONS.TEACHER,
       PERMISSIONS.STUDENT,
     ],
+  },
+  {
+    _tag: "CSidebarNavTitle",
+    _children: ["Giáo viên"],
+    permissions: [PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
   },
   {
     _tag: "CSidebarNavItem",
@@ -42,17 +47,28 @@ const _nav = [
   },
   {
     _tag: "CSidebarNavItem",
-    name: "Phân công phản biện",
-    to: "/assign-review",
-    icon: "cil-spreadsheet",
-    permissions: [PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
-  },
-  {
-    _tag: "CSidebarNavItem",
     name: "Hội đồng",
     to: "/council",
     icon: "cil-people",
     permissions: [PERMISSIONS.HEAD_SUBJECT_DEPARTMENT, PERMISSIONS.TEACHER],
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Người dùng",
+    to: "/users",
+    icon: "cil-user",
+  },
+  {
+    _tag: "CSidebarNavTitle",
+    _children: ["Trưởng bộ môn"],
+    permissions: [PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Phân công phản biện",
+    to: "/assign-review",
+    icon: "cil-spreadsheet",
+    permissions: [PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
   },
   {
     _tag: "CSidebarNavItem",
@@ -63,12 +79,6 @@ const _nav = [
       PERMISSIONS.EDUCATION_STAFF,
       PERMISSIONS.HEAD_SUBJECT_DEPARTMENT,
     ],
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Người dùng",
-    to: "/users",
-    icon: "cil-user",
   },
   {
     _tag: "CSidebarNavItem",

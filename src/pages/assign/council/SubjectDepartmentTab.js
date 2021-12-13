@@ -31,7 +31,7 @@ const MainComponent = ({ URL, InnerComponent }) => {
   React.useEffect(() => {
     history.push(
       `${URL}/${
-        headSubjectDepartment ? context.user.subjectDepartment?.id : tabs[0].id
+        headSubjectDepartment ? context.user?.subjectDepartment?.id : tabs[0].id
       }/${context.semester.name}`
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps

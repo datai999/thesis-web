@@ -74,11 +74,11 @@ const UserModal = ({ view, disableView, userId }) => {
                 ].includes(user.permission) && (
                   <>
                     <CRow>
-                      <CCol {...leftProps}>Phòng ban:</CCol>
+                      <CCol {...leftProps}>Bộ môn:</CCol>
                       <CCol {...rightProps}>
                         {user.subjectDepartmentName}
                         {PERMISSIONS.HEAD_SUBJECT_DEPARTMENT ===
-                          user.permission && " (trưởng phòng)"}
+                          user.permission && " (trưởng bộ môn)"}
                       </CCol>
                     </CRow>
                   </>

@@ -12,8 +12,8 @@ const fields = [
   },
   { key: "majorNames", label: "Chuyên ngành", _style: { width: 130 } },
   { key: "subjectDepartmentName", label: "Bộ môn" },
-  { key: "guideTeachers", label: "Giáo viên hướng dẫn" },
-  { key: "studentCount", label: "Số SV đăng ký", _style: { width: 100 } },
+  { key: "guideTeachers", label: "GVHD" },
+  { key: "studentCount", label: "Số SV", _style: { width: 100 } },
 ];
 
 const multiLine = (array) => (

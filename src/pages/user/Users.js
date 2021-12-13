@@ -31,7 +31,7 @@ const tabs = [
   },
   {
     url: "head",
-    tabName: "Trưởng phòng ban",
+    tabName: "Trưởng bộ môn",
   },
   {
     url: "edu-staff",
@@ -74,20 +74,22 @@ const MainComponent = () => {
                 ))}
               </CNav>
             </CCol>
-            {loginUserHasAny([
-              PERMISSIONS.ADMIN,
-              PERMISSIONS.EDUCATION_STAFF,
-            ]) && (
-              <CCol md="2">
-                <CButton
-                  color="primary"
-                  className="float-right"
-                  // TODO create user
-                >
-                  Thêm {tabs[tabIndex].tabName}
-                </CButton>
-              </CCol>
-            )}
+            {loginUserHasAny([PERMISSIONS.ADMIN]) &&
+              permissionTabs[tabIndex]?.url !== "student" && (
+                <CCol md="2">
+                  <CButton
+                    color="primary"
+                    className="float-right"
+                    onClick={() =>
+                      history.push(
+                        `/users/${permissionTabs[tabIndex]?.url}/create`
+                      )
+                    }
+                  >
+                    Thêm {tabs[tabIndex].tabName}
+                  </CButton>
+                </CCol>
+              )}
           </CRow>
           <CTabContent>
             {permissionTabs.map((e, index) => (

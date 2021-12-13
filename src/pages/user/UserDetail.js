@@ -92,7 +92,7 @@ const MainComponent = () => {
                 <CCol>{user.degreeName}</CCol>
               </CRow>
               <CRow>
-                <CCol md="4">Phòng ban:</CCol>
+                <CCol md="4">Bộ môn:</CCol>
                 <CCol>{user.subjectDepartmentName}</CCol>
               </CRow>
             </>
