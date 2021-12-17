@@ -6,6 +6,7 @@ import api from "src/service/api";
 import context from "src/service/contextService";
 import {
   loginUserHasAny,
+  loginUserIsEduStaff,
   loginUserIsStudent,
   PERMISSIONS,
 } from "src/service/permissionService";
@@ -46,7 +47,7 @@ const MainComponent = ({ thesis }) => {
             : null,
           majors: loginUserIsStudent() ? [context.user.major?.id] : null,
         },
-        { params: { direction: "ASC" } }
+        { params: { direction: "DESC" } }
       )
       .then((response) => {
         response.forEach((e) => {
@@ -54,6 +55,8 @@ const MainComponent = ({ thesis }) => {
             e.students?.length === e.maxStudentTake ? "Đủ sinh viên" : "Đăng ký"
           }  ${e.students?.length}/${e.maxStudentTake}`.toString();
         });
+        if (loginUserIsEduStaff())
+          response = response.filter((e) => e.students?.length > 0);
         setData(response);
         setLoading(false);
       });

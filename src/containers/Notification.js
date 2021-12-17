@@ -15,7 +15,7 @@ import viewUserModal from "src/components/user/UserModal";
 import api from "src/service/api";
 
 const limitMessage = 20;
-const scheduleMilliseconds = 100 * 5000;
+const scheduleMilliseconds = 5 * 5000;
 
 const idTagRegex = /\d+(?=( >))/;
 const hrefTagRegex = /\/.+(?=(" >))/;

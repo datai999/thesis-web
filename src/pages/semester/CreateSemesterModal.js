@@ -60,27 +60,20 @@ const MainComponent = ({ view, disableView, success, defaultForm = {} }) => {
         <CModalTitle>{update ? "Chỉnh sửa" : "Thêm mới"} học kỳ</CModalTitle>
       </CModalHeader>
       <CModalBody className="px-3">
-        {update && (
-          <CRow>
-            <CCol md="4">
-              <CLabel>Mã học kỳ</CLabel>
-            </CCol>
-            <CCol>{form.id}</CCol>
-          </CRow>
-        )}
-
         <CForm>
           <CFormGroup row>
             <CCol md="4">
-              <CLabel htmlFor="name">Học kỳ</CLabel>
+              <CLabel htmlFor="name">
+                <strong>Học kỳ</strong>
+              </CLabel>
             </CCol>
             <CCol>
               <CInput
                 id="name"
                 placeholder="211, 212, 213, ..."
-                invalid={!form.name}
+                // invalid={!form.name}
                 valid={form.name}
-                required
+                // required
                 {...setGetForm("name")}
               />
               {!form.name && (
@@ -90,7 +83,9 @@ const MainComponent = ({ view, disableView, success, defaultForm = {} }) => {
           </CFormGroup>
 
           <CFormGroup>
-            <CLabel htmlFor="startTime">Sinh viên đăng kí đề tài</CLabel>
+            <CLabel htmlFor="startTime">
+              <strong>Sinh viên đăng kí đề tài</strong>
+            </CLabel>
             <CRow>
               <CCol>
                 <CInput
@@ -109,7 +104,9 @@ const MainComponent = ({ view, disableView, success, defaultForm = {} }) => {
           </CFormGroup>
 
           <CFormGroup>
-            <CLabel htmlFor="startTime">Làm đề cương luận văn</CLabel>
+            <CLabel htmlFor="startTime">
+              <strong>Làm đề cương luận văn</strong>
+            </CLabel>
             <CRow>
               <CCol>
                 <CInput type="datetime-local" {...setGetForm("topicStart")} />
@@ -122,7 +119,9 @@ const MainComponent = ({ view, disableView, success, defaultForm = {} }) => {
           </CFormGroup>
 
           <CFormGroup>
-            <CLabel htmlFor="startTime">Làm luận văn</CLabel>
+            <CLabel htmlFor="startTime">
+              <strong>Làm luận văn</strong>
+            </CLabel>
             <CRow>
               <CCol>
                 <CInput type="datetime-local" {...setGetForm("thesisStart")} />

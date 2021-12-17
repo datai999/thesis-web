@@ -16,9 +16,9 @@ import {
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import contextHolder from "src/service/contextService";
 import toastHolder from "src/service/toastService";
 import api from "../../service/api";
+import ConfirmNextSemesterModal from "./ConfirmNextSemesterModal";
 import CreateSemesterModal from "./CreateSemesterModal";
 
 const fields = [
@@ -102,6 +102,8 @@ const MainComponent = () => {
   const [createModal, setCreateModal] = useState(false);
   const [editSemester, setEditSemester] = useState({});
   const [toggle, refreshToggle] = useState(false);
+  const [currentSemesterView, setCurrentSemesterView] = useState(false);
+  const [currentSemesterProps, setCurrentSemesterProps] = useState({});
 
   const refresh = () => refreshToggle(!toggle);
 
@@ -116,11 +118,10 @@ const MainComponent = () => {
       toastHolder.success("Xoá học kỳ thành công");
     });
 
-  const setCurrentSemester = (semester) =>
-    api.put(`/semesters/current?id=${semester.id}`).then(() => {
-      refresh();
-      contextHolder.refreshSemester();
-    });
+  const setCurrentSemester = async (semester) => {
+    await setCurrentSemesterProps(semester);
+    setCurrentSemesterView(true);
+  };
 
   useEffect(() => {
     api
@@ -137,6 +138,12 @@ const MainComponent = () => {
         disableView={() => setCreateModal(false)}
         success={refresh}
         defaultForm={editSemester}
+      />
+      <ConfirmNextSemesterModal
+        view={currentSemesterView}
+        disableView={() => setCurrentSemesterView(false)}
+        success={refresh}
+        semester={currentSemesterProps}
       />
       <CCardHeader>
         <CRow>

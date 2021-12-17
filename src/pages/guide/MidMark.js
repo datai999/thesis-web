@@ -51,7 +51,7 @@ const MainComponent = ({ topic = {}, markSuccess = () => {} }) => {
 
     api
       .post(`/topic-student/example`, {
-        topicId: topic.id,
+        topic: { id: topic.id },
       })
       .then((res) => {
         setMidResult(res);

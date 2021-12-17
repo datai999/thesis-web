@@ -1,4 +1,5 @@
 import {
+  CBadge,
   CButton,
   CCard,
   CCardBody,
@@ -14,7 +15,24 @@ import context from "src/service/contextService";
 import { loginUserIsTeacher } from "src/service/permissionService";
 import { fields, scopedSlots } from "src/service/topicService";
 
-const guideFields = fields.filter((e) => e.key !== "subjectDepartmentName");
+const guideFields = fields.filter(
+  (e) => !["subjectDepartmentName", "studentCount"].includes(e.key)
+);
+
+const renderColorState = (state) => {
+  switch (state) {
+    case "REGISTER":
+      return "warning";
+    case "MID":
+      return "info";
+    case "FINAL":
+      return "primary";
+    case "COMPLETE":
+      return "success";
+    default:
+      return "";
+  }
+};
 
 const MainComponent = () => {
   const history = useHistory();
@@ -59,9 +77,18 @@ const MainComponent = () => {
       </CCardHeader>
       <CCardBody>
         <BaseTable
-          fields={guideFields}
+          fields={[...guideFields, { key: "stateName", label: "Trạng thái" }]}
           items={data}
-          scopedSlots={scopedSlots}
+          scopedSlots={{
+            ...scopedSlots,
+            stateName: (item) => (
+              <td>
+                <CBadge color={renderColorState(item.state)}>
+                  {item.stateName}
+                </CBadge>
+              </td>
+            ),
+          }}
           selectSemester
           semesterTop={8}
           tableProps={{

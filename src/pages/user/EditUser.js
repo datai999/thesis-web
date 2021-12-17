@@ -38,16 +38,17 @@ const renderPermission = (permission) => {
 };
 
 const getPermission = (userType) => {
-  switch (userType) {
-    case "head":
-      return PERMISSIONS.HEAD_SUBJECT_DEPARTMENT;
-    case "edu-staff":
-      return PERMISSIONS.EDUCATION_STAFF;
-    case "users":
-      return PERMISSIONS.STUDENT;
-    default:
-      return userType.toUpperCase();
-  }
+  if (userType)
+    switch (userType) {
+      case "head":
+        return PERMISSIONS.HEAD_SUBJECT_DEPARTMENT;
+      case "edu-staff":
+        return PERMISSIONS.EDUCATION_STAFF;
+      case "users":
+        return PERMISSIONS.STUDENT;
+      default:
+        return userType.toUpperCase();
+    }
 };
 
 const MainComponent = () => {

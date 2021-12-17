@@ -67,13 +67,19 @@ const MainComponent = ({ topic = {} }) => {
                       {teacher.fullName}
                     </CLink>
                   </CCol>
-                  {teacher.students.map((student) => (
-                    <CCol {...PROPS.STUDENT}>
-                      {student.templates.map((template) => (
-                        <CRow className="border">{renderScore(template)}</CRow>
-                      ))}
-                    </CCol>
-                  ))}
+                  {teacher.students
+                    .filter((student) =>
+                      studentPassMid.some((e) => student.id === e.id)
+                    )
+                    .map((student) => (
+                      <CCol {...PROPS.STUDENT}>
+                        {student.templates.map((template) => (
+                          <CRow className="border">
+                            {renderScore(template)}
+                          </CRow>
+                        ))}
+                      </CCol>
+                    ))}
                 </CRow>
               ))}
             </CCol>

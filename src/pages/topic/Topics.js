@@ -48,11 +48,11 @@ const MainComponent = () => {
             <CNavItem>
               <CNavLink>Đề cương</CNavLink>
             </CNavItem>
-            {
+            {studentDoneOutline && (
               <CNavItem>
                 <CNavLink>Luận văn</CNavLink>
               </CNavItem>
-            }
+            )}
           </CNav>
 
           <CTabContent>

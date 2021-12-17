@@ -17,7 +17,7 @@ import { loginUserHasAny, PERMISSIONS } from "src/service/permissionService";
 const MainComponent = () => {
   const canEdit = loginUserHasAny([
     PERMISSIONS.ADMIN,
-    PERMISSIONS.EDUCATION_STAFF,
+    // PERMISSIONS.EDUCATION_STAFF,
   ]);
 
   const history = useHistory();
