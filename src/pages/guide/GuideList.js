@@ -39,6 +39,7 @@ const MainComponent = () => {
   const semesterName = window.location.pathname.split("/").pop();
 
   const [data, setData] = useState([]);
+  const [canRegister, setCanRegister] = useState(false);
 
   const getData = async () => {
     api
@@ -48,6 +49,7 @@ const MainComponent = () => {
         },
       })
       .then(setData);
+    api.get(`/students/${50}/allow-register-topic`).then(setCanRegister);
   };
 
   useEffect(() => {
@@ -62,17 +64,19 @@ const MainComponent = () => {
           <CCol>
             <h4>Danh sách đề tài hướng dẫn</h4>
           </CCol>
-          {loginUserIsTeacher() && semesterName === context.semester.name && (
-            <CCol md="2">
-              <CButton
-                color="primary"
-                className="float-right"
-                onClick={() => history.push(`/guide/${semesterName}/create`)}
-              >
-                Tạo đề tài
-              </CButton>
-            </CCol>
-          )}
+          {loginUserIsTeacher() &&
+            semesterName === context.semester.name &&
+            canRegister && (
+              <CCol md="2">
+                <CButton
+                  color="primary"
+                  className="float-right"
+                  onClick={() => history.push(`/guide/${semesterName}/create`)}
+                >
+                  Tạo đề tài
+                </CButton>
+              </CCol>
+            )}
         </CRow>
       </CCardHeader>
       <CCardBody>

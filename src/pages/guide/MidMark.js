@@ -24,6 +24,7 @@ const fields = [
 
 const MainComponent = ({ topic = {}, markSuccess = () => {} }) => {
   const history = useHistory();
+  const semesterName = window.location.pathname.split("/")[2];
   const topicId = window.location.pathname.split("/")[3];
   const canEdit = topic.guideTeachers?.some((e) => e.id === context.user.id);
 
@@ -66,33 +67,35 @@ const MainComponent = ({ topic = {}, markSuccess = () => {} }) => {
       <td>
         {canEdit ? (
           <CForm>
-            <CFormGroup variant="custom-radio" inline>
-              <CInputRadio
-                custom
-                id={`${student.id}pass`}
-                name={`${student.id}mid`}
-                checked={studentMidResult.midPass}
-                onChange={() => midMark(student, true)}
-              />
-              <CLabel variant="custom-checkbox" htmlFor={`${student.id}pass`}>
-                Đạt
-              </CLabel>
-            </CFormGroup>
-            <CFormGroup variant="custom-radio" inline>
-              <CInputRadio
-                custom
-                id={`${student.id}fail`}
-                name={`${student.id}mid`}
-                checked={
-                  ![null, undefined].includes(studentMidResult.midPass) &&
-                  !studentMidResult.midPass
-                }
-                onChange={() => midMark(student, false)}
-              />
-              <CLabel variant="custom-checkbox" htmlFor={`${student.id}fail`}>
-                Không đạt
-              </CLabel>
-            </CFormGroup>
+            <fieldset disabled={semesterName !== context.semester?.name}>
+              <CFormGroup variant="custom-radio" inline>
+                <CInputRadio
+                  custom
+                  id={`${student.id}pass`}
+                  name={`${student.id}mid`}
+                  checked={studentMidResult.midPass}
+                  onChange={() => midMark(student, true)}
+                />
+                <CLabel variant="custom-checkbox" htmlFor={`${student.id}pass`}>
+                  Đạt
+                </CLabel>
+              </CFormGroup>
+              <CFormGroup variant="custom-radio" inline>
+                <CInputRadio
+                  custom
+                  id={`${student.id}fail`}
+                  name={`${student.id}mid`}
+                  checked={
+                    ![null, undefined].includes(studentMidResult.midPass) &&
+                    !studentMidResult.midPass
+                  }
+                  onChange={() => midMark(student, false)}
+                />
+                <CLabel variant="custom-checkbox" htmlFor={`${student.id}fail`}>
+                  Không đạt
+                </CLabel>
+              </CFormGroup>
+            </fieldset>
           </CForm>
         ) : (
           <>

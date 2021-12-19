@@ -67,22 +67,28 @@ const MainComponent = ({
   };
 
   if (data?.length < 1) return <div></div>;
+  if (templates.length < 1) return <div></div>;
 
   return (
-    <CDataTable
-      fields={[...fields, ...dataToField()]}
-      items={data}
-      size="sm"
-      scopedSlots={{
-        ...templates?.reduce(
-          (a, v) => ({
-            ...a,
-            ["template" + v.id]: (item) => renderScore(v, item),
-          }),
-          {}
-        ),
-      }}
-    />
+    <>
+      <strong>{`Giáo viên ${
+        template.guideTeacher ? "hướng dẫn" : "phản biện"
+      }`}</strong>
+      <CDataTable
+        fields={[...fields, ...dataToField()]}
+        items={data}
+        size="sm"
+        scopedSlots={{
+          ...templates?.reduce(
+            (a, v) => ({
+              ...a,
+              ["template" + v.id]: (item) => renderScore(v, item),
+            }),
+            {}
+          ),
+        }}
+      />
+    </>
   );
 };
 

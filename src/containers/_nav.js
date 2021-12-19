@@ -75,10 +75,14 @@ const _nav = [
     name: "Phân công hội đồng",
     to: "/assign-council",
     icon: "cil-user-follow",
-    permissions: [
-      PERMISSIONS.EDUCATION_STAFF,
-      PERMISSIONS.HEAD_SUBJECT_DEPARTMENT,
-    ],
+    permissions: [PERMISSIONS.HEAD_SUBJECT_DEPARTMENT],
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Sắp xếp hội đồng",
+    to: "/assign-council",
+    icon: "cil-user-follow",
+    permissions: [PERMISSIONS.EDUCATION_STAFF],
   },
   {
     _tag: "CSidebarNavItem",

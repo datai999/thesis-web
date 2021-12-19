@@ -26,7 +26,7 @@ const MainComponent = ({
       <CModalBody>
         <CRow>
           {councilMember?.map((e) => (
-            <CCol>
+            <CCol md="6">
               <UserCard user={e.member} />
             </CCol>
           ))}

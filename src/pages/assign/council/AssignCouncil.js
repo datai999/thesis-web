@@ -31,6 +31,7 @@ const MainComponent = () => {
   const [assigning, setAssigning] = useState(false);
   const [editing, setEditing] = useState(false);
   const [council, setCouncil] = useState({});
+  const [refresh, setRefresh] = useState(false);
 
   const submit = () => {
     api
@@ -87,18 +88,24 @@ const MainComponent = () => {
       });
   };
 
+  const updateCouncilSuccess = () => {
+    setRefresh(!refresh);
+    setEditing(false);
+    toastHolder.success("Cập nhật thông tin hội đồng thành công");
+  };
+
   useEffect(() => {
     api.get(`/councils/detail/${councilId}`).then((res) => {
       setCouncil(res);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     getAssignedTopics();
     context.user?.subjectDepartment && getUnassignTopics();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [assigning]);
+  }, [assigning, refresh]);
 
   return (
     <>
@@ -109,7 +116,10 @@ const MainComponent = () => {
       />
 
       {editing ? (
-        <CreateCouncil location={{ state: council }} />
+        <CreateCouncil
+          location={{ state: council }}
+          updateCouncilSuccess={updateCouncilSuccess}
+        />
       ) : (
         <CCard>
           <CCardHeader>

@@ -6,7 +6,9 @@ import TopicModal from "src/pages/topic/TopicModal";
 import api from "src/service/api";
 import { fields, scopedSlots } from "src/service/topicService";
 
-const customFields = fields.filter((e) => e.key !== "studentCount");
+const customFields = fields.filter(
+  (e) => !["studentCount", "subjectDepartment"].includes(e.key)
+);
 
 const MainComponent = ({ councilId, mark }) => {
   const history = useHistory();

@@ -25,7 +25,7 @@ import { loginUserIsHead } from "src/service/permissionService";
 import toastHolder from "src/service/toastService";
 import ConflictTimeModal from "./ConflictTimeModal";
 
-const MainComponent = ({ location }) => {
+const MainComponent = ({ location, ...props }) => {
   const subjectDepartmentId = window.location.pathname.split("/")[2];
 
   const history = useHistory();
@@ -94,8 +94,7 @@ const MainComponent = ({ location }) => {
     }
     if (form.id) {
       api.patch("/councils", form).then(() => {
-        history.go(0);
-        toastHolder.success("Cập nhật thông tin hội đồng thành công");
+        props.updateCouncilSuccess();
       });
     } else {
       api.post("/councils", form).then(() => {

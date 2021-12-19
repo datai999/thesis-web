@@ -76,7 +76,16 @@ const getAction = (
         </CButton>
       );
     case "USED":
-      return null;
+      return (
+        <CDropdown variant="btn-group">
+          <CDropdownToggle color="primary" variant="outline"></CDropdownToggle>
+          <CDropdownMenu>
+            <CDropdownItem onClick={setCurrentSemester}>
+              Đặt làm học kỳ hiện tại
+            </CDropdownItem>
+          </CDropdownMenu>
+        </CDropdown>
+      );
     default:
       return (
         <CDropdown variant="btn-group">

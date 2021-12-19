@@ -109,7 +109,6 @@ const TopicExecutes = () => {
                     <div style={{ width: "90%" }}>
                       <h5>Kết quả đánh giá cuối kỳ</h5>
                       <div className="ml-4">
-                        <strong>Giáo viên hướng dẫn</strong>
                         <TeacherStudentScore
                           topic={topic}
                           student={context.user}
@@ -118,7 +117,6 @@ const TopicExecutes = () => {
                         />
                         {topic.reviewTeachers?.length > 0 && (
                           <>
-                            <strong>Giáo viên phản biện</strong>
                             <TeacherStudentScore
                               topic={topic}
                               student={context.user}

@@ -80,6 +80,8 @@ const MainComponent = ({ guide = true, topic = {} }) => {
     );
   };
 
+  if (templates.length < 1) return <div></div>;
+
   return (
     <CCardHeader>
       <h5>{guide ? "Đánh giá cuối kỳ" : "Đánh giá phản biện"}</h5>

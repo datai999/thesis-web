@@ -25,8 +25,24 @@ const fields = [
   { key: "studentCount", label: "Số SV đăng ký", _style: { width: 100 } },
 ];
 
+const renderColorState = (state) => {
+  switch (state) {
+    case "REGISTER":
+      return "warning";
+    case "MID":
+      return "info";
+    case "FINAL":
+      return "primary";
+    case "COMPLETE":
+      return "success";
+    default:
+      return "";
+  }
+};
+
 const MainComponent = ({ thesis }) => {
   const semesterName = window.location.pathname.split("/").pop();
+  const isStaff = loginUserIsEduStaff();
 
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -55,8 +71,7 @@ const MainComponent = ({ thesis }) => {
             e.students?.length === e.maxStudentTake ? "Đủ sinh viên" : "Đăng ký"
           }  ${e.students?.length}/${e.maxStudentTake}`.toString();
         });
-        if (loginUserIsEduStaff())
-          response = response.filter((e) => e.students?.length > 0);
+        if (isStaff) response = response.filter((e) => e.students?.length > 0);
         setData(response);
         setLoading(false);
       });
@@ -78,6 +93,8 @@ const MainComponent = ({ thesis }) => {
             PERMISSIONS.TEACHER,
           ])
             ? fields.filter((e) => e.key !== "subjectDepartmentName")
+            : isStaff
+            ? fields.filter((e) => e.key !== "studentCount")
             : fields
         }
         items={data}
