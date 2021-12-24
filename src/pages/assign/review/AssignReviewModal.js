@@ -97,7 +97,7 @@ const MainComponent = ({
               </CCol>
             ))}
             {topic?.semester?.id === context.semester.id &&
-              teachers.length < 3 && (
+              teachers.length < 1 && (
                 <CCol md="4">
                   <CButton
                     color="primary"

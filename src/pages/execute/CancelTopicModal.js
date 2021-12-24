@@ -72,12 +72,4 @@ const MainComponent = ({ view, disableView, confirm, topic }) => {
   );
 };
 
-const multiLine = (array) => (
-  <td>
-    {array?.map((e) => (
-      <tr>{e}</tr>
-    ))}
-  </td>
-);
-
 export default MainComponent;

@@ -85,7 +85,7 @@ const TopicExecutes = () => {
                 {topic.semester.id === context.semester.id && canCancel && (
                   <CTooltip content={"Hủy đăng ký đề tài"}>
                     <CButton
-                      color="primary"
+                      color="danger"
                       variant="outline"
                       onClick={() => {
                         setTopicCancel(topic);

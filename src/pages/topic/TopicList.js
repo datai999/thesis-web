@@ -71,7 +71,6 @@ const MainComponent = ({ thesis }) => {
             e.students?.length === e.maxStudentTake ? "Đủ sinh viên" : "Đăng ký"
           }  ${e.students?.length}/${e.maxStudentTake}`.toString();
         });
-        if (isStaff) response = response.filter((e) => e.students?.length > 0);
         setData(response);
         setLoading(false);
       });
@@ -93,8 +92,6 @@ const MainComponent = ({ thesis }) => {
             PERMISSIONS.TEACHER,
           ])
             ? fields.filter((e) => e.key !== "subjectDepartmentName")
-            : isStaff
-            ? fields.filter((e) => e.key !== "studentCount")
             : fields
         }
         items={data}

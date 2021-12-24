@@ -155,7 +155,7 @@ const TopicDetailBody = ({
                   Đăng ký
                 </CButton>
               ) : (
-                <div>SV</div>
+                <div>Không có SV đăng ký</div>
               )}
             </div>
           </CCol>
