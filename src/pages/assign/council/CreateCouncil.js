@@ -200,7 +200,7 @@ const MainComponent = ({ location, ...props }) => {
                                   setSearchTeachers(true);
                                 }}
                               >
-                                Phân công giáo viên
+                                {`Phân công ${role.name}`}
                               </CButton>
                             </CCol>
                           ))}
