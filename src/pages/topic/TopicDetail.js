@@ -1,3 +1,4 @@
+import CIcon from "@coreui/icons-react";
 import {
   CButton,
   CCard,
@@ -5,6 +6,7 @@ import {
   CCardHeader,
   CCol,
   CRow,
+  CTooltip,
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
@@ -45,8 +47,26 @@ const MainComponent = () => {
   return (
     <CCard className="mx-5">
       <CCardHeader className="mx-3">
-        <h5>{topic.name?.vi}</h5>
-        <h5>{topic.name?.en}</h5>
+        <CRow>
+          <CCol>
+            <h5>{topic.name?.vi}</h5>
+            <h5>{topic.name?.en}</h5>
+          </CCol>
+          <tr>
+            <CTooltip content={"Chỉnh sửa"}>
+              <CButton
+                className="float-right"
+                color="primary"
+                variant="outline"
+                onClick={() => {
+                  history.push(`${window.location.pathname}/edit`, topic);
+                }}
+              >
+                <CIcon name="cil-pencil" />
+              </CButton>
+            </CTooltip>
+          </tr>
+        </CRow>
       </CCardHeader>
       <RegisterTopicModal
         view={registerTopicModal}

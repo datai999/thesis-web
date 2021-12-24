@@ -1,11 +1,4 @@
-import CIcon from "@coreui/icons-react";
-import {
-  CButton,
-  CButtonGroup,
-  CCard,
-  CCardHeader,
-  CTooltip,
-} from "@coreui/react";
+import { CCard, CCardHeader } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import FinalMark from "src/components/topic/FinalMark";
@@ -46,7 +39,7 @@ const MainComponent = () => {
 
       <CCardHeader>
         <TopicDetailBody topic={topic} />
-        <CButtonGroup
+        {/* <CButtonGroup
           vertical
           size="sm"
           style={{ position: "absolute", top: 5, right: 5 }}
@@ -62,7 +55,7 @@ const MainComponent = () => {
               <CIcon name="cil-pencil" />
             </CButton>
           </CTooltip>
-        </CButtonGroup>
+        </CButtonGroup> */}
       </CCardHeader>
 
       {topic.students?.length > 0 &&

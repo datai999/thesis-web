@@ -115,9 +115,15 @@ let routes = [
   { path: "/topics/thesis", exact: false, name: "Luận văn", component: Topics },
   {
     path: "/topics/:id",
-    exact: false,
+    exact: true,
     name: "Thông tin đề tài",
     component: TopicDetail,
+  },
+  {
+    path: "/topics/:id/edit",
+    exact: false,
+    name: "Chỉnh sửa đề tài",
+    component: CreateTopic,
   },
 
   {
@@ -150,12 +156,12 @@ let routes = [
     name: "Thông tin đề tài",
     component: GuideTopicDetail,
   },
-  {
-    path: "/guide/:id/:id/edit",
-    exact: false,
-    name: "Chỉnh sửa đề tài",
-    component: CreateTopic,
-  },
+  // {
+  //   path: "/guide/:id/:id/edit",
+  //   exact: false,
+  //   name: "Chỉnh sửa đề tài",
+  //   component: CreateTopic,
+  // },
   {
     path: "/guide/:id/:id/mark",
     exact: false,

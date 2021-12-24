@@ -1,12 +1,12 @@
 import CIcon from "@coreui/icons-react";
 import { CBadge, CTooltip } from "@coreui/react";
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import BaseTable from "src/components/BaseTable";
 import api from "src/service/api";
 import context from "src/service/contextService";
 import {
   loginUserHasAny,
-  loginUserIsEduStaff,
   loginUserIsStudent,
   PERMISSIONS,
 } from "src/service/permissionService";
@@ -42,7 +42,7 @@ const renderColorState = (state) => {
 
 const MainComponent = ({ thesis }) => {
   const semesterName = window.location.pathname.split("/").pop();
-  const isStaff = loginUserIsEduStaff();
+  const history = useHistory();
 
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -98,8 +98,7 @@ const MainComponent = ({ thesis }) => {
         selectSemester={true}
         tableProps={{
           clickableRows: true,
-          onRowClick: (item) =>
-            window.open(`/topics/${item.id}`, "_blank").focus(),
+          onRowClick: (item) => history.push(`/topics/${item.id}`),
         }}
         scopedSlots={{
           names: (item) => multiLine(item.names),
