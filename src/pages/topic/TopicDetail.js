@@ -164,29 +164,35 @@ const TopicDetailBody = ({
 
       <br />
 
-      <div className="my-2">
-        <strong>Mô tả</strong>
-        <div
-          className="border p-2"
-          dangerouslySetInnerHTML={{ __html: topic.description }}
-        />
-      </div>
+      {topic.description && (
+        <div className="my-2">
+          <strong>Mô tả</strong>
+          <div
+            className="border p-2"
+            dangerouslySetInnerHTML={{ __html: topic.description }}
+          />
+        </div>
+      )}
 
-      <div className="my-2">
-        <strong>Nhiệm vụ</strong>
-        <div
-          className="border p-2"
-          dangerouslySetInnerHTML={{ __html: topic.task }}
-        ></div>
-      </div>
+      {topic.task && (
+        <div className="my-2">
+          <strong>Nhiệm vụ</strong>
+          <div
+            className="border p-2"
+            dangerouslySetInnerHTML={{ __html: topic.task }}
+          ></div>
+        </div>
+      )}
 
-      <div className="my-2">
-        <strong>Tài liệu</strong>
-        <div
-          className="border p-2"
-          dangerouslySetInnerHTML={{ __html: topic.documentReference }}
-        ></div>
-      </div>
+      {topic.documentReference && (
+        <div className="my-2">
+          <strong>Tài liệu</strong>
+          <div
+            className="border p-2"
+            dangerouslySetInnerHTML={{ __html: topic.documentReference }}
+          ></div>
+        </div>
+      )}
     </CCardBody>
   );
 };

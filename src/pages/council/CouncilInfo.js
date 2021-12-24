@@ -87,13 +87,15 @@ const MainComponent = ({ council }) => {
 
           <br />
 
-          <div>
-            <strong>Ghi chú</strong>
-            <div
-              className="border p-2"
-              dangerouslySetInnerHTML={{ __html: council.note }}
-            />
-          </div>
+          {council.note && (
+            <div>
+              <strong>Ghi chú:</strong>
+              <div
+                className="border p-2"
+                dangerouslySetInnerHTML={{ __html: council.note }}
+              />
+            </div>
+          )}
         </CCol>
       </CRow>
     </div>
