@@ -18,6 +18,9 @@ const MainComponent = ({
   const [page, setPage] = useState(currentPage);
   const [semesters, setSemesters] = React.useState([]);
   const [querySemester, setQuerySemester] = React.useState(context.semester);
+  const [itemsPerPage, setItemsPerPage] = React.useState(
+    props.tableProps?.itemsPerPage ?? 5
+  );
 
   const onChangeSemester = (event) => {
     let nextSemester = semesters.find(
@@ -30,6 +33,16 @@ const MainComponent = ({
     currentPage !== newPage &&
       history.push(`${window.location.pathname}?page=${newPage}`);
     setPage(newPage);
+  };
+
+  const calPage = () => {
+    const realItemsPerPage = props.tableProps?.itemsPerPage ?? itemsPerPage;
+    const a = Math.floor(items.length / realItemsPerPage);
+    const b = items.length % realItemsPerPage === 0 ? 0 : 1;
+    console.log(items.length);
+    console.log(a);
+    console.log(b);
+    return a + b;
   };
 
   React.useEffect(() => {
@@ -94,11 +107,12 @@ const MainComponent = ({
         columnFilter
         tableFilter
         itemsPerPageSelect
-        itemsPerPage={5}
+        itemsPerPage={itemsPerPage}
         activePage={page}
         {...props.tableProps}
         fields={fields}
         items={items}
+        onPaginationChange={(e) => setItemsPerPage(e)}
         scopedSlots={{
           actions: (item, index) => (
             <CButtonGroup vertical size="sm">
@@ -111,12 +125,14 @@ const MainComponent = ({
           ...scopedSlots,
         }}
       />
-      {pagination && (
+
+      {pagination && items.length > itemsPerPage && (
         <CPagination
           size="sm"
           activePage={page}
           onActivePageChange={pageChange}
           align="center"
+          pages={calPage()}
         />
       )}
     </>

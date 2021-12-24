@@ -6,16 +6,14 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
-  CDataTable,
   CDropdown,
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
-  CPagination,
   CRow,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import BaseTable from "src/components/BaseTable";
 import toastHolder from "src/service/toastService";
 import api from "../../service/api";
 import ConfirmNextSemesterModal from "./ConfirmNextSemesterModal";
@@ -103,10 +101,6 @@ const getAction = (
 };
 
 const MainComponent = () => {
-  const history = useHistory();
-  const queryPage = useLocation().search.match(/page=([0-9]+)/, "");
-  const currentPage = Number(queryPage && queryPage[1] ? queryPage[1] : 1);
-  const [page, setPage] = useState(currentPage);
   const [data, setData] = useState([]);
   const [createModal, setCreateModal] = useState(false);
   const [editSemester, setEditSemester] = useState({});
@@ -115,11 +109,6 @@ const MainComponent = () => {
   const [currentSemesterProps, setCurrentSemesterProps] = useState({});
 
   const refresh = () => refreshToggle(!toggle);
-
-  const pageChange = (newPage) => {
-    currentPage !== newPage && history.push(`/semesters?page=${newPage}`);
-    setPage(newPage);
-  };
 
   const deleteSemester = (semester) =>
     api.delete(`/semesters/${semester.id}`).then(() => {
@@ -138,7 +127,7 @@ const MainComponent = () => {
       .then((response) => {
         setData(response);
       });
-  }, [page, toggle]);
+  }, [toggle]);
 
   return (
     <CCard>
@@ -176,13 +165,16 @@ const MainComponent = () => {
         </CRow>
       </CCardHeader>
       <CCardBody>
-        <CDataTable
+        <BaseTable
           items={data}
           fields={fields}
-          size="sm"
-          hover
-          striped
-          activePage={page}
+          tableProps={{
+            striped: true,
+            tableFilter: false,
+            itemsPerPageSelect: false,
+            columnFilter: false,
+            sorter: false,
+          }}
           scopedSlots={{
             status: (item) => (
               <td className="py-2">
@@ -214,12 +206,6 @@ const MainComponent = () => {
               </td>
             ),
           }}
-        />
-        <CPagination
-          size="sm"
-          activePage={page}
-          onActivePageChange={pageChange}
-          align="center"
         />
       </CCardBody>
     </CCard>
