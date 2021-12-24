@@ -64,7 +64,14 @@ const CouncilList = ({ subjectDepartmentId, data, assign = true }) => {
         </CRow>
       </CCardHeader>
       <BaseTable
-        items={data}
+        items={data.map((e) => {
+          return {
+            ...e,
+            reserveDate: e.reserveDate ?? "",
+            startTime: e.startTime ?? "",
+            location: e.location ?? "",
+          };
+        })}
         fields={fields}
         selectSemester
         semesterTop={8}
