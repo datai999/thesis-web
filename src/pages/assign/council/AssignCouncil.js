@@ -7,6 +7,7 @@ import {
   CCardHeader,
   CCol,
   CRow,
+  CSelect,
   CTooltip,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
@@ -32,6 +33,33 @@ const MainComponent = () => {
   const [editing, setEditing] = useState(false);
   const [council, setCouncil] = useState({});
   const [refresh, setRefresh] = useState(false);
+  const [unassignMode, setUnassignMode] = useState(0);
+
+  const unassignTopicByMode = () => {
+    if (unassignMode.toString() === "1") {
+      return unassignTopics.filter((e) => {
+        const mainTeacherId = e.guideTeachers.find(
+          (teacher) => teacher.main
+        ).id;
+        return council.members.some(
+          (member) => member.member?.id === mainTeacherId
+        );
+      });
+    }
+    if (unassignMode.toString() === "2") {
+      return unassignTopics.filter((e) => {
+        let result = true;
+        e.guideTeachers.forEach((teacher) => {
+          if (
+            !council.members.some((member) => member.member?.id === teacher.id)
+          )
+            result = false;
+        });
+        return result;
+      });
+    }
+    return unassignTopics;
+  };
 
   const submit = () => {
     api
@@ -162,10 +190,43 @@ const MainComponent = () => {
                 />
               </CCol>
               <CCol>
-                <h5 className="card-title mb-0">Đề tài cần gán hội đồng</h5>
+                <CRow>
+                  <CCol md="5">
+                    <h5 className="card-title mb-0">
+                      {`Đề tài cần gán hội đồng`}
+                    </h5>
+                  </CCol>
+                  <CCol>
+                    <small>
+                      <tr>
+                        <td>
+                          <strong className="mr-1">{`GVHD`}</strong>
+                        </td>
+                        <td>
+                          <CSelect
+                            size="sm"
+                            onChange={(event) =>
+                              setUnassignMode(event.currentTarget.value)
+                            }
+                          >
+                            <option value={0} selected={unassignMode === 0}>
+                              Không ràng buộc
+                            </option>
+                            <option value={1} selected={unassignMode === 1}>
+                              GVHD chính thuộc hội đồng
+                            </option>
+                            <option value={2} selected={unassignMode === 2}>
+                              Tất cả GVHD thuộc hội đồng
+                            </option>
+                          </CSelect>
+                        </td>
+                      </tr>
+                    </small>
+                  </CCol>
+                </CRow>
                 <TopicAssignList
                   onRowClick={(topic) => confirmAssign(topic, true)}
-                  topics={unassignTopics}
+                  topics={unassignTopicByMode()}
                 />
               </CCol>
             </CRow>

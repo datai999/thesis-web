@@ -39,9 +39,6 @@ const MainComponent = ({
     const realItemsPerPage = props.tableProps?.itemsPerPage ?? itemsPerPage;
     const a = Math.floor(items.length / realItemsPerPage);
     const b = items.length % realItemsPerPage === 0 ? 0 : 1;
-    console.log(items.length);
-    console.log(a);
-    console.log(b);
     return a + b;
   };
 

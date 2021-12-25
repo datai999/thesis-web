@@ -48,7 +48,9 @@ const scopedSlots = {
   educationMethodNames: (item) => multiLine(item.educationMethodNames),
   majorNames: (item) => multiLine(item.majorNames),
   guideTeachers: (item) => renderUserInTable(item.guideTeachers),
+  guideTeacherNames: (item) => renderUserInTable(item.guideTeachers),
   reviewTeachers: (item) => renderUserInTable(item.reviewTeachers),
+  reviewTeacherNames: (item) => renderUserInTable(item.reviewTeachers),
   studentCount: (item) => (
     <td className="py-2">
       {item.students?.length === item.maxStudentTake ? (
