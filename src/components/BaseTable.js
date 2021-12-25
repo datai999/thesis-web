@@ -15,7 +15,7 @@ const MainComponent = ({
   const history = useHistory();
   const queryPage = useLocation().search.match(/page=(\d+)/, "");
   const currentPage = Number(queryPage && queryPage[1] ? queryPage[1] : 1);
-  const [page, setPage] = useState(currentPage);
+  const [page, setPage] = useState(currentPage < 1 ? 1 : currentPage);
   const [semesters, setSemesters] = React.useState([]);
   const [querySemester, setQuerySemester] = React.useState(context.semester);
   const [itemsPerPage, setItemsPerPage] = React.useState(
@@ -31,6 +31,7 @@ const MainComponent = ({
 
   const pageChange = (newPage) => {
     currentPage !== newPage &&
+      newPage > 0 &&
       history.push(`${window.location.pathname}?page=${newPage}`);
     setPage(newPage);
   };
@@ -103,13 +104,13 @@ const MainComponent = ({
         sorter
         columnFilter
         tableFilter
+        activePage={page}
         itemsPerPageSelect
         itemsPerPage={itemsPerPage}
-        activePage={page}
+        onPaginationChange={(e) => setItemsPerPage(e)}
         {...props.tableProps}
         fields={fields}
         items={items}
-        onPaginationChange={(e) => setItemsPerPage(e)}
         scopedSlots={{
           actions: (item, index) => (
             <CButtonGroup vertical size="sm">
@@ -123,7 +124,7 @@ const MainComponent = ({
         }}
       />
 
-      {pagination && items.length > itemsPerPage && (
+      {pagination && (
         <CPagination
           size="sm"
           activePage={page}

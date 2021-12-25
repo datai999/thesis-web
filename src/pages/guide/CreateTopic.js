@@ -19,6 +19,7 @@ import {
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import StudentSearchModal from "src/components/user/StudentSearchModal";
 import TeacherSearchModal from "src/components/user/TeacherSearchModal";
 import UserCard from "src/components/UserCard";
 import api from "src/service/api";
@@ -37,6 +38,11 @@ const TopicCreate = ({ location }) => {
   const [thesis, setThesis] = useState(false);
   const [guideTeachers, setGuideTeachers] = useState([]);
   const [searchTeachers, setSearchTeachers] = useState(false);
+  const [searchStudent, setSearchStudent] = useState(false);
+  const [studentExecutes, setStudentExecutes] = useState([]);
+  const [valid, setValid] = useState(false);
+  const [waiting, setWaiting] = React.useState(false);
+  const [searchStudentProps, setSearchStudentProps] = React.useState({});
 
   const creator = guideTeachers[0]?.id === contextHolder.user.id;
 
@@ -73,11 +79,52 @@ const TopicCreate = ({ location }) => {
 
   const selectProps = (path) => {
     return {
-      onChange: (e) => setValueForm(path, e.currentTarget.value),
+      onChange: (e) => {
+        if (
+          path === "maxStudentTake" &&
+          studentExecutes.length > e.currentTarget.value
+        ) {
+          setStudentExecutes([]);
+        }
+        setValueForm(path, e.currentTarget.value);
+      },
     };
   };
 
+  const canAssignStudent = () => {
+    if (
+      (!form.name?.vi && !form.name?.en) ||
+      form.educationMethods?.length < 1 ||
+      form.majors?.length < 1
+    ) {
+      toastHolder.error("Đề tài thiếu thông tin");
+      setValid(true);
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+      return false;
+    }
+    return true;
+  };
+
+  const viewSearchStudent = () => {
+    if (!canAssignStudent()) return;
+    setSearchStudentProps({
+      thesis: thesis,
+      educationMethods: form.educationMethods,
+      majors: form.majors,
+    });
+    setSearchStudent(true);
+  };
+
   const create = () => {
+    setWaiting(true);
+    if (!canAssignStudent()) {
+      setWaiting(false);
+      return;
+    }
+
     form.thesis = thesis;
     form.semester = contextHolder.semester;
     form.guideTeachers = guideTeachers.map((e) => {
@@ -85,22 +132,23 @@ const TopicCreate = ({ location }) => {
         guideTeacher: e,
       };
     });
+    form.students = studentExecutes.map((e) => {
+      return { student: e };
+    });
     if (form.id) {
       api.patch("/topics", form).then((response) => {
+        setWaiting(false);
         response && history.push(`/topics/${response.id}`);
         toastHolder.success("Cập nhật thông tin đề tài thành công");
       });
     } else {
       api.post("/topics", form).then((response) => {
+        setWaiting(false);
         response &&
           history.push(`/guide/${contextHolder.semester.name}/${response.id}`);
         toastHolder.success("Tạo đề tài thành công");
       });
     }
-  };
-
-  const removeGuideTeacher = (teacher) => {
-    setGuideTeachers(guideTeachers.filter((e) => e !== teacher));
   };
 
   useEffect(() => {
@@ -116,6 +164,8 @@ const TopicCreate = ({ location }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (waiting) throw new Promise(() => {});
 
   return (
     <CCard>
@@ -140,7 +190,7 @@ const TopicCreate = ({ location }) => {
               </CLabel>
               <CInput
                 id="name.vi"
-                placeholder="Text"
+                invalid={valid && !form.name?.vi && !form.name?.en}
                 {...setGetForm("name.vi")}
               />
             </CCol>
@@ -150,7 +200,7 @@ const TopicCreate = ({ location }) => {
               </CLabel>
               <CInput
                 id="name.en"
-                placeholder="Text"
+                invalid={valid && !form.name?.vi && !form.name?.en}
                 {...setGetForm("name.en")}
               />
             </CCol>
@@ -170,7 +220,10 @@ const TopicCreate = ({ location }) => {
                       name="type"
                       checked={!thesis}
                       value={false}
-                      onChange={() => setThesis(false)}
+                      onChange={() => {
+                        setThesis(false);
+                        setStudentExecutes([]);
+                      }}
                     />
                     <CLabel variant="custom-checkbox" htmlFor="nonThesis">
                       Đề cương
@@ -182,7 +235,10 @@ const TopicCreate = ({ location }) => {
                       id="thesis"
                       name="type"
                       checked={thesis}
-                      onChange={() => setThesis(true)}
+                      onChange={() => {
+                        setThesis(true);
+                        setStudentExecutes([]);
+                      }}
                       value={true}
                     />
                     <CLabel variant="custom-checkbox" htmlFor="thesis">
@@ -204,9 +260,11 @@ const TopicCreate = ({ location }) => {
                         id={"educationMethod" + educationMethod.id}
                         name="educationMethod"
                         value={educationMethod.id}
-                        onChange={(event) =>
-                          onChangeCheck(event, "educationMethods")
-                        }
+                        invalid={valid && form.educationMethods?.length < 1}
+                        onChange={(event) => {
+                          onChangeCheck(event, "educationMethods");
+                          setStudentExecutes([]);
+                        }}
                         checked={form.educationMethods?.some(
                           (e) => e === educationMethod.id
                         )}
@@ -233,7 +291,11 @@ const TopicCreate = ({ location }) => {
                         id={"major" + major.id}
                         name="major"
                         value={major.id}
-                        onChange={(event) => onChangeCheck(event, "majors")}
+                        invalid={valid && form.majors?.length < 1}
+                        onChange={(event) => {
+                          onChangeCheck(event, "majors");
+                          setStudentExecutes([]);
+                        }}
                         checked={form.majors.some((e) => e === major.id)}
                       />
                       <CLabel
@@ -308,7 +370,12 @@ const TopicCreate = ({ location }) => {
                     <UserCard
                       user={guideTeacher}
                       remove={
-                        creator ? () => removeGuideTeacher(guideTeacher) : null
+                        creator
+                          ? () => (teacher) =>
+                              setGuideTeachers(
+                                guideTeachers.filter((e) => e !== teacher)
+                              )
+                          : null
                       }
                     />
                   </CCol>
@@ -333,12 +400,6 @@ const TopicCreate = ({ location }) => {
               <strong>Mô tả</strong>
             </CLabel>
             <CKEditor editor={ClassicEditor} {...editorProps("description")} />
-            {/* <CTextarea
-              id="description"
-              rows="9"
-              placeholder="Content..."
-              {...setGetForm("description")}
-            /> */}
           </CFormGroup>
 
           <CFormGroup>
@@ -346,12 +407,6 @@ const TopicCreate = ({ location }) => {
               <strong>Nhiệm vụ</strong>
             </CLabel>
             <CKEditor editor={ClassicEditor} {...editorProps("task")} />
-            {/* <CTextarea
-              id="task"
-              rows="9"
-              placeholder="Content..."
-              {...setGetForm("task")}
-            /> */}
           </CFormGroup>
 
           <CFormGroup>
@@ -362,18 +417,57 @@ const TopicCreate = ({ location }) => {
               editor={ClassicEditor}
               {...editorProps("documentReference")}
             />
-            {/* <CTextarea
-              id="documentReference"
-              rows="5"
-              placeholder="Content..."
-              {...setGetForm("documentReference")}
-            /> */}
           </CFormGroup>
+
+          <CCardFooter>
+            <StudentSearchModal
+              view={searchStudent}
+              disableView={() => setSearchStudent(false)}
+              userNotShow={studentExecutes}
+              selected={(student) => {
+                setSearchStudent(false);
+                setStudentExecutes([...studentExecutes, student]);
+              }}
+              {...searchStudentProps}
+            />
+            <CFormGroup>
+              <CLabel>
+                <strong>Sinh viên thực hiện</strong>
+              </CLabel>
+              <CFormGroup row>
+                {_.range(0, studentExecutes.length).map((index) => (
+                  <CCol md="4">
+                    <UserCard
+                      user={studentExecutes[index]}
+                      remove={() =>
+                        setStudentExecutes(
+                          studentExecutes.filter(
+                            (e) => e.id !== studentExecutes[index].id
+                          )
+                        )
+                      }
+                    />
+                  </CCol>
+                ))}
+                {studentExecutes.length < form.maxStudentTake && (
+                  <CCol md="4">
+                    <CButton
+                      type="button"
+                      color="info"
+                      onClick={viewSearchStudent}
+                    >
+                      Thêm sinh viên
+                    </CButton>
+                  </CCol>
+                )}
+              </CFormGroup>
+            </CFormGroup>
+          </CCardFooter>
         </CForm>
       </CCardBody>
       <CCardFooter>
-        <CButton type="submit" color="info" onClick={create}>
-          <CIcon name="cil-save" /> Lưu
+        <CButton type="submit" color="primary" onClick={create}>
+          <CIcon name="cil-save" /> {form.id ? `Cập nhật đề tài` : "Tạo đề tài"}
         </CButton>
       </CCardFooter>
     </CCard>

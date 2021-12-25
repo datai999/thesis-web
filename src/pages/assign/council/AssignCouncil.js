@@ -34,6 +34,7 @@ const MainComponent = () => {
   const [council, setCouncil] = useState({});
   const [refresh, setRefresh] = useState(false);
   const [unassignMode, setUnassignMode] = useState(0);
+  const [assignMode, setAssignMode] = useState(0);
 
   const unassignTopicByMode = () => {
     if (unassignMode.toString() === "1") {
@@ -59,6 +60,32 @@ const MainComponent = () => {
       });
     }
     return unassignTopics;
+  };
+
+  const assignTopicByMode = () => {
+    if (assignMode.toString() === "1") {
+      return assignedTopics.filter((e) => {
+        const mainTeacherId = e.guideTeachers.find(
+          (teacher) => teacher.main
+        ).id;
+        return !council.members.some(
+          (member) => member.member?.id === mainTeacherId
+        );
+      });
+    }
+    if (assignMode.toString() === "2") {
+      return assignedTopics.filter((e) => {
+        let result = false;
+        e.guideTeachers.forEach((teacher) => {
+          if (
+            !council.members.some((member) => member.member?.id === teacher.id)
+          )
+            result = true;
+        });
+        return result;
+      });
+    }
+    return assignedTopics;
   };
 
   const submit = () => {
@@ -183,10 +210,40 @@ const MainComponent = () => {
           <CCardBody>
             <CRow>
               <CCol>
-                <h5 className="card-title mb-0">Đề tài thuộc hội đồng</h5>
+                <CRow>
+                  <CCol md="5">
+                    <h5 className="card-title mb-0">Đề tài thuộc hội đồng</h5>
+                  </CCol>
+                  <CCol>
+                    <small>
+                      <tr>
+                        <td></td>
+                        <td>
+                          <CSelect
+                            size="sm"
+                            onChange={(event) =>
+                              setAssignMode(event.currentTarget.value)
+                            }
+                          >
+                            <option value={0} selected={unassignMode === 0}>
+                              ---
+                            </option>
+                            <option value={1} selected={unassignMode === 1}>
+                              GVHD chính không thuộc hội đồng
+                            </option>
+                            <option value={2} selected={unassignMode === 2}>
+                              Có GVHD không thuộc hội đồng
+                            </option>
+                          </CSelect>
+                        </td>
+                      </tr>
+                    </small>
+                  </CCol>
+                </CRow>
+
                 <TopicAssignList
                   onRowClick={(topic) => confirmAssign(topic, false)}
-                  topics={assignedTopics}
+                  topics={assignTopicByMode()}
                 />
               </CCol>
               <CCol>
@@ -199,9 +256,7 @@ const MainComponent = () => {
                   <CCol>
                     <small>
                       <tr>
-                        <td>
-                          <strong className="mr-1">{`GVHD`}</strong>
-                        </td>
+                        <td></td>
                         <td>
                           <CSelect
                             size="sm"
@@ -210,7 +265,7 @@ const MainComponent = () => {
                             }
                           >
                             <option value={0} selected={unassignMode === 0}>
-                              Không ràng buộc
+                              ---
                             </option>
                             <option value={1} selected={unassignMode === 1}>
                               GVHD chính thuộc hội đồng
