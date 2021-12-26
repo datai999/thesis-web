@@ -39,7 +39,7 @@ const MainComponent = () => {
   const semesterName = window.location.pathname.split("/").pop();
 
   const [data, setData] = useState([]);
-  const [canRegister, setCanRegister] = useState(false);
+  const [canCreate, setCanCreate] = useState(false);
 
   const getData = async () => {
     api
@@ -49,7 +49,7 @@ const MainComponent = () => {
         },
       })
       .then(setData);
-    api.get(`/students/${50}/allow-register-topic`).then(setCanRegister);
+    api.get(`/semesters/in-any-create-time`).then(setCanCreate);
   };
 
   useEffect(() => {
@@ -66,7 +66,7 @@ const MainComponent = () => {
           </CCol>
           {loginUserIsTeacher() &&
             semesterName === context.semester.name &&
-            canRegister && (
+            canCreate && (
               <CCol md="2">
                 <CButton
                   color="primary"

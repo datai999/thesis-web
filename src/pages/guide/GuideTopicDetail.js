@@ -12,7 +12,7 @@ const MainComponent = () => {
   const history = useHistory();
   const topicId = window.location.pathname.split("/")[3];
   const [topic, setTopic] = useState({ guideTeachers: [] });
-  const [endRegisterTopic, setEndRegisterTopic] = useState(false);
+  const [beforeMidMarkStartTime, setBeforeMidMarkStartTime] = useState(false);
   const [refresh, setRefresh] = useState(true);
 
   const markSuccess = () => {
@@ -23,10 +23,12 @@ const MainComponent = () => {
   useEffect(() => {
     api.get(`/topics/detail/${topicId}`).then((res) => {
       setTopic(res);
+      api
+        .get(`/semesters/before-mid-mark-start-time`, {
+          params: { thesis: res.thesis },
+        })
+        .then(setBeforeMidMarkStartTime);
     });
-    api
-      .get(`/semesters/allow-student-register-cancel`)
-      .then((res) => setEndRegisterTopic(!res));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
 
@@ -59,7 +61,8 @@ const MainComponent = () => {
       </CCardHeader>
 
       {topic.students?.length > 0 &&
-        (topic.semester?.id !== context.semester.id || endRegisterTopic) && (
+        (topic.semester?.id !== context.semester.id ||
+          beforeMidMarkStartTime) && (
           <>
             <MidMark topic={topic} markSuccess={markSuccess} />
             {topic.students?.some((e) => e.midPass) && (

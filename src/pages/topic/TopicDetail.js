@@ -40,7 +40,9 @@ const MainComponent = () => {
         res.semester.id === context.semester.id
       )
         api
-          .get(`/students/${context.user.id}/allow-register-topic`)
+          .get(`/students/${context.user.id}/allow-register-topic`, {
+            params: { thesis: res.thesis },
+          })
           .then(setCanRegister);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

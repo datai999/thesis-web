@@ -45,8 +45,12 @@ const TopicExecutes = () => {
   useEffect(() => {
     api.get(`/students/${context.user.id}/topics`).then((res) => {
       setData(res);
+      api
+        .get(`/semesters/in-register-time`, {
+          params: { thesis: res[res.length - 1].thesis },
+        })
+        .then(setCanCancel);
     });
-    api.get(`/semesters/allow-student-register-cancel`).then(setCanCancel);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
 

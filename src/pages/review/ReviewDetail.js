@@ -8,15 +8,17 @@ import context from "src/service/contextService";
 const MainComponent = () => {
   const topicId = window.location.pathname.split("/")[3];
   const [topic, setTopic] = useState({ guideTeachers: [] });
-  const [endRegisterTopic, setEndRegisterTopic] = useState(false);
+  const [beforeMidMarkEndTime, setBeforeMidMarkEndTime] = useState(false);
 
   useEffect(() => {
     api.get(`/topics/detail/${topicId}`).then((res) => {
       setTopic(res);
+      api
+        .get(`/semesters/before-mid-mark-end-time`, {
+          params: { thesis: res.thesis },
+        })
+        .then(setBeforeMidMarkEndTime);
     });
-    api
-      .get(`/semesters/allow-student-register-cancel`)
-      .then((res) => setEndRegisterTopic(!res));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -32,9 +34,8 @@ const MainComponent = () => {
       </CCardHeader>
 
       {topic.students?.length > 0 &&
-        (topic.semester?.id !== context.semester.id || endRegisterTopic) && (
-          <FinalMark guide={false} topic={topic} />
-        )}
+        (topic.semester?.id !== context.semester.id ||
+          beforeMidMarkEndTime) && <FinalMark guide={false} topic={topic} />}
     </CCard>
   );
 };
