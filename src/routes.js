@@ -95,6 +95,10 @@ const Users = React.lazy(() => import("./pages/user/Users"));
 const UserDetail = React.lazy(() => import("./pages/user/UserDetail"));
 const EditUser = React.lazy(() => import("./pages/user/EditUser"));
 const Semesters = React.lazy(() => import("./pages/semester/Semesters"));
+const SemesterDetail = React.lazy(() =>
+  import("./pages/semester/SemesterDetail")
+);
+
 const TemplateList = React.lazy(() => import("./pages/template/TemplateList"));
 const TemplateDetail = React.lazy(() =>
   import("./pages/template/TemplateDetail")
@@ -361,7 +365,19 @@ let routes = [
     name: "Chỉnh sửa thông tin người dùng",
     component: EditUser,
   },
-  { path: "/semesters", exact: false, name: "Học kỳ", component: Semesters },
+  { path: "/semesters", exact: true, name: "Học kỳ", component: Semesters },
+  {
+    path: "/semesters/create",
+    exact: false,
+    name: "Tạo học kỳ mới",
+    component: SemesterDetail,
+  },
+  {
+    path: "/semesters/:id",
+    exact: false,
+    name: "Thông tin học kỳ",
+    component: SemesterDetail,
+  },
   {
     path: "/templates",
     exact: true,

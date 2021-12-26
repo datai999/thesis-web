@@ -13,27 +13,37 @@ import {
   CRow,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import BaseTable from "src/components/BaseTable";
 import toastHolder from "src/service/toastService";
 import api from "../../service/api";
 import ConfirmNextSemesterModal from "./ConfirmNextSemesterModal";
-import CreateSemesterModal from "./CreateSemesterModal";
 
 const fields = [
   { key: "id", label: "Mã", _style: { width: "1%" } },
   { key: "name", label: "Học kỳ" },
   { key: "status", label: "Trạng thái" },
+  { key: "type", label: "Loại đề tài" },
   {
-    key: "registerTopicTime",
-    label: "Thời gian đăng ký đề tài",
+    key: "createTopic",
+    label: "Ra đề tài",
   },
   {
-    key: "topicTime",
-    label: "Thời gian làm DCLV",
+    key: "registerTopic",
+    label: "Đăng ký đề tài",
   },
   {
-    key: "thesisTime",
-    label: "Thời gian làm luận văn",
+    key: "midMark",
+    label: "Đánh giá giữa kỳ",
+  },
+  {
+    key: "defaultMidMark",
+    label: "Kết quả giữa kỳ ban đầu",
+    _style: { width: 80 },
+  },
+  {
+    key: "executeTopic",
+    label: "Hiên thực",
   },
   {
     key: "actions",
@@ -101,9 +111,8 @@ const getAction = (
 };
 
 const MainComponent = () => {
+  const history = useHistory();
   const [data, setData] = useState([]);
-  const [createModal, setCreateModal] = useState(false);
-  const [editSemester, setEditSemester] = useState({});
   const [toggle, refreshToggle] = useState(false);
   const [currentSemesterView, setCurrentSemesterView] = useState(false);
   const [currentSemesterProps, setCurrentSemesterProps] = useState({});
@@ -131,12 +140,6 @@ const MainComponent = () => {
 
   return (
     <CCard>
-      <CreateSemesterModal
-        view={createModal}
-        disableView={() => setCreateModal(false)}
-        success={refresh}
-        defaultForm={editSemester}
-      />
       <ConfirmNextSemesterModal
         view={currentSemesterView}
         disableView={() => setCurrentSemesterView(false)}
@@ -155,8 +158,7 @@ const MainComponent = () => {
               color="primary"
               className="float-right"
               onClick={() => {
-                setEditSemester({});
-                setCreateModal(true);
+                history.push(`/semesters/create`);
               }}
             >
               Thêm học kỳ mới
@@ -187,18 +189,40 @@ const MainComponent = () => {
                 </CBadge>
               </td>
             ),
-            registerTopicTime: (item) =>
-              multiLineTime(item.registerTopicStart, item.registerTopicEnd),
-            topicTime: (item) => multiLineTime(item.topicStart, item.topicEnd),
-            thesisTime: (item) =>
-              multiLineTime(item.thesisStart, item.thesisEnd),
+            type: () => (
+              <td>
+                <div className="border-bottom">
+                  <div>Đề cương</div>
+                  <br />
+                </div>
+                <div>
+                  <div>Luận văn</div>
+                  <br />
+                </div>
+              </td>
+            ),
+            createTopic: (item) => multiLineTime(item, "createTopic"),
+            registerTopic: (item) => multiLineTime(item, "registerTopic"),
+            midMark: (item) => multiLineTime(item, "midMark"),
+            defaultMidMark: (item) => (
+              <td>
+                <div className="border-bottom">
+                  <div>{item.outline?.defaultMid ? "Đạt" : "Không đạt"}</div>
+                  <br />
+                </div>
+                <div>
+                  <div>{item.thesis?.defaultMid ? "Đạt" : "Không đạt"}</div>
+                  <br />
+                </div>
+              </td>
+            ),
+            executeTopic: (item) => multiLineTime(item, "executeTopic"),
             actions: (item) => (
               <td>
                 {getAction(
                   item,
                   () => {
-                    setEditSemester(item);
-                    setCreateModal(true);
+                    history.push(`/semesters/${item.id}`);
                   },
                   () => deleteSemester(item),
                   () => setCurrentSemester(item)
@@ -212,19 +236,28 @@ const MainComponent = () => {
   );
 };
 
-const multiLineTime = (from, to) => (
-  <td>
-    <CRow>
-      <CCol md="0" className="ml-3">
-        <div>Từ</div>
-        <div>Đến</div>
-      </CCol>
-      <CCol>
-        <div>{from?.replace("T", " ")}</div>
-        <div>{to?.replace("T", " ")}</div>
-      </CCol>
-    </CRow>
-  </td>
-);
+const multiLineTime = (item, property) => {
+  const outline = item.outline ?? {};
+  const thesis = item.thesis ?? {};
+
+  return (
+    <td>
+      <div className="border-bottom">
+        <div>{outline[`${property}Start`]?.replace("T", " ") || <br />}</div>
+        <div>
+          {outline[`${property}End`] && `->`}
+          {outline[`${property}End`]?.replace("T", " ") || <br />}
+        </div>
+      </div>
+      <div>
+        <div>{thesis[`${property}Start`]?.replace("T", " ") || <br />}</div>
+        <div>
+          {thesis[`${property}End`] && `->`}
+          {thesis[`${property}End`]?.replace("T", " ") || <br />}
+        </div>
+      </div>
+    </td>
+  );
+};
 
 export default MainComponent;
