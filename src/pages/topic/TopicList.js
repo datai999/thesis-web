@@ -25,24 +25,10 @@ const fields = [
   { key: "studentCount", label: "Số SV đăng ký", _style: { width: 100 } },
 ];
 
-const renderColorState = (state) => {
-  switch (state) {
-    case "REGISTER":
-      return "warning";
-    case "MID":
-      return "info";
-    case "FINAL":
-      return "primary";
-    case "COMPLETE":
-      return "success";
-    default:
-      return "";
-  }
-};
-
 const MainComponent = ({ thesis }) => {
   const semesterName = window.location.pathname.split("/").pop();
   const history = useHistory();
+  const refer = window.location.pathname.split("/")[1] === "refer-topics";
 
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -58,10 +44,12 @@ const MainComponent = ({ thesis }) => {
             name: semesterName,
           },
           subjectDepartment: context.user.subjectDepartment?.id,
-          educationMethods: loginUserIsStudent()
-            ? [context.user.educationMethod?.id]
-            : null,
-          majors: loginUserIsStudent() ? [context.user.major?.id] : null,
+          educationMethods:
+            loginUserIsStudent() && !refer
+              ? [context.user.educationMethod?.id]
+              : null,
+          majors:
+            loginUserIsStudent() && !refer ? [context.user.major?.id] : null,
         },
         { params: { direction: "DESC" } }
       )
@@ -98,7 +86,8 @@ const MainComponent = ({ thesis }) => {
         selectSemester={true}
         tableProps={{
           clickableRows: true,
-          onRowClick: (item) => history.push(`/topics/${item.id}`),
+          onRowClick: (item) =>
+            history.push(`${refer ? "/refer-topics" : "/topics"}/${item.id}`),
         }}
         scopedSlots={{
           names: (item) => multiLine(item.names),

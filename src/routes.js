@@ -61,6 +61,7 @@ const Widgets = React.lazy(() => import("./views/widgets/Widgets"));
 
 const Dashboard = React.lazy(() => import("./pages/dashboard/Dashboard"));
 const Topics = React.lazy(() => import("./pages/topic/Topics"));
+const ReferTopics = React.lazy(() => import("./pages/topic/ReferTopics"));
 const TopicDetail = React.lazy(() => import("./pages/topic/TopicDetail"));
 
 const TopicExecutes = React.lazy(() => import("./pages/execute/TopicExecutes"));
@@ -105,6 +106,31 @@ const CouncilSetting = React.lazy(() =>
 
 let routes = [
   { path: "/dashboard", name: "Trang chủ", component: Dashboard },
+  {
+    path: "/refer-topics",
+    exact: true,
+    name: "Đề tài tham khảo",
+    component: ReferTopics,
+  },
+  {
+    path: "/refer-topics/outline",
+    exact: false,
+    name: "Đề cương",
+    component: ReferTopics,
+  },
+  {
+    path: "/refer-topics/thesis",
+    exact: false,
+    name: "Luận văn",
+    component: ReferTopics,
+  },
+  {
+    path: "/refer-topics/:id",
+    exact: false,
+    name: "Thông tin đề tài",
+    component: TopicDetail,
+  },
+
   { path: "/topics", exact: true, name: "Đề tài", component: Topics },
   {
     path: "/topics/outline",

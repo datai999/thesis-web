@@ -104,7 +104,7 @@ const MainComponent = ({
         sorter
         columnFilter
         tableFilter
-        activePage={page}
+        activePage={page < 1 ? 1 : page}
         itemsPerPageSelect
         itemsPerPage={itemsPerPage}
         onPaginationChange={(e) => setItemsPerPage(e)}
@@ -127,7 +127,7 @@ const MainComponent = ({
       {pagination && (
         <CPagination
           size="sm"
-          activePage={page}
+          activePage={page < 1 ? 1 : page}
           onActivePageChange={pageChange}
           align="center"
           pages={calPage()}

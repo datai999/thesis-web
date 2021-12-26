@@ -10,14 +10,23 @@ const _nav = [
   {
     _tag: "CSidebarNavItem",
     name: "Danh sách đề tài",
+    to: "/refer-topics/outline",
+    icon: "cil-notes",
+    permissions: [PERMISSIONS.STUDENT],
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Đăng ký đề tài",
+    to: "/topics/outline",
+    icon: "cil-file",
+    permissions: [PERMISSIONS.STUDENT],
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Danh sách đề tài",
     to: "/topics/outline",
     icon: "cil-notes",
-    permissions: [
-      PERMISSIONS.EDUCATION_STAFF,
-      // PERMISSIONS.HEAD_SUBJECT_DEPARTMENT,
-      // PERMISSIONS.TEACHER,
-      PERMISSIONS.STUDENT,
-    ],
+    permissions: [PERMISSIONS.EDUCATION_STAFF],
   },
   {
     _tag: "CSidebarNavTitle",

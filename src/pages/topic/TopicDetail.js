@@ -18,6 +18,7 @@ import context from "src/service/contextService";
 import {
   loginUserHasAny,
   loginUserIsEduStaff,
+  loginUserIsStudent,
   PERMISSIONS,
 } from "src/service/permissionService";
 import TopicResult from "./TopicResult";
@@ -25,6 +26,7 @@ import TopicResult from "./TopicResult";
 const MainComponent = () => {
   const history = useHistory();
   const topicId = window.location.pathname.match(/topics\/(\d+)/, "")[1];
+  const efuStaff = loginUserIsEduStaff();
 
   const [topic, setTopic] = useState({ guideTeachers: [] });
   const [canRegister, setCanRegister] = useState(false);
@@ -52,20 +54,22 @@ const MainComponent = () => {
             <h5>{topic.name?.vi}</h5>
             <h5>{topic.name?.en}</h5>
           </CCol>
-          <tr>
-            <CTooltip content={"Chỉnh sửa"}>
-              <CButton
-                className="float-right"
-                color="primary"
-                variant="outline"
-                onClick={() => {
-                  history.push(`${window.location.pathname}/edit`, topic);
-                }}
-              >
-                <CIcon name="cil-pencil" />
-              </CButton>
-            </CTooltip>
-          </tr>
+          {efuStaff && (
+            <tr>
+              <CTooltip content={"Chỉnh sửa"}>
+                <CButton
+                  className="float-right"
+                  color="primary"
+                  variant="outline"
+                  onClick={() => {
+                    history.push(`${window.location.pathname}/edit`, topic);
+                  }}
+                >
+                  <CIcon name="cil-pencil" />
+                </CButton>
+              </CTooltip>
+            </tr>
+          )}
         </CRow>
       </CCardHeader>
       <RegisterTopicModal
@@ -80,7 +84,7 @@ const MainComponent = () => {
         canRegister={canRegister}
       />
 
-      {loginUserIsEduStaff() && <TopicResult topic={topic} />}
+      {efuStaff && <TopicResult topic={topic} />}
     </CCard>
   );
 };
@@ -99,6 +103,16 @@ const TopicDetailBody = ({
   const sliceStudent =
     12 / (topic.students?.length < 1 ? 1 : topic.students?.length);
   const mdStudent = sliceStudent > 4 ? 4 : sliceStudent;
+
+  const studentCanRegister = () => {
+    const eduMethodValid = topic.educationMethods?.some((e) =>
+      [e, e?.id].includes(context.user?.educationMethod?.id)
+    );
+    const majorValid = topic.majors?.some((e) =>
+      [e, e?.id].includes(context.user?.major?.id)
+    );
+    return loginUserIsStudent() && canRegister && eduMethodValid && majorValid;
+  };
 
   return (
     <CCardBody>
@@ -164,7 +178,7 @@ const TopicDetailBody = ({
         {_.range(topic.students?.length, topic.maxStudentTake).map((e) => (
           <CCol key={e} md={mdStudent} className="px-3">
             <div className="border p-3">
-              {canRegister ? (
+              {studentCanRegister() ? (
                 <CButton
                   type="button"
                   color="info"
