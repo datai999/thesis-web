@@ -1,4 +1,10 @@
-import { CModal, CModalBody, CModalHeader, CModalTitle } from "@coreui/react";
+import {
+  CModal,
+  CModalBody,
+  CModalHeader,
+  CModalTitle,
+  CPagination,
+} from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import BaseTable from "src/components/BaseTable";
 import api from "src/service/api";
@@ -16,6 +22,14 @@ const fields = [
 
 const Component = ({ view, disableView, selected, mode, userNotShow = [] }) => {
   const [data, setData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+
+  const calPage = () => {
+    const a = Math.floor(data.length / itemsPerPage);
+    const b = data.length % 5 === 0 ? 0 : 1;
+    return a + b;
+  };
 
   useEffect(() => {
     api
@@ -51,10 +65,21 @@ const Component = ({ view, disableView, selected, mode, userNotShow = [] }) => {
               : fields.filter((e) => e.key !== "topicReviewSize")
           }
           items={data}
+          pagination={false}
           tableProps={{
             clickableRows: true,
             onRowClick: selected,
+            activePage: page < 1 ? 1 : page,
+            itemsPerPage: itemsPerPage,
+            onPaginationChange: (e) => setItemsPerPage(e),
           }}
+        />
+        <CPagination
+          size="sm"
+          align="center"
+          activePage={page < 1 ? 1 : page}
+          onActivePageChange={setPage}
+          pages={calPage()}
         />
       </CModalBody>
     </CModal>

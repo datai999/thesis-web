@@ -187,23 +187,21 @@ const MainComponent = ({ location, ...props }) => {
                             />
                           </CCol>
                         ))}
-                        {loginUserIsHead() &&
-                          _.range(role.teachers.length, role.max).map((e) => (
-                            <CCol key={e}>
-                              <CButton
-                                key={e}
-                                size="sm"
-                                type="button"
-                                color="primary"
-                                onClick={() => {
-                                  setCurrentRole(index);
-                                  setSearchTeachers(true);
-                                }}
-                              >
-                                {`Phân công ${role.name}`}
-                              </CButton>
-                            </CCol>
-                          ))}
+                        {loginUserIsHead() && role.teachers.length < role.max && (
+                          <CCol>
+                            <CButton
+                              size="sm"
+                              type="button"
+                              color="primary"
+                              onClick={() => {
+                                setCurrentRole(index);
+                                setSearchTeachers(true);
+                              }}
+                            >
+                              {`Phân công ${role.name}`}
+                            </CButton>
+                          </CCol>
+                        )}
                       </CRow>
                     </CFormGroup>
                   </CCol>

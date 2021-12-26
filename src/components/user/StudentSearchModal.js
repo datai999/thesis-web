@@ -85,6 +85,7 @@ const Component = ({
         <BaseTable
           fields={fields}
           items={data}
+          pagination={false}
           tableProps={{
             clickableRows: true,
             onRowClick: selected,
@@ -92,7 +93,6 @@ const Component = ({
             itemsPerPage: itemsPerPage,
             onPaginationChange: (e) => setItemsPerPage(e),
           }}
-          pagination={false}
         />
         <CPagination
           size="sm"

@@ -24,6 +24,7 @@ import TeacherSearchModal from "src/components/user/TeacherSearchModal";
 import UserCard from "src/components/UserCard";
 import api from "src/service/api";
 import contextHolder from "src/service/contextService";
+import { loginUserIsEduStaff } from "src/service/permissionService";
 import toastHolder from "src/service/toastService";
 
 const TopicCreate = ({ location }) => {
@@ -45,6 +46,7 @@ const TopicCreate = ({ location }) => {
   const [searchStudentProps, setSearchStudentProps] = React.useState({});
 
   const creator = guideTeachers[0]?.id === contextHolder.user.id;
+  const efuStaff = loginUserIsEduStaff();
 
   const setValueForm = (path, value) => {
     let nextForm = _.cloneDeep(form);
@@ -158,7 +160,8 @@ const TopicCreate = ({ location }) => {
       exitTopic.majors = exitTopic.majors.map((e) => e.id);
       setForm(exitTopic);
       setThesis(exitTopic.thesis);
-      setGuideTeachers(location.state.guideTeachers);
+      setGuideTeachers(exitTopic.guideTeachers);
+      setStudentExecutes(exitTopic.students);
     } else {
       setGuideTeachers([contextHolder.user]);
     }
@@ -370,7 +373,7 @@ const TopicCreate = ({ location }) => {
                     <UserCard
                       user={guideTeacher}
                       remove={
-                        creator
+                        creator || efuStaff
                           ? () => (teacher) =>
                               setGuideTeachers(
                                 guideTeachers.filter((e) => e !== teacher)
@@ -380,7 +383,7 @@ const TopicCreate = ({ location }) => {
                     />
                   </CCol>
                 ))}
-                {guideTeachers.length < 3 && creator && (
+                {guideTeachers.length < 3 && (creator || efuStaff) && (
                   <CCol md="4">
                     <CButton
                       type="button"
