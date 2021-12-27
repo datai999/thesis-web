@@ -378,6 +378,7 @@ let routes = [
     name: "Thông tin học kỳ",
     component: SemesterDetail,
   },
+
   {
     path: "/templates",
     exact: true,
@@ -385,13 +386,19 @@ let routes = [
     component: TemplateList,
   },
   {
-    path: "/templates/create",
+    path: "/templates/:id",
+    exact: true,
+    // name: "Mẫu tiêu chí",
+    component: TemplateList,
+  },
+  {
+    path: "/templates/:id/create",
     exact: false,
     name: "Soạn mẫu tiêu chí",
     component: TemplateDetail,
   },
   {
-    path: "/templates/:id",
+    path: "/templates/:id/:id",
     exact: false,
     name: "Chi tiết mẫu tiêu chí",
     component: TemplateDetail,

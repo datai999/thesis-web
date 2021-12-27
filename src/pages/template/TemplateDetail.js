@@ -19,18 +19,23 @@ import {
 } from "@coreui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import api from "src/service/api";
 import context from "src/service/contextService";
-import { loginUserHasAny, PERMISSIONS } from "src/service/permissionService";
 import toastHolder from "src/service/toastService";
 import Criterion from "./Criterion";
 
-const MainComponent = () => {
-  const canEdit = loginUserHasAny([PERMISSIONS.EDUCATION_STAFF]);
-
+const MainComponent = ({ location }) => {
   const history = useHistory();
-  const templateIdPath = useLocation().pathname.match(/templates\/(\d+)/, "");
+
+  const paths = window.location.pathname.split("/");
+  const semesterName = window.location.pathname.match(
+    /templates\/(\d+)/,
+    ""
+  )[1];
+  const create = paths.at(-1) === "create";
+  const templateId = create ? null : paths.at(-1);
+
   const [data, setData] = useState({
     thesis: false,
     midSemester: false,
@@ -40,9 +45,14 @@ const MainComponent = () => {
     majors: [],
     councilRoles: [],
   });
-  const [edit, setEdit] = useState(templateIdPath ? false : true);
+  const [edit, setEdit] = useState(!create ? false : true);
   const [review, setReview] = useState(false);
   const [councilRoles, setCouncilRoles] = useState([]);
+  const [semester, setSemester] = useState({});
+
+  const isCurrentSemester =
+    context.semester?.name === semesterName &&
+    semesterName === data.semesterName;
 
   const reviewing = () => {
     setReview(true);
@@ -78,7 +88,8 @@ const MainComponent = () => {
 
   const submit = () => {
     setReview(false);
-    if (templateIdPath)
+    if (!data.rootCriterion) data.rootCriterion = {};
+    if (data.id)
       api.patch(`/templates`, data).then((response) => {
         toastHolder.success(
           `Cập nhật mẫu tiêu chí số ${response.id} thành công`
@@ -86,10 +97,17 @@ const MainComponent = () => {
         setData(response);
       });
     else
-      api.post(`/templates`, data).then((response) => {
-        history.push(`/templates/${response.id}`);
-        toastHolder.success("Tạo mẫu tiêu chí thành công");
-      });
+      api
+        .post(`/templates`, { ...data, semester: { id: semester.id } })
+        .then((response) => {
+          history.push(
+            window.location.pathname.substring(
+              0,
+              window.location.pathname.lastIndexOf("/")
+            )
+          );
+          toastHolder.success("Tạo mẫu tiêu chí thành công");
+        });
   };
 
   const setValueForm = (path, value) => {
@@ -122,10 +140,13 @@ const MainComponent = () => {
   };
 
   useEffect(() => {
-    templateIdPath &&
-      api.get(`/templates/detail/${templateIdPath[1]}`).then((res) => {
-        setData(res);
-      });
+    if (!create) {
+      if (location?.state) setData(location?.state);
+      else api.get(`/templates/detail/${templateId}`).then(setData);
+    }
+    api.post(`/semesters/example`, { name: semesterName }).then((res) => {
+      setSemester(res[0]);
+    });
     api
       .get(`/council-roles`, { params: { sort: "displayOrder" } })
       .then(setCouncilRoles);
@@ -151,7 +172,7 @@ const MainComponent = () => {
               <h5>
                 <center>
                   <strong>
-                    {templateIdPath
+                    {data.id
                       ? `Mã số ${data.id} : ${data.name}`
                       : "Tạo mẫu tiêu chí"}
                   </strong>
@@ -159,7 +180,7 @@ const MainComponent = () => {
               </h5>
             </CCol>
             <CCol md="0">
-              {canEdit && templateIdPath && !edit && !review && (
+              {isCurrentSemester && !create && !edit && !review && (
                 <CTooltip content={"Chỉnh sửa mẫu tiêu chí"}>
                   <CButton color="primary" onClick={editing}>
                     <CIcon name="cil-pencil" /> Chỉnh sửa
@@ -184,7 +205,7 @@ const MainComponent = () => {
                 </>
               )}
 
-              {edit && (
+              {(create || edit) && !review && (
                 <CButton color="primary" variant="outline" onClick={reviewing}>
                   <CIcon name="cil-save" /> Xem trước
                 </CButton>
@@ -235,45 +256,6 @@ const MainComponent = () => {
                     </CFormGroup>
                   </CCol>
                 </CFormGroup>
-
-                {/* <CFormGroup row>
-                  <CCol md="0">
-                    <strong>Loại điểm</strong>
-                  </CCol>
-                  <CCol>
-                    <CFormGroup variant="custom-radio">
-                      <CInputRadio
-                        custom
-                        id="midSemester"
-                        name="timeSemester"
-                        checked={data.midSemester}
-                        value={true}
-                        onChange={() => {
-                          data.guideTeacher = true;
-                          data.reviewTeacher = false;
-                          data.councilRoles = [];
-                          setValueForm("midSemester", true);
-                        }}
-                      />
-                      <CLabel variant="custom-checkbox" htmlFor="midSemester">
-                        Giữa kỳ
-                      </CLabel>
-                    </CFormGroup>
-                    <CFormGroup variant="custom-radio" inline>
-                      <CInputRadio
-                        custom
-                        id="finalSemester"
-                        name="timeSemester"
-                        checked={!data.midSemester}
-                        onChange={() => setValueForm("midSemester", false)}
-                        value={false}
-                      />
-                      <CLabel variant="custom-checkbox" htmlFor="finalSemester">
-                        Cuối kỳ
-                      </CLabel>
-                    </CFormGroup>
-                  </CCol>
-                </CFormGroup> */}
 
                 <CFormGroup row>
                   <strong>Sử dụng thang điểm số</strong>

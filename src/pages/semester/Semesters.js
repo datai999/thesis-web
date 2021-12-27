@@ -88,6 +88,7 @@ const getAction = (
         <CDropdown variant="btn-group">
           <CDropdownToggle color="primary" variant="outline"></CDropdownToggle>
           <CDropdownMenu>
+            <CDropdownItem onClick={editSemester}>Xem thông tin</CDropdownItem>
             <CDropdownItem onClick={setCurrentSemester}>
               Đặt làm học kỳ hiện tại
             </CDropdownItem>

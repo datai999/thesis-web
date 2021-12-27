@@ -69,13 +69,6 @@ const MainComponent = ({
       <CFormGroup row className="pl-0 ml-0 mb-0">
         <CCol className="pl-0 pr-1">
           {edit && deep > 0 ? (
-            // <CTextarea
-            //   rows={parseInt(criterion.description?.length / 130) + 1}
-            //   value={criterion.description}
-            //   onChange={(e) =>
-            //     updateCriterion({ ...criterion, description: e.target.value })
-            //   }
-            // />
             <CKEditor
               editor={ClassicEditor}
               data={criterion.description}
