@@ -1,6 +1,7 @@
 import { CCard, CCardHeader } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import FinalMark from "src/components/topic/FinalMark";
+import MidMark from "src/pages/guide/MidMark";
 import { TopicDetailBody } from "src/pages/topic/TopicDetail";
 import api from "src/service/api";
 import context from "src/service/contextService";
@@ -33,7 +34,9 @@ const MainComponent = () => {
         <TopicDetailBody topic={topic} />
       </CCardHeader>
 
-      {topic.students?.length > 0 &&
+      <MidMark topic={topic} />
+
+      {topic.students?.some((e) => e.midPass) &&
         (topic.semester?.id !== context.semester.id || afterMidMarkEndTime) && (
           <FinalMark guide={false} topic={topic} />
         )}

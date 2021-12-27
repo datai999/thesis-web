@@ -12,8 +12,9 @@ const MainComponent = () => {
   const history = useHistory();
   const topicId = window.location.pathname.split("/")[3];
   const [topic, setTopic] = useState({ guideTeachers: [] });
-  const [afterMidMarkStartTime, setAfterMidMarkStartTime] = useState(false);
   const [refresh, setRefresh] = useState(true);
+  const [afterMidMarkStartTime, setAfterMidMarkStartTime] = useState(false);
+  const [afterMidMarkEndTime, setAfterMidMarkEndTime] = useState(false);
 
   const markSuccess = () => {
     toastHolder.success("Đánh giá giữa kỳ thành công");
@@ -28,6 +29,11 @@ const MainComponent = () => {
           params: { thesis: res.thesis, before: false },
         })
         .then(setAfterMidMarkStartTime);
+      api
+        .get(`/semesters/compare-mid-mark-end-time`, {
+          params: { thesis: res.thesis, before: false },
+        })
+        .then(setAfterMidMarkEndTime);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
@@ -65,9 +71,11 @@ const MainComponent = () => {
           afterMidMarkStartTime) && (
           <>
             <MidMark topic={topic} markSuccess={markSuccess} />
-            {topic.students?.some((e) => e.midPass) && (
-              <FinalMark guide={true} topic={topic} />
-            )}
+            {topic.students?.some((e) => e.midPass) &&
+              (topic.semester?.id !== context.semester.id ||
+                afterMidMarkEndTime) && (
+                <FinalMark guide={true} topic={topic} />
+              )}
           </>
         )}
     </CCard>

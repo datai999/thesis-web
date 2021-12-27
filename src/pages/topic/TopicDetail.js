@@ -117,119 +117,121 @@ const TopicDetailBody = ({
   };
 
   return (
-    <CCardBody>
-      <CRow>
-        <CCol md="3">
-          <div>
-            <strong>Mã số: </strong>
-            {topic.id}
-          </div>
-          <div>
-            <strong>Học kỳ: </strong>
-            {topic.semester?.name}
-          </div>
-          <div>
-            <strong>Loại đề tài: </strong>
-            {topic.type}
-          </div>
-        </CCol>
-        <CCol>
-          <div>
-            <strong>Đào tạo: </strong>
-            {topic.educationMethodNames?.join(", ")}
-          </div>
-          <div>
-            <strong>Bộ môn: </strong>
-            {topic.subjectDepartmentName}
-          </div>
-          <div>
-            <strong>Chuyên ngành: </strong>
-            {topic.majorNames?.join(", ")}
-          </div>
-        </CCol>
-      </CRow>
-
-      <br />
-
-      <CRow>
-        <CCol md={mdGuideTeacher}>
-          <strong>Giáo viên hướng dẫn</strong>
-          {topic.guideTeachers && <UserCard user={topic.guideTeachers[0]} />}
-        </CCol>
-        {topic.guideTeachers?.length > 1 && (
-          <CCol>
-            <strong>Giáo viên đồng hướng dẫn</strong>
-            <CRow>
-              {topic.guideTeachers?.slice(1, 3).map((guideTeacher) => (
-                <CCol md={mdGuideTeacherToo}>
-                  <UserCard key={guideTeacher.id} user={guideTeacher} />
-                </CCol>
-              ))}
-            </CRow>
-          </CCol>
-        )}
-      </CRow>
-
-      <strong>Sinh viên thực hiện</strong>
-      <CRow>
-        {topic.students?.map((student) => (
-          <CCol md={mdStudent}>
-            <UserCard key={student.id} user={student} />
-          </CCol>
-        ))}
-        {_.range(topic.students?.length, topic.maxStudentTake).map((e) => (
-          <CCol key={e} md={mdStudent} className="px-3">
-            <div className="border p-3">
-              {studentCanRegister() ? (
-                <CButton
-                  type="button"
-                  color="info"
-                  onClick={() => {
-                    setRegisterTopicModal(true);
-                  }}
-                >
-                  Đăng ký
-                </CButton>
-              ) : (
-                <div>Không có SV đăng ký</div>
-              )}
+    <>
+      <CCardBody>
+        <CRow>
+          <CCol md="3">
+            <div>
+              <strong>Mã số: </strong>
+              {topic.id}
+            </div>
+            <div>
+              <strong>Học kỳ: </strong>
+              {topic.semester?.name}
+            </div>
+            <div>
+              <strong>Loại đề tài: </strong>
+              {topic.type}
             </div>
           </CCol>
-        ))}
-      </CRow>
+          <CCol>
+            <div>
+              <strong>Đào tạo: </strong>
+              {topic.educationMethodNames?.join(", ")}
+            </div>
+            <div>
+              <strong>Bộ môn: </strong>
+              {topic.subjectDepartmentName}
+            </div>
+            <div>
+              <strong>Chuyên ngành: </strong>
+              {topic.majorNames?.join(", ")}
+            </div>
+          </CCol>
+        </CRow>
 
-      <br />
+        <br />
 
-      {topic.description && (
-        <div className="my-2">
-          <strong>Mô tả</strong>
-          <div
-            className="border p-2"
-            dangerouslySetInnerHTML={{ __html: topic.description }}
-          />
-        </div>
-      )}
+        <CRow>
+          <CCol md={mdGuideTeacher}>
+            <strong>Giáo viên hướng dẫn</strong>
+            {topic.guideTeachers && <UserCard user={topic.guideTeachers[0]} />}
+          </CCol>
+          {topic.guideTeachers?.length > 1 && (
+            <CCol>
+              <strong>Giáo viên đồng hướng dẫn</strong>
+              <CRow>
+                {topic.guideTeachers?.slice(1, 3).map((guideTeacher) => (
+                  <CCol md={mdGuideTeacherToo}>
+                    <UserCard key={guideTeacher.id} user={guideTeacher} />
+                  </CCol>
+                ))}
+              </CRow>
+            </CCol>
+          )}
+        </CRow>
 
-      {topic.task && (
-        <div className="my-2">
-          <strong>Nhiệm vụ</strong>
-          <div
-            className="border p-2"
-            dangerouslySetInnerHTML={{ __html: topic.task }}
-          ></div>
-        </div>
-      )}
+        <strong>Sinh viên thực hiện</strong>
+        <CRow>
+          {topic.students?.map((student) => (
+            <CCol md={mdStudent}>
+              <UserCard key={student.id} user={student} />
+            </CCol>
+          ))}
+          {_.range(topic.students?.length, topic.maxStudentTake).map((e) => (
+            <CCol key={e} md={mdStudent} className="px-3">
+              <div className="border p-3">
+                {studentCanRegister() ? (
+                  <CButton
+                    type="button"
+                    color="info"
+                    onClick={() => {
+                      setRegisterTopicModal(true);
+                    }}
+                  >
+                    Đăng ký
+                  </CButton>
+                ) : (
+                  <div>Không có SV đăng ký</div>
+                )}
+              </div>
+            </CCol>
+          ))}
+        </CRow>
 
-      {topic.documentReference && (
-        <div className="my-2">
-          <strong>Tài liệu</strong>
-          <div
-            className="border p-2"
-            dangerouslySetInnerHTML={{ __html: topic.documentReference }}
-          ></div>
-        </div>
-      )}
-    </CCardBody>
+        <br />
+
+        {topic.description && (
+          <div className="my-2">
+            <strong>Mô tả</strong>
+            <div
+              className="border p-2"
+              dangerouslySetInnerHTML={{ __html: topic.description }}
+            />
+          </div>
+        )}
+
+        {topic.task && (
+          <div className="my-2">
+            <strong>Nhiệm vụ</strong>
+            <div
+              className="border p-2"
+              dangerouslySetInnerHTML={{ __html: topic.task }}
+            ></div>
+          </div>
+        )}
+
+        {topic.documentReference && (
+          <div className="my-2">
+            <strong>Tài liệu</strong>
+            <div
+              className="border p-2"
+              dangerouslySetInnerHTML={{ __html: topic.documentReference }}
+            ></div>
+          </div>
+        )}
+      </CCardBody>
+    </>
   );
 };
 

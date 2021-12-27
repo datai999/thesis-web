@@ -16,7 +16,6 @@ import {
   CModalTitle,
 } from "@coreui/react";
 import React, { useEffect } from "react";
-import { useHistory } from "react-router-dom";
 import api from "src/service/api";
 import { context } from "src/service/contextService";
 
@@ -35,13 +34,12 @@ const fields = [
 ];
 
 const MainComponent = ({ topic = {}, markSuccess = () => {} }) => {
-  const history = useHistory();
   const semesterName = window.location.pathname.split("/")[2];
-  const topicId = window.location.pathname.split("/")[3];
   const canEdit = topic.guideTeachers?.some((e) => e.id === context.user.id);
+  const midResult = topic.students?.map((e) => {
+    return { ...e, id: e.relationId, topic: topic, studentId: e.id };
+  });
 
-  const [templates, setTemplates] = React.useState([]);
-  const [midResult, setMidResult] = React.useState([]);
   const [confirm, setConfirm] = React.useState(false);
   const [confirmProps, setConfirmProps] = React.useState({});
   const [refresh, setRefresh] = React.useState(true);
@@ -54,22 +52,6 @@ const MainComponent = ({ topic = {}, markSuccess = () => {} }) => {
   };
 
   useEffect(() => {
-    api
-      .post(`/templates/example`, {
-        thesis: topic.thesis,
-        midSemester: true,
-        guideTeacher: true,
-        majors: topic.majors,
-      })
-      .then(setTemplates);
-
-    api
-      .post(`/topic-student/example`, {
-        topic: { id: topic.id },
-      })
-      .then((res) => {
-        setMidResult(res);
-      });
     api
       .get(`/semesters/compare-mid-mark-end-time`, {
         params: { thesis: topic.thesis, before: true },
@@ -146,29 +128,6 @@ const MainComponent = ({ topic = {}, markSuccess = () => {} }) => {
           items={topic.students}
           size="sm"
           scopedSlots={{
-            ...templates.reduce(
-              (a, v) => ({
-                ...a,
-                ["template" + v.id]: (item) => (
-                  <td>
-                    <CButton
-                      color="primary"
-                      size="sm"
-                      onClick={() =>
-                        history.push(`${window.location.pathname}/mark`, {
-                          template: v,
-                          topicId: topicId,
-                          studentId: item.id,
-                        })
-                      }
-                    >
-                      Đánh giá
-                    </CButton>
-                  </td>
-                ),
-              }),
-              {}
-            ),
             result: renderSwitchResult,
             reason: (item) => (
               <td>{midResult.find((e) => e.studentId === item.id)?.reason}</td>
