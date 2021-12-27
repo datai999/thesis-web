@@ -26,11 +26,16 @@ const MainComponent = ({ defaultForm = {} }) => {
   const history = useHistory();
   const semesterId = window.location.pathname.split("/").pop();
   const [form, setForm] = useState(defaultForm);
+  const [refresh, setRefresh] = React.useState(false);
 
   const submit = () => {
     if (form.id) {
       api.patch("/semesters", form).then((response) => {
-        history.push(`/semesters`);
+        setRefresh();
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
         toastHolder.success("Cập nhật thông tin học kỳ thành công");
       });
     } else {
@@ -62,7 +67,7 @@ const MainComponent = ({ defaultForm = {} }) => {
     semesterId !== "create" &&
       api.get(`/semesters/detail/${semesterId}`).then(setForm);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [refresh]);
 
   return (
     <CCard>

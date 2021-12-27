@@ -44,6 +44,8 @@ const TopicCreate = ({ location }) => {
   const [valid, setValid] = useState(false);
   const [waiting, setWaiting] = React.useState(false);
   const [searchStudentProps, setSearchStudentProps] = React.useState({});
+  const [createOutlineTime, setCreateOutlineTime] = React.useState(true);
+  const [createThesisTime, setCreateThesisTime] = React.useState(true);
 
   const creator = guideTeachers[0]?.id === contextHolder.user.id;
   const efuStaff = loginUserIsEduStaff();
@@ -144,12 +146,19 @@ const TopicCreate = ({ location }) => {
         toastHolder.success("Cập nhật thông tin đề tài thành công");
       });
     } else {
-      api.post("/topics", form).then((response) => {
-        setWaiting(false);
-        response &&
-          history.push(`/guide/${contextHolder.semester.name}/${response.id}`);
-        toastHolder.success("Tạo đề tài thành công");
-      });
+      api
+        .post("/topics", form)
+        .then((response) => {
+          setWaiting(false);
+          response &&
+            history.push(
+              `/guide/${contextHolder.semester.name}/${response.id}`
+            );
+          toastHolder.success("Tạo đề tài thành công");
+        })
+        .catch(() => {
+          setWaiting(false);
+        });
     }
   };
 
@@ -164,6 +173,15 @@ const TopicCreate = ({ location }) => {
       setStudentExecutes(exitTopic.students);
     } else {
       setGuideTeachers([contextHolder.user]);
+      api
+        .get(`/semesters/in-create-time`, { params: { thesis: false } })
+        .then((res) => {
+          setCreateOutlineTime(res);
+          if (!res) setThesis(true);
+        });
+      api
+        .get(`/semesters/in-create-time`, { params: { thesis: true } })
+        .then(setCreateThesisTime);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -227,6 +245,7 @@ const TopicCreate = ({ location }) => {
                         setThesis(false);
                         setStudentExecutes([]);
                       }}
+                      disabled={!createOutlineTime}
                     />
                     <CLabel variant="custom-checkbox" htmlFor="nonThesis">
                       Đề cương
@@ -243,6 +262,7 @@ const TopicCreate = ({ location }) => {
                         setStudentExecutes([]);
                       }}
                       value={true}
+                      disabled={!createThesisTime}
                     />
                     <CLabel variant="custom-checkbox" htmlFor="thesis">
                       Luận văn

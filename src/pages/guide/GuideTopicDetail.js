@@ -12,7 +12,7 @@ const MainComponent = () => {
   const history = useHistory();
   const topicId = window.location.pathname.split("/")[3];
   const [topic, setTopic] = useState({ guideTeachers: [] });
-  const [beforeMidMarkStartTime, setBeforeMidMarkStartTime] = useState(false);
+  const [afterMidMarkStartTime, setAfterMidMarkStartTime] = useState(false);
   const [refresh, setRefresh] = useState(true);
 
   const markSuccess = () => {
@@ -24,10 +24,10 @@ const MainComponent = () => {
     api.get(`/topics/detail/${topicId}`).then((res) => {
       setTopic(res);
       api
-        .get(`/semesters/before-mid-mark-start-time`, {
-          params: { thesis: res.thesis },
+        .get(`/semesters/compare-mid-mark-start-time`, {
+          params: { thesis: res.thesis, before: false },
         })
-        .then(setBeforeMidMarkStartTime);
+        .then(setAfterMidMarkStartTime);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
@@ -62,7 +62,7 @@ const MainComponent = () => {
 
       {topic.students?.length > 0 &&
         (topic.semester?.id !== context.semester.id ||
-          beforeMidMarkStartTime) && (
+          afterMidMarkStartTime) && (
           <>
             <MidMark topic={topic} markSuccess={markSuccess} />
             {topic.students?.some((e) => e.midPass) && (

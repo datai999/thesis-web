@@ -1,10 +1,13 @@
 import {
   CButton,
   CCardHeader,
+  CCol,
   CDataTable,
   CForm,
   CFormGroup,
+  CInput,
   CInputRadio,
+  CInvalidFeedback,
   CLabel,
   CModal,
   CModalBody,
@@ -18,8 +21,17 @@ import api from "src/service/api";
 import { context } from "src/service/contextService";
 
 const fields = [
-  { key: "code", label: "MSSV" },
-  { key: "fullName", label: "Sinh viên" },
+  { key: "code", label: "MSSV", _style: { width: 1 } },
+  { key: "fullName", label: "Sinh viên", _style: { width: 200 } },
+  {
+    key: "result",
+    label: "Kết quả giữa kỳ",
+    _style: { width: 200 },
+  },
+  {
+    key: "reason",
+    label: "Đánh giá",
+  },
 ];
 
 const MainComponent = ({ topic = {}, markSuccess = () => {} }) => {
@@ -33,10 +45,11 @@ const MainComponent = ({ topic = {}, markSuccess = () => {} }) => {
   const [confirm, setConfirm] = React.useState(false);
   const [confirmProps, setConfirmProps] = React.useState({});
   const [refresh, setRefresh] = React.useState(true);
+  const [beforeMidMarkEnd, setBeforeMidMarkEnd] = React.useState(false);
 
   const midMark = (student, value) => {
     const topicStudent = midResult.find((e) => e.studentId === student.id);
-    setConfirmProps({ topicStudent, value, student });
+    setConfirmProps({ topicStudent, value, student, reason: null });
     setConfirm(true);
   };
 
@@ -57,6 +70,11 @@ const MainComponent = ({ topic = {}, markSuccess = () => {} }) => {
       .then((res) => {
         setMidResult(res);
       });
+    api
+      .get(`/semesters/compare-mid-mark-end-time`, {
+        params: { thesis: topic.thesis, before: true },
+      })
+      .then(setBeforeMidMarkEnd);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
 
@@ -65,7 +83,7 @@ const MainComponent = ({ topic = {}, markSuccess = () => {} }) => {
       midResult.find((e) => e.studentId === student.id) ?? {};
     return (
       <td>
-        {canEdit ? (
+        {canEdit && beforeMidMarkEnd ? (
           <CForm>
             <fieldset disabled={semesterName !== context.semester?.name}>
               <CFormGroup variant="custom-radio" inline>
@@ -122,17 +140,9 @@ const MainComponent = ({ topic = {}, markSuccess = () => {} }) => {
         {...confirmProps}
       />
       <h5>Kết quả đánh giá giữa kỳ</h5>
-      <div className="ml-4" style={{ width: 500 }}>
+      <div className="ml-4" style={{ width: 700 }}>
         <CDataTable
-          fields={[
-            ...fields,
-            // ...templates.map(templateToField),
-            {
-              key: "result",
-              label: "Kết quả giữa kỳ",
-              _style: { width: 200 },
-            },
-          ]}
+          fields={fields}
           items={topic.students}
           size="sm"
           scopedSlots={{
@@ -160,6 +170,9 @@ const MainComponent = ({ topic = {}, markSuccess = () => {} }) => {
               {}
             ),
             result: renderSwitchResult,
+            reason: (item) => (
+              <td>{midResult.find((e) => e.studentId === item.id)?.reason}</td>
+            ),
           }}
         />
       </div>
@@ -174,19 +187,27 @@ const ConfirmMidMark = ({
   topicStudent,
   student = {},
   value,
+  ...props
 }) => {
+  const [reason, setReason] = React.useState(props.reason);
+
   const midMark = () => {
     const nextTopicStudent = {
       id: topicStudent.id,
       topic: { id: topicStudent.topic.id },
       student: { id: topicStudent.studentId },
       midPass: value,
+      reason: reason,
     };
     api.patch(`/topic-student`, nextTopicStudent).then(() => {
       disableView();
       confirm();
     });
   };
+
+  React.useEffect(() => {
+    setReason(null);
+  }, [view]);
 
   return (
     <CModal color="warning" size="md" show={view} onClose={disableView}>
@@ -199,6 +220,31 @@ const ConfirmMidMark = ({
             Đánh giá sinh viên {student.code} {student.fullName}{" "}
             <strong>{value ? "đạt" : "không đạt"}</strong> giữa kỳ
           </h5>
+
+          <br />
+
+          <CForm style={{ width: 400 }} className="ml-5">
+            <CFormGroup row>
+              <CLabel htmlFor="reason">
+                <strong>Đánh giá</strong>
+              </CLabel>
+              <CCol md="8">
+                <CInput
+                  id="reason"
+                  invalid={!value && (!reason || reason?.length < 1)}
+                  value={reason}
+                  onChange={(e) => {
+                    setReason(e.target.value);
+                  }}
+                />
+                {!value && (!reason || reason?.length < 1) && (
+                  <CInvalidFeedback>
+                    Cần lý do để đánh giá sinh viên <strong>không đạt</strong>
+                  </CInvalidFeedback>
+                )}
+              </CCol>
+            </CFormGroup>
+          </CForm>
         </center>
       </CModalBody>
       <CModalFooter>
